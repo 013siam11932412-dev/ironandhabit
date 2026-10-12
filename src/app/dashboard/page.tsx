@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
 import ProgressChartBoard from "@/components/dashboard/ProgressChartBoard";
 import {
@@ -17,7 +18,9 @@ import {
 
 export default function DashboardPage() {
   const pathname = usePathname();
+  const router = useRouter();
   const { dict, language } = useLanguage();
+  const { user, signOut } = useAuth();
 
   // 1. Streak State: 7-Day Cyclical Tracker (Day 1 to 7)
   const [streakDay, setStreakDay] = useState<number>(() => getStoredStreak());
@@ -251,12 +254,37 @@ export default function DashboardPage() {
                 </span>
               </div>
 
-              <Link
-                href="/"
-                className="text-xs font-bold text-[#94a3b8] hover:text-white px-2.5 py-1.5 rounded-lg border border-[rgba(163,230,53,0.15)] hover:border-[rgba(163,230,53,0.35)] transition-colors"
+              {/* User Initial / Avatar Badge */}
+              {user && (
+                <div
+                  title={user.email || "Athlete"}
+                  className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-full bg-[rgba(18,24,38,0.9)] border border-[#a3e635]/40 shadow-[0_0_15px_rgba(204,255,0,0.2)]"
+                >
+                  <div className="w-6 h-6 rounded-full bg-[#ccff00] text-black font-black text-xs flex items-center justify-center uppercase shadow-[0_0_8px_rgba(204,255,0,0.4)]">
+                    {(
+                      user.user_metadata?.full_name?.[0] ||
+                      user.email?.[0] ||
+                      "A"
+                    ).toUpperCase()}
+                  </div>
+                  <span className="hidden md:inline-block text-xs font-bold text-white max-w-[100px] truncate">
+                    {user.user_metadata?.full_name ||
+                      user.email?.split("@")[0] ||
+                      "Athlete"}
+                  </span>
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={async () => {
+                  await signOut();
+                  router.push("/");
+                }}
+                className="text-xs font-bold text-[#94a3b8] hover:text-[#ccff00] px-2.5 py-1.5 rounded-lg border border-[rgba(163,230,53,0.15)] hover:border-[rgba(163,230,53,0.35)] transition-colors cursor-pointer uppercase tracking-wider"
               >
                 {dict.signOut}
-              </Link>
+              </button>
             </div>
           </div>
 

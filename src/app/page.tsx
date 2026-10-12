@@ -3,10 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
 
 export default function Home() {
   const { dict, language } = useLanguage();
+  const { user, openAuthModal, signOut } = useAuth();
 
   const quickHighlights = [
     {
@@ -201,21 +203,65 @@ export default function Home() {
             </Link>
           </nav>
 
-          {/* Language Switcher & Glowing CTA */}
+          {/* Language Switcher & Glowing CTA / User Badge */}
           <div className="flex items-center gap-3 sm:gap-4">
             <LanguageToggle />
-            <Link
-              href="/login"
-              className="hidden sm:inline-block text-xs font-bold uppercase tracking-wider text-[#94a3b8] hover:text-white px-2.5 py-1.5 transition-colors"
-            >
-              {dict.login}
-            </Link>
-            <Link
-              href="/signup"
-              className="relative px-5 py-2.5 rounded-lg text-xs font-black uppercase tracking-wider bg-[#ccff00] hover:bg-[#d8ff33] text-black transition-all duration-200 shadow-[0_0_25px_rgba(204,255,0,0.35)] hover:shadow-[0_0_35px_rgba(204,255,0,0.55)] active:scale-95"
-            >
-              {dict.joinFree}
-            </Link>
+            {user ? (
+              <div className="flex items-center gap-2 sm:gap-3">
+                <Link
+                  href="/dashboard"
+                  className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider bg-[#121826] border border-[#a3e635]/40 text-[#ccff00] hover:border-[#ccff00] shadow-[0_0_15px_rgba(204,255,0,0.15)] transition-all"
+                >
+                  <span>{dict.dashboard}</span>
+                  <span>&rarr;</span>
+                </Link>
+
+                {/* User Initial / Avatar Badge */}
+                <div
+                  title={user.email || "Athlete"}
+                  className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-[rgba(18,24,38,0.9)] border border-[#a3e635]/40 shadow-[0_0_15px_rgba(204,255,0,0.2)]"
+                >
+                  <div className="w-6 h-6 rounded-full bg-[#ccff00] text-black font-black text-xs flex items-center justify-center uppercase shadow-[0_0_8px_rgba(204,255,0,0.4)]">
+                    {(
+                      user.user_metadata?.full_name?.[0] ||
+                      user.email?.[0] ||
+                      "A"
+                    ).toUpperCase()}
+                  </div>
+                  <span className="hidden md:inline-block text-xs font-bold text-white max-w-[110px] truncate">
+                    {user.user_metadata?.full_name ||
+                      user.email?.split("@")[0] ||
+                      "Athlete"}
+                  </span>
+                </div>
+
+                {/* Accessible Log Out Option */}
+                <button
+                  type="button"
+                  onClick={() => signOut()}
+                  className="text-xs font-bold text-[#94a3b8] hover:text-[#ccff00] px-2.5 py-1.5 rounded-lg border border-[rgba(163,230,53,0.15)] hover:border-[rgba(163,230,53,0.35)] transition-colors uppercase tracking-wider"
+                >
+                  {dict.logOut}
+                </button>
+              </div>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  onClick={() => openAuthModal("signin")}
+                  className="hidden sm:inline-block text-xs font-bold uppercase tracking-wider text-[#94a3b8] hover:text-white px-2.5 py-1.5 transition-colors cursor-pointer"
+                >
+                  {dict.login}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openAuthModal("signup")}
+                  className="relative px-5 py-2.5 rounded-lg text-xs font-black uppercase tracking-wider bg-[#ccff00] hover:bg-[#d8ff33] text-black transition-all duration-200 shadow-[0_0_25px_rgba(204,255,0,0.35)] hover:shadow-[0_0_35px_rgba(204,255,0,0.55)] active:scale-95 cursor-pointer"
+                >
+                  {dict.joinFree}
+                </button>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -259,25 +305,48 @@ export default function Home() {
 
             {/* High-Energy CTA */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-12 w-full sm:w-auto">
-              <Link
-                href="/signup"
-                className="px-8 py-4 rounded-xl text-sm font-black uppercase tracking-wider bg-[#ccff00] hover:bg-[#d8ff33] text-black flex items-center justify-center gap-3 transition-all duration-200 shadow-[0_0_30px_rgba(204,255,0,0.45)] hover:shadow-[0_0_45px_rgba(204,255,0,0.65)] hover:-translate-y-0.5 active:scale-95"
-              >
-                <span>{dict.startJourney}</span>
-                <svg
-                  className="w-4 h-4 text-black font-extrabold"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  viewBox="0 0 24 24"
+              {user ? (
+                <Link
+                  href="/dashboard"
+                  className="px-8 py-4 rounded-xl text-sm font-black uppercase tracking-wider bg-[#ccff00] hover:bg-[#d8ff33] text-black flex items-center justify-center gap-3 transition-all duration-200 shadow-[0_0_30px_rgba(204,255,0,0.45)] hover:shadow-[0_0_45px_rgba(204,255,0,0.65)] hover:-translate-y-0.5 active:scale-95"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                  />
-                </svg>
-              </Link>
+                  <span>{dict.dashboard}</span>
+                  <svg
+                    className="w-4 h-4 text-black font-extrabold"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                    />
+                  </svg>
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => openAuthModal("signup")}
+                  className="px-8 py-4 rounded-xl text-sm font-black uppercase tracking-wider bg-[#ccff00] hover:bg-[#d8ff33] text-black flex items-center justify-center gap-3 transition-all duration-200 shadow-[0_0_30px_rgba(204,255,0,0.45)] hover:shadow-[0_0_45px_rgba(204,255,0,0.65)] hover:-translate-y-0.5 active:scale-95 cursor-pointer"
+                >
+                  <span>{dict.startJourney}</span>
+                  <svg
+                    className="w-4 h-4 text-black font-extrabold"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
+                    />
+                  </svg>
+                </button>
+              )}
               <Link
                 href="/dashboard"
                 className="px-6 py-4 rounded-xl text-sm font-bold uppercase tracking-wider text-white bg-[rgba(18,24,38,0.7)] hover:bg-[rgba(18,24,38,0.95)] border border-[rgba(163,230,53,0.2)] hover:border-[rgba(204,255,0,0.45)] backdrop-blur-md transition-all text-center"
