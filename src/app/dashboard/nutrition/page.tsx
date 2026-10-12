@@ -37,7 +37,6 @@ export default function NutritionPage() {
   // Load today's meals on mount & user change
   useEffect(() => {
     let mounted = true;
-    setIsLoading(true);
 
     fetchTodayNutritionLogs(user?.id)
       .then((data) => {

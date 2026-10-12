@@ -34,15 +34,14 @@ export default function BmiPage() {
   // Load Historical BMI Records from Supabase / localStorage
   useEffect(() => {
     let mounted = true;
-    setIsLoadingRecords(true);
 
     fetchBmiRecords(user?.id)
       .then((data) => {
         if (mounted) {
           setRecords(data);
           // If there's a previous record, initialize latest BMI result display
-          if (data.length > 0 && bmiResult === null) {
-            setBmiResult(data[0].bmi);
+          if (data.length > 0) {
+            setBmiResult((prev) => (prev === null ? data[0].bmi : prev));
           }
           setIsLoadingRecords(false);
         }

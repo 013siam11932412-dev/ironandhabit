@@ -18,8 +18,28 @@ export const translations = {
     login: "Log In",
     joinFree: "JOIN FREE",
     startJourney: "START YOUR JOURNEY",
+    getStarted: "GET STARTED",
+    heroSubheadline:
+      "A unified athletic tracker for progressive overload workouts, macronutrient nutrition, and daily hydration streaks.",
     viewDemo: "VIEW LIVE DEMO",
     signOut: "Sign Out",
+    tryNow: "Try Now",
+    explore: "Explore",
+
+    // How It Works / 3-Step Onboarding Guide
+    howItWorks: "HOW TO GET STARTED",
+    howItWorksBadge: "3-STEP ONBOARDING PROTOCOL",
+    howItWorksSubtitle:
+      "Three simple steps to unlock your peak physical output, dial in nutrition, and cement unbroken streaks.",
+    step1Title: "Create Your Profile",
+    step1Desc:
+      "Set up your account and calculate your baseline BMI and body telemetry index.",
+    step2Title: "Log Daily Habits",
+    step2Desc:
+      "Log your exercises with sets and reps, track nutrition macros, and complete 250ml hydration glasses.",
+    step3Title: "Level Up & Keep Streaks",
+    step3Desc:
+      "Earn XP, build consistent 7-day cyclical streaks, and monitor progressive overload over time.",
 
     // Landing Hero
     trainSmarter: "TRAIN SMARTER",
@@ -232,8 +252,28 @@ export const translations = {
     login: "লগইন",
     joinFree: "যুক্ত হোন",
     startJourney: "যাত্রা শুরু করুন",
+    getStarted: "শুরু করুন",
+    heroSubheadline:
+      "ওয়ার্কআউট, প্রোগ্রেসিভ ওভারলোড, ম্যাক্রো পুষ্টি এবং দৈনিক হাইড্রেশন স্ট্রিকের একটি সমন্বিত আধুনিক প্ল্যাটফর্ম।",
     viewDemo: "লাইভ ডেমো",
     signOut: "লগআউট",
+    tryNow: "এখনই দেখুন",
+    explore: "এক্সপ্লোর",
+
+    // How It Works / 3-Step Onboarding Guide
+    howItWorks: "যেভাবে শুরু করবেন",
+    howItWorksBadge: "৩-ধাপের কুইক গাইড",
+    howItWorksSubtitle:
+      "শারীরিক সক্ষমতা বৃদ্ধি, পুষ্টি নিয়ন্ত্রণ এবং অবিচল শৃঙ্খলা গড়ে তোলার ৩টি সহজ ধাপ।",
+    step1Title: "প্রোফাইল তৈরি করুন",
+    step1Desc:
+      "আপনার অ্যাকাউন্ট সেট আপ করুন এবং বেসলাইন বিএমআই ও শারীরিক সূচক নির্ণয় করুন।",
+    step2Title: "অভ্যাসগুলো ট্র্যাক করুন",
+    step2Desc:
+      "সেট ও রিপস সহ ব্যায়াম লগ করুন, ম্যাক্রো পুষ্টি পর্যবেক্ষণ করুন এবং ২৫০ মিলি পানির গ্লাস পূর্ণ করুন।",
+    step3Title: "স্ট্রিক বজায় রাখুন",
+    step3Desc:
+      "এক্সপি (XP) অর্জন করুন, ৭-দিনের অবিচল সাইকেল স্ট্রিক গড়ে তুলুন এবং দীর্ঘমেয়াদী অগ্রগতি পর্যবেক্ষণ করুন।",
 
     // Landing Hero
     trainSmarter: "স্মার্ট অনুশীলন",

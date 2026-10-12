@@ -195,11 +195,16 @@ export default function DashboardPage() {
       totalQuests: 5,
     });
     if (resetResult.didReset) {
-      setGlasses([false, false, false, false, false, false, false, false]);
-      setQuests((prev) => prev.map((q) => ({ ...q, completed: false })));
-      setHistory30Days(resetResult.updatedHistory);
-      setMidnightNotice(true);
-      setTimeout(() => setMidnightNotice(false), 5000);
+      queueMicrotask(() => {
+        if (!mounted) return;
+        setGlasses([false, false, false, false, false, false, false, false]);
+        setQuests((prev) => prev.map((q) => ({ ...q, completed: false })));
+        setHistory30Days(resetResult.updatedHistory);
+        setMidnightNotice(true);
+        setTimeout(() => {
+          if (mounted) setMidnightNotice(false);
+        }, 5000);
+      });
     }
 
     function handleStorage() {

@@ -87,48 +87,52 @@ export default function Home() {
 
   const featureCards = [
     {
-      title: language === "bn" ? "ওয়ার্কআউট ট্র্যাকার" : "Workout Tracker",
-      badge: language === "bn" ? "শক্তি ও রিপস" : "STRENGTH & REPS",
+      title: language === "bn" ? "ওয়ার্কআউট প্ল্যানার" : "Workout Planner",
+      badge: language === "bn" ? "শক্তি ও ভলিউম" : "SETS & REPS",
       description:
         language === "bn"
-          ? "হেভি কম্পাউন্ড সেট লগ করুন, প্রোগ্রেসিভ ওভারলোড ট্র্যাক করুন এবং ভেলোসিটি পরিমাপ করুন।"
-          : "Log heavy compound sets, target progressive overload, and measure velocity with seamless rep tracking.",
+          ? "সেট, রিপস, রেস্ট টাইমার এবং প্রোগ্রেসিভ ওভারলোড সহ বাস্তব ব্যায়াম ট্র্যাকিং।"
+          : "Sets, reps, rest timer, and progressive overload with real-time exercise logging.",
       image:
         "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80",
       metric: "5x5 @ 315 LBS",
+      href: "/dashboard/workouts",
     },
     {
-      title: language === "bn" ? "পুষ্টি ও ক্যালরি হাব" : "Nutrition & Calorie Hub",
+      title: language === "bn" ? "পুষ্টি ও ক্যালরি হাব" : "Nutrition Hub",
       badge: language === "bn" ? "ম্যাক্রো ও এনার্জি" : "MACROS & FUEL",
       description:
         language === "bn"
-          ? "সঠিক ম্যাক্রো বিন্যাস, ক্যালরি বণ্টন এবং পেশির পুষ্টি পর্যবেক্ষণ করুন।"
-          : "Tailor macro distributions, caloric surpluses, and post-workout fuel with surgical nutrition accuracy.",
+          ? "সঠিক ম্যাক্রো বিন্যাস (প্রোটিন, কার্ব, ফ্যাট), ক্যালরি এবং লাইভ মিল পারসিস্টেন্স।"
+          : "Macro breakdown, calories, and real meal persistence for peak muscle recovery.",
       image:
         "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80",
       metric: "2,750 KCAL / 190G P",
+      href: "/dashboard/nutrition",
     },
     {
-      title: language === "bn" ? "পানি ও অভ্যাসের ধারাবাহিকতা" : "Water & Habit Consistency",
-      badge: language === "bn" ? "দৈনিক হাইড্রেশন" : "DAILY HYDRATION",
+      title: language === "bn" ? "হাইড্রেশন ও স্ট্রিকস" : "Hydration & Analytics",
+      badge: language === "bn" ? "দৈনিক কোটা" : "HYDRATION & STREAKS",
       description:
         language === "bn"
-          ? "ইলেক্ট্রোলাইট ব্যালান্স, দৈনিক পানির কোটা এবং অবিচ্ছিন্ন স্ট্রিক শৃঙ্খলা গড়ে তুলুন।"
-          : "Electrolyte pacing, daily water quotas, and unbroken streak psychology built for relentless discipline.",
+          ? "দৈনিক ২৫০ মিলি ইন্টারভ্যাল, ৭-দিনের অবিচল সাইকেল স্ট্রিক এবং টেলিমেট্রি।"
+          : "Daily 250ml intervals, 7-day cyclical streaks, and holistic consistency telemetry.",
       image:
         "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=800&q=80",
       metric: "3.8 LITERS TODAY",
+      href: "/dashboard",
     },
     {
-      title: language === "bn" ? "স্মার্ট প্রগ্রেস অ্যানালিটিক্স" : "Smart Progress Analytics",
-      badge: language === "bn" ? "লাইভ টেলিমেট্রি" : "LIVE TELEMETRY",
+      title: language === "bn" ? "বিএমআই ও শারীরিক সূচক" : "BMI & Body Composition",
+      badge: language === "bn" ? "বডি টেলিমেট্রি" : "BODY TELEMETRY",
       description:
         language === "bn"
-          ? "রিয়েল-টাইম ভলিউম চার্ট, শরীর গঠনের পরিবর্তন এবং রিকভারি ডেটা ভিজুয়ালাইজ করুন।"
-          : "Real-time volume load curves, body composition trends, and recovery analytics visualized seamlessly.",
+          ? "উচ্চতা ও ওজনের অনুপাত, পরিমাপের রেকর্ড এবং বাস্তব ঐতিহাসিক পরিবর্তন।"
+          : "Mass-to-height index, circumference logs, and real historical progress metrics.",
       image:
         "https://images.unsplash.com/photo-1576243345690-4e4b79b63288?auto=format&fit=crop&w=800&q=80",
       metric: "+16.4% VOL GROWTH",
+      href: "/dashboard/bmi",
     },
   ];
 
@@ -183,23 +187,29 @@ export default function Home() {
             >
               {dict.home}
             </Link>
+            <a
+              href="#how-it-works"
+              className="hover:text-[#ccff00] transition-colors"
+            >
+              {dict.howItWorks}
+            </a>
             <Link
-              href="#workouts"
+              href="/dashboard/workouts"
               className="hover:text-[#ccff00] transition-colors"
             >
               {dict.workouts}
             </Link>
             <Link
-              href="#nutrition"
+              href="/dashboard/nutrition"
               className="hover:text-[#ccff00] transition-colors"
             >
               {dict.nutrition}
             </Link>
             <Link
-              href="#progress"
+              href="/dashboard/bmi"
               className="hover:text-[#ccff00] transition-colors"
             >
-              {dict.progress}
+              {dict.bmi}
             </Link>
           </nav>
 
@@ -299,9 +309,15 @@ export default function Home() {
             </h1>
 
             {/* Subtitle */}
-            <p className="text-base sm:text-lg text-[#94a3b8] leading-relaxed max-w-xl mb-8">
+            <p className="text-base sm:text-lg text-[#94a3b8] leading-relaxed max-w-xl mb-4">
               {dict.heroSubtitle}
             </p>
+
+            {/* Sub-headline explaining exact purpose */}
+            <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-[rgba(18,24,38,0.7)] border border-[rgba(163,230,53,0.25)] text-xs sm:text-sm font-semibold text-[#ccff00] max-w-xl mb-8 shadow-[0_0_20px_rgba(204,255,0,0.06)]">
+              <span className="w-2 h-2 rounded-full bg-[#ccff00] shrink-0 animate-ping" />
+              <span>{dict.heroSubheadline}</span>
+            </div>
 
             {/* High-Energy CTA */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-12 w-full sm:w-auto">
@@ -310,7 +326,7 @@ export default function Home() {
                   href="/dashboard"
                   className="px-8 py-4 rounded-xl text-sm font-black uppercase tracking-wider bg-[#ccff00] hover:bg-[#d8ff33] text-black flex items-center justify-center gap-3 transition-all duration-200 shadow-[0_0_30px_rgba(204,255,0,0.45)] hover:shadow-[0_0_45px_rgba(204,255,0,0.65)] hover:-translate-y-0.5 active:scale-95"
                 >
-                  <span>{dict.dashboard}</span>
+                  <span>{dict.getStarted}</span>
                   <svg
                     className="w-4 h-4 text-black font-extrabold"
                     fill="none"
@@ -331,7 +347,7 @@ export default function Home() {
                   onClick={() => openAuthModal("signup")}
                   className="px-8 py-4 rounded-xl text-sm font-black uppercase tracking-wider bg-[#ccff00] hover:bg-[#d8ff33] text-black flex items-center justify-center gap-3 transition-all duration-200 shadow-[0_0_30px_rgba(204,255,0,0.45)] hover:shadow-[0_0_45px_rgba(204,255,0,0.65)] hover:-translate-y-0.5 active:scale-95 cursor-pointer"
                 >
-                  <span>{dict.startJourney}</span>
+                  <span>{dict.getStarted}</span>
                   <svg
                     className="w-4 h-4 text-black font-extrabold"
                     fill="none"
@@ -347,12 +363,13 @@ export default function Home() {
                   </svg>
                 </button>
               )}
-              <Link
-                href="/dashboard"
-                className="px-6 py-4 rounded-xl text-sm font-bold uppercase tracking-wider text-white bg-[rgba(18,24,38,0.7)] hover:bg-[rgba(18,24,38,0.95)] border border-[rgba(163,230,53,0.2)] hover:border-[rgba(204,255,0,0.45)] backdrop-blur-md transition-all text-center"
+              <a
+                href="#how-it-works"
+                className="px-6 py-4 rounded-xl text-sm font-bold uppercase tracking-wider text-white bg-[rgba(18,24,38,0.7)] hover:bg-[rgba(18,24,38,0.95)] border border-[rgba(163,230,53,0.2)] hover:border-[rgba(204,255,0,0.45)] backdrop-blur-md transition-all text-center flex items-center justify-center gap-2 group cursor-pointer"
               >
-                {dict.viewDemo}
-              </Link>
+                <span>{dict.howItWorks}</span>
+                <span className="text-[#ccff00] group-hover:translate-y-0.5 transition-transform">&darr;</span>
+              </a>
             </div>
 
             {/* 4 Quick Icon Highlights Below CTA */}
@@ -483,6 +500,167 @@ export default function Home() {
         </div>
       </section>
 
+      {/* 2.5. "How to Get Started" (3-Step Quick Guide) */}
+      <section
+        id="how-it-works"
+        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 w-full border-t border-[rgba(163,230,53,0.12)] scroll-mt-20"
+      >
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[rgba(18,24,38,0.85)] border border-[rgba(163,230,53,0.3)] shadow-[0_0_15px_rgba(204,255,0,0.1)] mb-4">
+            <span className="w-2 h-2 rounded-full bg-[#ccff00] animate-pulse" />
+            <span className="text-[11px] font-black uppercase tracking-widest text-[#ccff00]">
+              {dict.howItWorksBadge}
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-white mb-4">
+            {dict.howItWorks}
+          </h2>
+          <p className="text-sm sm:text-base text-[#94a3b8] leading-relaxed">
+            {dict.howItWorksSubtitle}
+          </p>
+        </div>
+
+        {/* 3 Step Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 relative">
+          {/* Step 1 */}
+          <div className="relative p-6 sm:p-8 rounded-2xl bg-[rgba(18,24,38,0.65)] backdrop-blur-xl border border-[rgba(163,230,53,0.2)] hover:border-[#ccff00]/60 shadow-[0_10px_30px_rgba(0,0,0,0.4)] transition-all duration-300 group hover:-translate-y-1 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-3xl font-black font-mono text-[#ccff00]/30 group-hover:text-[#ccff00] transition-colors">
+                  01
+                </span>
+                <div className="w-12 h-12 rounded-xl bg-[#07090e] border border-[#a3e635]/30 flex items-center justify-center text-[#ccff00] group-hover:border-[#ccff00] group-hover:shadow-[0_0_20px_rgba(204,255,0,0.25)] transition-all">
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3 className="text-xl font-black text-white uppercase tracking-tight mb-3 group-hover:text-[#ccff00] transition-colors">
+                {dict.step1Title}
+              </h3>
+              <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed mb-6">
+                {dict.step1Desc}
+              </p>
+            </div>
+            <div>
+              {user ? (
+                <Link
+                  href="/dashboard/bmi"
+                  className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#ccff00] hover:text-white transition-colors"
+                >
+                  <span>{dict.explore} BMI &rarr;</span>
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => openAuthModal("signup")}
+                  className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#ccff00] hover:text-white transition-colors cursor-pointer"
+                >
+                  <span>{dict.joinFree} &rarr;</span>
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Step 2 */}
+          <div className="relative p-6 sm:p-8 rounded-2xl bg-[rgba(18,24,38,0.65)] backdrop-blur-xl border border-[rgba(163,230,53,0.2)] hover:border-[#ccff00]/60 shadow-[0_10px_30px_rgba(0,0,0,0.4)] transition-all duration-300 group hover:-translate-y-1 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-3xl font-black font-mono text-[#ccff00]/30 group-hover:text-[#ccff00] transition-colors">
+                  02
+                </span>
+                <div className="w-12 h-12 rounded-xl bg-[#07090e] border border-[#a3e635]/30 flex items-center justify-center text-[#ccff00] group-hover:border-[#ccff00] group-hover:shadow-[0_0_20px_rgba(204,255,0,0.25)] transition-all">
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3 className="text-xl font-black text-white uppercase tracking-tight mb-3 group-hover:text-[#ccff00] transition-colors">
+                {dict.step2Title}
+              </h3>
+              <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed mb-6">
+                {dict.step2Desc}
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <Link
+                href="/dashboard/workouts"
+                className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[#ccff00] hover:text-white transition-colors"
+              >
+                <span>{dict.workouts} &rarr;</span>
+              </Link>
+              <span className="text-white/20">|</span>
+              <Link
+                href="/dashboard/nutrition"
+                className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[#ccff00] hover:text-white transition-colors"
+              >
+                <span>{dict.nutrition} &rarr;</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Step 3 */}
+          <div className="relative p-6 sm:p-8 rounded-2xl bg-[rgba(18,24,38,0.65)] backdrop-blur-xl border border-[rgba(163,230,53,0.2)] hover:border-[#ccff00]/60 shadow-[0_10px_30px_rgba(0,0,0,0.4)] transition-all duration-300 group hover:-translate-y-1 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-3xl font-black font-mono text-[#ccff00]/30 group-hover:text-[#ccff00] transition-colors">
+                  03
+                </span>
+                <div className="w-12 h-12 rounded-xl bg-[#07090e] border border-[#a3e635]/30 flex items-center justify-center text-[#ccff00] group-hover:border-[#ccff00] group-hover:shadow-[0_0_20px_rgba(204,255,0,0.25)] transition-all">
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <h3 className="text-xl font-black text-white uppercase tracking-tight mb-3 group-hover:text-[#ccff00] transition-colors">
+                {dict.step3Title}
+              </h3>
+              <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed mb-6">
+                {dict.step3Desc}
+              </p>
+            </div>
+            <div>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#ccff00] hover:text-white transition-colors"
+              >
+                <span>{dict.dashboard} &rarr;</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 3. Feature Showcase Cards (With Contextual Matching Photography) */}
       <section
         id="workouts"
@@ -507,10 +685,13 @@ export default function Home() {
           {featureCards.map((card, idx) => (
             <div
               key={idx}
-              className="card-neon-glass rounded-2xl overflow-hidden flex flex-col group"
+              className="card-neon-glass rounded-2xl overflow-hidden flex flex-col group transition-all duration-300 hover:border-[#ccff00]/50 hover:-translate-y-1"
             >
               {/* Card Photography */}
-              <div className="relative w-full aspect-[16/11] overflow-hidden">
+              <Link
+                href={card.href}
+                className="relative w-full aspect-[16/11] overflow-hidden block"
+              >
                 <Image
                   src={card.image}
                   alt={card.title}
@@ -530,36 +711,35 @@ export default function Home() {
                 <div className="absolute bottom-3 right-3 px-2 py-0.5 rounded bg-[rgba(18,24,38,0.85)] border border-[rgba(163,230,53,0.2)] text-[10px] font-mono font-bold text-white">
                   {card.metric}
                 </div>
-              </div>
+              </Link>
 
               {/* Card Body */}
               <div className="p-5 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="text-lg font-black text-white uppercase tracking-tight mb-2 group-hover:text-[#ccff00] transition-colors">
-                    {card.title}
-                  </h3>
+                  <Link href={card.href}>
+                    <h3 className="text-lg font-black text-white uppercase tracking-tight mb-2 group-hover:text-[#ccff00] transition-colors">
+                      {card.title}
+                    </h3>
+                  </Link>
                   <p className="text-xs text-[#94a3b8] leading-relaxed">
                     {card.description}
                   </p>
                 </div>
 
                 <div className="mt-5 pt-4 border-t border-[rgba(163,230,53,0.12)] flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-white group-hover:text-[#ccff00] transition-colors">
-                    {dict.exploreModule}
-                  </span>
-                  <svg
-                    className="w-4 h-4 text-[#ccff00] transition-transform group-hover:translate-x-1"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    viewBox="0 0 24 24"
+                  <Link
+                    href={card.href}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider bg-[#121826] border border-[#a3e635]/30 text-[#ccff00] hover:bg-[#ccff00] hover:text-black hover:border-[#ccff00] transition-all shadow-[0_0_12px_rgba(204,255,0,0.1)] group/btn"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                    />
-                  </svg>
+                    <span>{dict.tryNow}</span>
+                    <span className="group-hover/btn:translate-x-0.5 transition-transform">&rarr;</span>
+                  </Link>
+                  <Link
+                    href={card.href}
+                    className="text-[11px] font-bold uppercase tracking-wider text-[#94a3b8] hover:text-[#ccff00] transition-colors"
+                  >
+                    {dict.explore}
+                  </Link>
                 </div>
               </div>
             </div>
