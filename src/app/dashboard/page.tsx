@@ -178,7 +178,7 @@ export default function DashboardPage() {
   const navTabs = [
     { name: dict.overview, href: "/dashboard" },
     { name: dict.bmi, href: "/dashboard/bmi" },
-    { name: dict.workouts, href: "/dashboard/workout" },
+    { name: dict.workouts, href: "/dashboard/workouts" },
     { name: dict.nutrition, href: "/dashboard/nutrition" },
   ];
 
@@ -291,7 +291,10 @@ export default function DashboardPage() {
           {/* Navigation Tabs Bar */}
           <nav className="flex space-x-1 sm:space-x-2 border-t border-[rgba(163,230,53,0.08)] py-2 overflow-x-auto">
             {navTabs.map((tab) => {
-              const isActive = pathname === tab.href;
+              const isActive =
+                pathname === tab.href ||
+                (tab.href === "/dashboard/workouts" &&
+                  pathname === "/dashboard/workout");
               return (
                 <Link
                   key={tab.name}
