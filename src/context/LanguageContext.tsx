@@ -97,9 +97,6 @@ export const translations = {
     // 7-Day Cyclical Streak & 30-Day Progress Board
     streakPrefix: "Day",
     streakOutOfSeven: "/ 7 🔥",
-    bmiPrereqNotice:
-      "⚠️ To activate the 30-Day Progress Chart Board, please calculate & record your BMI and body metrics first",
-    calcBmiBtn: "Measure BMI",
     chartBoardTitle: "30-DAY TELEMETRY & PROGRESS BOARD",
     chartBoardSubtitle:
       "Historical telemetry of daily calories burned, water hydration, and habit completion rate",
@@ -111,10 +108,6 @@ export const translations = {
     avgHydration: "Avg Hydration",
     consistencyRate: "Consistency Rate",
     bestCycle: "Best Streak Cycle",
-    chartLocked: "CHART BOARD LOCKED",
-    chartLockedDesc:
-      "Calculate your BMI in the Body module to unlock full 30-day analytics and trend projections.",
-    unlockNow: "UNLOCK NOW",
     statusCompleted: "Completed",
     statusPartial: "Partial",
     statusRest: "Rest / Pending",
@@ -225,9 +218,6 @@ export const translations = {
     // 7-Day Cyclical Streak & 30-Day Progress Board
     streakPrefix: "দিন",
     streakOutOfSeven: "/ ৭ 🔥",
-    bmiPrereqNotice:
-      "⚠️ চার্ট বোর্ড চালু করতে প্রথমে আপনার BMI ও শারীরিক পরিমাপ হিসাব করুন",
-    calcBmiBtn: "BMI মাপুন",
     chartBoardTitle: "৩০ দিনের অগ্রগতি ও টেলিমেট্রি বোর্ড",
     chartBoardSubtitle:
       "গত ৩০ দিনের দৈনিক ক্যালরি খরচ, পানি গ্রহণ এবং অভ্যাসের ইতিহাস পর্যবেক্ষণ করুন",
@@ -239,10 +229,6 @@ export const translations = {
     avgHydration: "গড় পানি গ্রহণ",
     consistencyRate: "ধারাবাহিকতা রেটিং",
     bestCycle: "সেরা স্ট্রিক সাইকেল",
-    chartLocked: "চার্ট বোর্ড লক করা",
-    chartLockedDesc:
-      "৩০ দিনের সম্পূর্ণ অ্যানালিটিক্স ও ট্রেন্ড আনলক করতে প্রথমে বডি মডিউলে গিয়ে আপনার BMI হিসাব করুন।",
-    unlockNow: "এখনই আনলক করুন",
     statusCompleted: "সম্পূর্ণ",
     statusPartial: "আংশিক",
     statusRest: "বিশ্রাম / অসমাপ্ত",

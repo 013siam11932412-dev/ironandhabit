@@ -11,7 +11,6 @@ import {
   getStoredHistory,
   getStoredStreak,
   saveStoredStreak,
-  hasCalculatedBmi,
   checkAndRunMidnightReset,
   forceMidnightReset,
 } from "@/lib/storage";
@@ -24,10 +23,7 @@ export default function DashboardPage() {
   const [streakDay, setStreakDay] = useState<number>(() => getStoredStreak());
   const [streakIncrementedToday, setStreakIncrementedToday] = useState(false);
 
-  // 2. BMI Prerequisite State
-  const [hasBmi, setHasBmi] = useState<boolean>(() => hasCalculatedBmi());
-
-  // 3. 30-Day History State
+  // 2. 30-Day History State
   const [history30Days, setHistory30Days] = useState<DailyRecord[]>(() =>
     getStoredHistory()
   );
@@ -97,7 +93,6 @@ export default function DashboardPage() {
   // Client-side date check & storage sync (ensuring zero SSR hydration mismatch)
   useEffect(() => {
     const timer = setTimeout(() => {
-      setHasBmi(hasCalculatedBmi());
       const resetResult = checkAndRunMidnightReset({
         glassesCount: 8,
         completedQuests: 5,
@@ -113,7 +108,6 @@ export default function DashboardPage() {
     }, 0);
 
     function handleStorage() {
-      setHasBmi(hasCalculatedBmi());
       setStreakDay(getStoredStreak());
       setHistory30Days(getStoredHistory());
     }
@@ -667,50 +661,19 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* 3. 30-Day Progress Chart Board (With BMI Prerequisite Check) */}
+        {/* 3. 30-Day Progress Chart Board */}
         <section className="pt-2">
-          {!hasBmi ? (
-            /* Aesthetic Dark Neon Locked Banner */
-            <div className="p-6 sm:p-8 rounded-2xl bg-[rgba(18,24,38,0.7)] backdrop-blur-md border-2 border-dashed border-amber-400/40 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
-              <div className="flex flex-col sm:flex-row items-center gap-5">
-                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-center text-3xl flex-shrink-0 shadow-[0_0_20px_rgba(245,158,11,0.2)]">
-                  ⚠️
-                </div>
-                <div>
-                  <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-300 text-[10px] font-black uppercase tracking-wider border border-amber-400/20 mb-1">
-                    {dict.chartLocked}
-                  </div>
-                  <h4 className="text-lg font-black uppercase text-white">
-                    {language === "bn"
-                      ? "৩০-দিনের প্রগ্রেস চার্ট বোর্ড আনলক করুন"
-                      : "Unlock 30-Day Monthly Telemetry Board"}
-                  </h4>
-                  <p className="text-xs text-[#94a3b8] mt-1 max-w-xl leading-relaxed">
-                    {dict.bmiPrereqNotice}
-                  </p>
-                </div>
-              </div>
-              <Link
-                href="/dashboard/bmi"
-                className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-[#ccff00] hover:bg-[#d8ff33] text-black font-black text-xs uppercase tracking-wider shadow-[0_0_25px_rgba(204,255,0,0.4)] whitespace-nowrap active:scale-95 transition-all text-center"
-              >
-                {dict.calcBmiBtn} &rarr;
-              </Link>
-            </div>
-          ) : (
-            /* Unlocked 30-Day History Chart Board with Real-Time Metric Binding */
-            <ProgressChartBoard
-              history={history30Days}
-              todayMetrics={{
-                caloriesBurned:
-                  1850 + Math.round((completionPercentage / 100) * 600),
-                waterMl: filledGlassesCount * 250,
-                habitsScore: completionPercentage,
-                completedQuestsCount: completedQuestsCount,
-                totalQuestsCount: quests.length,
-              }}
-            />
-          )}
+          <ProgressChartBoard
+            history={history30Days}
+            todayMetrics={{
+              caloriesBurned:
+                1850 + Math.round((completionPercentage / 100) * 600),
+              waterMl: filledGlassesCount * 250,
+              habitsScore: completionPercentage,
+              completedQuestsCount: completedQuestsCount,
+              totalQuestsCount: quests.length,
+            }}
+          />
         </section>
 
         {/* 4. Quick Navigation Cards to Connected Modules */}
