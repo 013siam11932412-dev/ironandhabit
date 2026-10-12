@@ -37,6 +37,20 @@ export default function DashboardPage() {
 
   // 2. Real Telemetry Metrics (Dynamic from Supabase / localStorage)
   const [todayCalories, setTodayCalories] = useState<number>(0);
+  const [calorieTarget] = useState<number>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("iron_custom_calorie_target");
+        if (saved) {
+          const parsed = parseInt(saved, 10);
+          if (!isNaN(parsed) && parsed > 0) return parsed;
+        }
+      } catch {
+        // ignore
+      }
+    }
+    return 2400;
+  });
   const [todayWorkoutMinutes, setTodayWorkoutMinutes] = useState<number>(0);
 
   // 3. 30-Day History State (starts empty / authentic records only)
@@ -479,19 +493,19 @@ export default function DashboardPage() {
                 {todayCalories.toLocaleString()}
               </span>
               <span className="text-xs text-[#94a3b8] font-mono">
-                / 2,400 kcal
+                / {calorieTarget.toLocaleString()} kcal
               </span>
             </div>
             <div className="w-full bg-[#07090e] h-2 rounded-full overflow-hidden border border-[rgba(163,230,53,0.1)]">
               <div
                 className="bg-[#ccff00] h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(204,255,0,0.4)]"
-                style={{ width: `${Math.min(100, (todayCalories / 2400) * 100)}%` }}
+                style={{ width: `${Math.min(100, (todayCalories / calorieTarget) * 100)}%` }}
               />
             </div>
             <div className="flex justify-between items-center text-[10px] text-[#94a3b8] mt-2 font-mono">
-              <span>{Math.max(0, 2400 - todayCalories)} kcal {dict.remaining}</span>
+              <span>{Math.max(0, calorieTarget - todayCalories).toLocaleString()} kcal {dict.remaining}</span>
               <span className="text-[#ccff00] font-bold">
-                {Math.min(100, Math.round((todayCalories / 2400) * 100))}% {dict.target}
+                {Math.min(100, Math.round((todayCalories / calorieTarget) * 100))}% {dict.target}
               </span>
             </div>
           </div>

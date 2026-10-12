@@ -11,8 +11,10 @@ import {
   fetchBmiRecords,
   insertBmiRecord,
   deleteBmiRecord,
+  fetchDailyMetrics,
+  upsertDailyMetrics,
 } from "@/lib/db";
-import { getStoredStreak } from "@/lib/storage";
+import { getStoredStreak, getTodayIsoDate, toBnDigits } from "@/lib/storage";
 
 export default function BmiPage() {
   const pathname = usePathname();
@@ -24,6 +26,11 @@ export default function BmiPage() {
   const [inches, setInches] = useState<string>("");
   const [weightKg, setWeightKg] = useState<string>("");
   const [bmiResult, setBmiResult] = useState<number | null>(null);
+
+  // Recommendation Engine State (Goal Switcher & Sync)
+  const [selectedGoal, setSelectedGoal] = useState<"gain" | "maintain" | "lose">("maintain");
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const [syncNotice, setSyncNotice] = useState<string | null>(null);
 
   // Historical Records State
   const [records, setRecords] = useState<BmiRecord[]>([]);
@@ -41,7 +48,19 @@ export default function BmiPage() {
           setRecords(data);
           // If there's a previous record, initialize latest BMI result display
           if (data.length > 0) {
-            setBmiResult((prev) => (prev === null ? data[0].bmi : prev));
+            const firstBmi = data[0].bmi;
+            setBmiResult((prev) => (prev === null ? firstBmi : prev));
+            if (data[0].weight) {
+              setWeightKg((prev) => (prev ? prev : String(data[0].weight)));
+            }
+            // Auto detect category recommendation for existing history
+            if (firstBmi < 18.5) {
+              setSelectedGoal("gain");
+            } else if (firstBmi >= 25.0) {
+              setSelectedGoal("lose");
+            } else {
+              setSelectedGoal("maintain");
+            }
           }
           setIsLoadingRecords(false);
         }
@@ -114,6 +133,15 @@ export default function BmiPage() {
       const bmiVal = parseFloat(calculated.toFixed(1));
       setBmiResult(bmiVal);
 
+      // Trigger automatic category detection immediately
+      if (bmiVal < 18.5) {
+        setSelectedGoal("gain");
+      } else if (bmiVal >= 25.0) {
+        setSelectedGoal("lose");
+      } else {
+        setSelectedGoal("maintain");
+      }
+
       const categoryData = getBmiData(bmiVal);
       const categoryName = categoryData?.category || "Normal / Athletic";
 
@@ -143,6 +171,121 @@ export default function BmiPage() {
   }
 
   const bmiData = getBmiData(bmiResult);
+
+  // Automated Smart Health & Action Recommendation Calculations
+  const effectiveBmi = bmiResult ?? (records.length > 0 ? records[0].bmi : null);
+  const aiRecommendedGoal: "gain" | "maintain" | "lose" =
+    effectiveBmi !== null
+      ? effectiveBmi < 18.5
+        ? "gain"
+        : effectiveBmi >= 25.0
+        ? "lose"
+        : "maintain"
+      : "maintain";
+
+  const activeWeight =
+    parseFloat(weightKg) || (records.length > 0 ? records[0].weight : 70);
+
+  // Base Maintenance Calories
+  const baseTdee = Math.round(activeWeight * 33);
+  let targetCalories = baseTdee;
+  let proteinGrams = Math.round(activeWeight * 1.8);
+  let fatsGrams = Math.round(activeWeight * 0.9);
+  let goalBadgeText = language === "bn" ? "মেইনটেন্যান্স ক্যালরি" : "MAINTENANCE FUEL";
+  let goalBadgeColor = "#ccff00";
+  let goalSplit =
+    language === "bn"
+      ? "আপার / লোয়ার স্প্লিট বা ফুল-বডি অ্যাথলেটিক"
+      : "Upper / Lower Split or Full-Body Athletic";
+  let goalFrequency =
+    language === "bn"
+      ? "সপ্তাহে ৩ - ৪ দিন • শক্তি ও গতিশীলতা"
+      : "3 - 4 Days / Week • Strength & Mobility";
+  let goalFocus =
+    language === "bn"
+      ? "ফাংশনাল কম্পাউন্ড মুভমেন্ট, কোর স্ট্যাবিলিটি, ১০-১৫ মিনিট স্টেডি কার্ডিও ফিনিশ।"
+      : "Functional compound lifts, core stability, and 10-15 min steady aerobic finish.";
+
+  if (selectedGoal === "gain") {
+    targetCalories = baseTdee + 450;
+    proteinGrams = Math.round(activeWeight * 2.0);
+    fatsGrams = Math.round(activeWeight * 1.0);
+    goalBadgeText = language === "bn" ? "+৪৫০ ক্যালরি উদ্বৃত্ত (বাল্ক)" : "+450 KCAL SURPLUS (BULK)";
+    goalBadgeColor = "#38bdf8";
+    goalSplit =
+      language === "bn"
+        ? "হাইপারট্রফি পুশ / পুল / লেগস (PPL)"
+        : "Hypertrophy Push / Pull / Legs (PPL)";
+    goalFrequency =
+      language === "bn"
+        ? "সপ্তাহে ৪ - ৫ দিন • প্রোগ্রেসিভ ওভারলোড"
+        : "4 - 5 Days / Week • Progressive Overload";
+    goalFocus =
+      language === "bn"
+        ? "হেভি কম্পাউন্ড ব্যায়াম (স্কোয়াট, বেঞ্চ, ডেডলিফ্ট), ৮-১২ রিপস ভলিউম, ২-৩ মিনিট রেস্ট।"
+        : "Heavy compound lifts (Squat, Bench, Deadlift), 8-12 reps hypertrophy range, 2-3 min rest.";
+  } else if (selectedGoal === "lose") {
+    targetCalories = Math.max(1400, baseTdee - 450);
+    proteinGrams = Math.round(activeWeight * 2.2);
+    fatsGrams = Math.round(activeWeight * 0.75);
+    goalBadgeText = language === "bn" ? "-৪৫০ ক্যালরি ঘাটতি (কাট)" : "-450 KCAL DEFICIT (CUT)";
+    goalBadgeColor = "#f59e0b";
+    goalSplit =
+      language === "bn"
+        ? "কার্ডিও + হাই-ডেনসিটি রেজিস্ট্যান্স / সার্কিট"
+        : "Cardio + High-Density Resistance / Circuit";
+    goalFrequency =
+      language === "bn"
+        ? "সপ্তাহে ৪ - ৫ দিন • ক্যালরি বার্ন ও পেশি সুরক্ষা"
+        : "4 - 5 Days / Week • Calorie Burn & Retention";
+    goalFocus =
+      language === "bn"
+        ? "১২-১৫ রিপস সুপারসেট, দৈনিক ৮,০০০-১০,০০০ স্টেপস এবং জোন ২ লো-ইন্টেনসিটি কার্ডিও।"
+        : "12-15 rep supersets, 8k-10k daily steps, and Zone 2 steady-state cardiovascular conditioning.";
+  }
+
+  const carbsGrams = Math.max(
+    80,
+    Math.round((targetCalories - (proteinGrams * 4 + fatsGrams * 9)) / 4)
+  );
+
+  const recommendedWaterMl = Math.round((activeWeight * 35) / 250) * 250;
+  const recommendedGlasses = Math.max(8, Math.round(recommendedWaterMl / 250));
+
+  async function handleApplyDailyTargets() {
+    setIsSyncing(true);
+    try {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("iron_custom_calorie_target", String(targetCalories));
+        localStorage.setItem("iron_custom_hydration_target_ml", String(recommendedWaterMl));
+        localStorage.setItem("iron_custom_water_glasses", String(recommendedGlasses));
+        localStorage.setItem("iron_selected_fitness_goal", selectedGoal);
+      }
+
+      const today = getTodayIsoDate();
+      const existing = await fetchDailyMetrics(user?.id || null, today);
+      await upsertDailyMetrics(user?.id || null, {
+        date: today,
+        water_ml: existing?.water_ml || 0,
+        calories_consumed: existing?.calories_consumed || 0,
+        streak_count: existing?.streak_count || streakDay,
+      });
+
+      const message =
+        language === "bn"
+          ? `দৈনিক লক্ষ্য ${toBnDigits(targetCalories)} ক্যালরি এবং ${toBnDigits(recommendedGlasses)} গ্লাস পানি (${toBnDigits(recommendedWaterMl)} মিলি) সফলভাবে ড্যাশবোর্ডে সেট করা হয়েছে!`
+          : `Daily targets updated! Calorie goal set to ${targetCalories.toLocaleString()} kcal & Water goal set to ${recommendedGlasses} glasses (${recommendedWaterMl.toLocaleString()} ml).`;
+
+      setSyncNotice(message);
+      setTimeout(() => {
+        setSyncNotice(null);
+      }, 5000);
+    } catch (err) {
+      console.error("Failed to apply daily targets:", err);
+    } finally {
+      setIsSyncing(false);
+    }
+  }
 
   const navTabs = [
     { name: dict.overview, href: "/dashboard" },
@@ -478,6 +621,275 @@ export default function BmiPage() {
             )}
           </div>
         </div>
+
+        {/* Smart Health & Action Recommendation Engine */}
+        <section className="bg-[rgba(18,24,38,0.7)] backdrop-blur-md border border-[rgba(163,230,53,0.25)] rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden space-y-6">
+          {/* Subtle Ambient Glow */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-[#ccff00]/[0.03] blur-[120px] rounded-full pointer-events-none" />
+
+          {/* Section Header & Interactive Goal Switcher Tabs */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[rgba(163,230,53,0.12)] pb-5">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[rgba(18,24,38,0.85)] border border-[rgba(163,230,53,0.3)] shadow-[0_0_12px_rgba(204,255,0,0.1)] mb-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ccff00] animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-[#ccff00]">
+                  {dict.smartRecTitle}
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-black uppercase text-white tracking-tight">
+                {dict.actionPlanOverview}
+              </h2>
+              <p className="text-xs text-[#94a3b8] mt-1">
+                {dict.smartRecSubtitle}
+              </p>
+            </div>
+
+            {/* Interactive Goal Switcher Tabs */}
+            <div className="flex items-center gap-1.5 bg-[#07090e] p-1.5 rounded-xl border border-[rgba(163,230,53,0.2)] self-start md:self-auto overflow-x-auto max-w-full">
+              {[
+                { key: "gain", label: dict.goalGainShort, fullLabel: dict.goalGain },
+                { key: "maintain", label: dict.goalMaintainShort, fullLabel: dict.goalMaintain },
+                { key: "lose", label: dict.goalLoseShort, fullLabel: dict.goalLose },
+              ].map((tab) => {
+                const isActive = selectedGoal === tab.key;
+                const isAiRecommended = aiRecommendedGoal === tab.key;
+                return (
+                  <button
+                    key={tab.key}
+                    type="button"
+                    onClick={() => setSelectedGoal(tab.key as "gain" | "maintain" | "lose")}
+                    title={tab.fullLabel}
+                    className={`px-3 sm:px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 flex items-center gap-2 whitespace-nowrap cursor-pointer ${
+                      isActive
+                        ? "bg-[#ccff00] text-black shadow-[0_0_15px_rgba(204,255,0,0.35)] font-black"
+                        : "text-[#94a3b8] hover:text-white hover:bg-[rgba(18,24,38,0.6)]"
+                    }`}
+                  >
+                    <span>{tab.label}</span>
+                    {isAiRecommended && (
+                      <span
+                        className={`text-[9px] font-black uppercase px-1.5 py-0.5 rounded border transition-colors ${
+                          isActive
+                            ? "bg-black/20 text-black border-black/30"
+                            : "bg-[#ccff00]/15 text-[#ccff00] border-[#ccff00]/30"
+                        }`}
+                      >
+                        {dict.aiRecommendedBadge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 3 Comprehensive Action Plan Cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Card 1: Daily Nutrition Target */}
+            <div className="p-5 rounded-2xl bg-[#07090e]/85 border border-[rgba(163,230,53,0.2)] hover:border-[#ccff00]/40 transition-all flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">🔥</span>
+                    <span className="text-xs font-black uppercase tracking-wider text-white">
+                      {dict.nutritionTargetTitle}
+                    </span>
+                  </div>
+                  <span
+                    className="text-[10px] font-mono font-bold px-2 py-0.5 rounded border"
+                    style={{
+                      color: goalBadgeColor,
+                      borderColor: `${goalBadgeColor}40`,
+                      backgroundColor: `${goalBadgeColor}15`,
+                    }}
+                  >
+                    {goalBadgeText}
+                  </span>
+                </div>
+
+                <div className="mb-4">
+                  <div className="text-3xl font-black text-white font-mono leading-none">
+                    {targetCalories.toLocaleString()}
+                    <span className="text-sm font-bold text-[#ccff00] ml-1.5 font-mono">
+                      KCAL
+                    </span>
+                  </div>
+                  <div className="text-[10px] font-black uppercase tracking-wider text-[#94a3b8] mt-1">
+                    {dict.dailyCaloriesTarget}
+                  </div>
+                </div>
+
+                {/* Macro Breakdown Pills */}
+                <div className="space-y-2 pt-2 border-t border-[rgba(163,230,53,0.1)]">
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-[#94a3b8] flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-[#ccff00]" />
+                      {dict.proteinTarget}
+                    </span>
+                    <span className="font-bold text-white">{proteinGrams}g</span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-[#94a3b8] flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-sky-400" />
+                      {dict.carbsTarget}
+                    </span>
+                    <span className="font-bold text-white">{carbsGrams}g</span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs font-mono">
+                    <span className="text-[#94a3b8] flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-amber-400" />
+                      {dict.fatsTarget}
+                    </span>
+                    <span className="font-bold text-white">{fatsGrams}g</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-[rgba(163,230,53,0.08)] text-[11px] text-[#94a3b8] leading-relaxed">
+                {dict.nutritionTargetDesc}
+              </div>
+            </div>
+
+            {/* Card 2: Workout & Training Protocol */}
+            <div className="p-5 rounded-2xl bg-[#07090e]/85 border border-[rgba(163,230,53,0.2)] hover:border-[#ccff00]/40 transition-all flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">🏋️</span>
+                    <span className="text-xs font-black uppercase tracking-wider text-white">
+                      {dict.workoutProtocolTitle}
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono font-bold text-[#ccff00] bg-[#ccff00]/10 px-2 py-0.5 rounded border border-[#ccff00]/25">
+                    {dict.routineSplit}
+                  </span>
+                </div>
+
+                <div className="space-y-3 mb-4">
+                  <div>
+                    <div className="text-base font-black text-white uppercase tracking-tight">
+                      {goalSplit}
+                    </div>
+                    <div className="text-xs font-bold text-[#ccff00] font-mono mt-0.5">
+                      {goalFrequency}
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-[rgba(18,24,38,0.6)] border border-[rgba(163,230,53,0.15)] text-xs text-[#94a3b8] leading-relaxed">
+                    <span className="font-bold text-white block mb-0.5">
+                      {dict.keyTrainingFocus}:
+                    </span>
+                    {goalFocus}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-2 pt-3 border-t border-[rgba(163,230,53,0.08)] flex items-center justify-between">
+                <Link
+                  href="/dashboard/workouts"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-wider bg-[#121826] border border-[#a3e635]/40 text-[#ccff00] hover:bg-[#ccff00] hover:text-black transition-all shadow-[0_0_12px_rgba(204,255,0,0.15)]"
+                >
+                  <span>{dict.openWorkoutPlanner}</span>
+                  <span>&rarr;</span>
+                </Link>
+                <span className="text-[10px] font-mono text-[#94a3b8]">
+                  {language === "bn" ? "লাইভ ট্র্যাকার" : "Live Logging"}
+                </span>
+              </div>
+            </div>
+
+            {/* Card 3: Hydration & Recovery Blueprint */}
+            <div className="p-5 rounded-2xl bg-[#07090e]/85 border border-[rgba(163,230,53,0.2)] hover:border-[#ccff00]/40 transition-all flex flex-col justify-between group">
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">💧</span>
+                    <span className="text-xs font-black uppercase tracking-wider text-white">
+                      {dict.hydrationRecoveryTitle}
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono font-bold text-sky-400 bg-sky-400/10 px-2 py-0.5 rounded border border-sky-400/25">
+                    {recommendedGlasses} {language === "bn" ? "গ্লাস" : "GLASSES"}
+                  </span>
+                </div>
+
+                <div className="mb-4">
+                  <div className="text-3xl font-black text-white font-mono leading-none">
+                    {recommendedWaterMl.toLocaleString()}
+                    <span className="text-sm font-bold text-sky-400 ml-1.5 font-mono">
+                      ML
+                    </span>
+                  </div>
+                  <div className="text-[10px] font-black uppercase tracking-wider text-[#94a3b8] mt-1">
+                    {dict.recommendedWater} ({recommendedGlasses} x 250ml)
+                  </div>
+                </div>
+
+                <div className="space-y-2 pt-2 border-t border-[rgba(163,230,53,0.1)]">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-[#94a3b8]">{dict.sleepTarget}:</span>
+                    <span className="font-bold text-white font-mono">
+                      {language === "bn" ? "৭.৫ - ৮.৫ ঘণ্টা" : "7.5 - 8.5 Hours"}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-[#94a3b8]">{dict.mobilityTarget}:</span>
+                    <span className="font-bold text-[#ccff00] font-mono">
+                      {language === "bn" ? "১০-১৫ মিনিট দৈনিক" : "10-15 Min Daily"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-[rgba(163,230,53,0.08)] text-[11px] text-[#94a3b8] leading-relaxed">
+                {dict.hydrationRecoveryDesc}
+              </div>
+            </div>
+          </div>
+
+          {/* One-Click Sync Action Footer Bar */}
+          <div className="p-4 sm:p-5 rounded-xl bg-[#07090e]/80 border border-[rgba(163,230,53,0.25)] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-[#ccff00]/10 border border-[#ccff00]/30 flex items-center justify-center text-[#ccff00]">
+                ⚡
+              </div>
+              <div>
+                <div className="text-xs font-bold text-white">
+                  {language === "bn"
+                    ? "ড্যাশবোর্ডের সাথে এই লক্ষ্যগুলো সংযুক্ত করুন"
+                    : "Synchronize tailored targets to your daily dashboard"}
+                </div>
+                <div className="text-[11px] text-[#94a3b8]">
+                  {language === "bn"
+                    ? `ক্যালরি লক্ষ্যমাত্রা ${toBnDigits(targetCalories)} kcal এবং পানি ${toBnDigits(recommendedGlasses)} গ্লাস নির্ধারণ করা হবে।`
+                    : `Will configure ${targetCalories.toLocaleString()} kcal & ${recommendedGlasses} glasses water on Dashboard.`}
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleApplyDailyTargets}
+              disabled={isSyncing}
+              className="w-full sm:w-auto px-6 py-3 rounded-xl text-xs font-black uppercase tracking-wider bg-[#ccff00] hover:bg-[#d8ff33] text-black transition-all duration-200 shadow-[0_0_20px_rgba(204,255,0,0.35)] hover:shadow-[0_0_30px_rgba(204,255,0,0.55)] active:scale-95 disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap"
+            >
+              {isSyncing ? (
+                <span className="animate-spin">⏳</span>
+              ) : (
+                <span>✓</span>
+              )}
+              <span>{dict.applyToDailyTargets}</span>
+            </button>
+          </div>
+
+          {/* Sync Success Toast Notice */}
+          {syncNotice && (
+            <div className="p-3.5 rounded-xl bg-[#ccff00]/10 border border-[#ccff00] text-xs font-bold text-[#ccff00] flex items-center gap-2.5 shadow-[0_0_20px_rgba(204,255,0,0.2)] animate-in fade-in">
+              <span className="text-base leading-none">✓</span>
+              <span>{syncNotice}</span>
+            </div>
+          )}
+        </section>
 
         {/* Real Historical BMI Entries List (Live Supabase & Offline Persistence) */}
         <div className="bg-[rgba(18,24,38,0.7)] backdrop-blur-md border border-[rgba(163,230,53,0.2)] rounded-2xl p-6 shadow-xl space-y-4">
