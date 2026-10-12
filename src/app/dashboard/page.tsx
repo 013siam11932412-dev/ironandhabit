@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import LanguageToggle from "@/components/LanguageToggle";
-import ProgressChartBoard from "./components/ProgressChartBoard";
+import ProgressChartBoard from "@/components/dashboard/ProgressChartBoard";
 import {
   DailyRecord,
   getStoredHistory,
