@@ -1,50 +1,61 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
+import {
+  BmiRecord,
+  fetchBmiRecords,
+  insertBmiRecord,
+  deleteBmiRecord,
+} from "@/lib/db";
+import { getStoredStreak } from "@/lib/storage";
 
 export default function BmiPage() {
   const pathname = usePathname();
   const { dict, language } = useLanguage();
+  const { user } = useAuth();
 
-  // BMI inputs (Feet, Inches, and Weight in KG)
-  const [feet, setFeet] = useState<string>("5");
-  const [inches, setInches] = useState<string>("9");
-  const [weightKg, setWeightKg] = useState<string>("78");
-  const [bmiResult, setBmiResult] = useState<number | null>(25.4);
+  // BMI inputs (Feet, Inches, and Weight in KG) - Empty Initial State (No fake data)
+  const [feet, setFeet] = useState<string>("");
+  const [inches, setInches] = useState<string>("");
+  const [weightKg, setWeightKg] = useState<string>("");
+  const [bmiResult, setBmiResult] = useState<number | null>(null);
 
-  function calculateBmi() {
-    const ft = parseFloat(feet) || 0;
-    const inc = parseFloat(inches) || 0;
-    const w = parseFloat(weightKg);
-    const totalInches = ft * 12 + inc;
-    if (totalInches > 0 && w > 0) {
-      const totalMeters = totalInches * 0.0254;
-      const calculated = w / (totalMeters * totalMeters);
-      const bmiVal = parseFloat(calculated.toFixed(1));
-      setBmiResult(bmiVal);
+  // Historical Records State
+  const [records, setRecords] = useState<BmiRecord[]>([]);
+  const [isLoadingRecords, setIsLoadingRecords] = useState<boolean>(true);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [streakDay] = useState<number>(() => getStoredStreak());
 
-      if (typeof window !== "undefined") {
-        try {
-          localStorage.setItem(
-            "iron_bmi_data",
-            JSON.stringify({
-              bmi: bmiVal,
-              feet: ft,
-              inches: inc,
-              weightKg: w,
-              calculatedAt: "2026-10-11",
-            })
-          );
-        } catch {
-          // ignore
+  // Load Historical BMI Records from Supabase / localStorage
+  useEffect(() => {
+    let mounted = true;
+    setIsLoadingRecords(true);
+
+    fetchBmiRecords(user?.id)
+      .then((data) => {
+        if (mounted) {
+          setRecords(data);
+          // If there's a previous record, initialize latest BMI result display
+          if (data.length > 0 && bmiResult === null) {
+            setBmiResult(data[0].bmi);
+          }
+          setIsLoadingRecords(false);
         }
-      }
-    }
-  }
+      })
+      .catch((err) => {
+        console.error("Failed to load BMI records:", err);
+        if (mounted) setIsLoadingRecords(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [user]);
 
   // Determine category & advice
   function getBmiData(bmi: number | null) {
@@ -87,6 +98,48 @@ export default function BmiPage() {
           : "Prioritize caloric deficit, high daily hydration, and steady-state Zone 2 cardiovascular work paired with hypertrophy training to preserve metabolic rate.",
         positionPercent: Math.min(95, 75 + ((bmi - 30) / 10) * 20),
       };
+    }
+  }
+
+  async function calculateAndSaveBmi() {
+    const ft = parseFloat(feet) || 0;
+    const inc = parseFloat(inches) || 0;
+    const w = parseFloat(weightKg);
+    const totalInches = ft * 12 + inc;
+
+    if (totalInches > 0 && w > 0) {
+      setIsSaving(true);
+      const totalMeters = totalInches * 0.0254;
+      const heightCm = Math.round(totalMeters * 100);
+      const calculated = w / (totalMeters * totalMeters);
+      const bmiVal = parseFloat(calculated.toFixed(1));
+      setBmiResult(bmiVal);
+
+      const categoryData = getBmiData(bmiVal);
+      const categoryName = categoryData?.category || "Normal / Athletic";
+
+      try {
+        const saved = await insertBmiRecord(user?.id || null, {
+          height: heightCm,
+          weight: w,
+          bmi: bmiVal,
+          category: categoryName,
+        });
+        setRecords((prev) => [saved, ...prev]);
+      } catch (err) {
+        console.error("Failed to save BMI record:", err);
+      } finally {
+        setIsSaving(false);
+      }
+    }
+  }
+
+  async function handleDeleteRecord(id: string | number) {
+    try {
+      await deleteBmiRecord(user?.id || null, id);
+      setRecords((prev) => prev.filter((r) => String(r.id) !== String(id)));
+    } catch (err) {
+      console.error("Failed to delete BMI record:", err);
     }
   }
 
@@ -145,8 +198,8 @@ export default function BmiPage() {
               <LanguageToggle />
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[rgba(18,24,38,0.85)] border border-[rgba(163,230,53,0.3)] shadow-[0_0_15px_rgba(204,255,0,0.15)]">
                 <span className="w-2 h-2 rounded-full bg-[#ccff00] animate-pulse" />
-                <span className="text-xs font-black uppercase text-[#ccff00] tracking-wider">
-                  {dict.streak7DaysBadge}
+                <span className="text-xs font-black uppercase text-[#ccff00] tracking-wider font-mono">
+                  {language === "bn" ? `দিন ${streakDay} / ৭ 🔥` : `Day ${streakDay} / 7 🔥`}
                 </span>
               </div>
               <Link
@@ -265,7 +318,7 @@ export default function BmiPage() {
                     step="0.1"
                     value={weightKg}
                     onChange={(e) => setWeightKg(e.target.value)}
-                    placeholder="78"
+                    placeholder="75"
                     className="w-full bg-[#07090e] border border-[rgba(163,230,53,0.2)] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[#ccff00] focus:ring-1 focus:ring-[#ccff00] font-mono transition-colors"
                   />
                   <span className="absolute right-4 top-3.5 text-xs text-[#94a3b8] font-bold font-mono">
@@ -276,14 +329,19 @@ export default function BmiPage() {
 
               <button
                 type="button"
-                onClick={calculateBmi}
-                className="w-full py-3.5 rounded-xl text-sm font-black uppercase tracking-wider bg-[#ccff00] hover:bg-[#d8ff33] text-black transition-all duration-200 shadow-[0_0_20px_rgba(204,255,0,0.3)] hover:shadow-[0_0_30px_rgba(204,255,0,0.5)] active:scale-95"
+                onClick={calculateAndSaveBmi}
+                disabled={isSaving || !feet || !weightKg}
+                className="w-full py-3.5 rounded-xl text-sm font-black uppercase tracking-wider bg-[#ccff00] hover:bg-[#d8ff33] text-black transition-all duration-200 shadow-[0_0_20px_rgba(204,255,0,0.3)] hover:shadow-[0_0_30px_rgba(204,255,0,0.5)] active:scale-95 disabled:opacity-50 cursor-pointer"
               >
-                {dict.recalculateBmi}
+                {isSaving
+                  ? dict.savedToStorage
+                  : bmiResult !== null
+                  ? dict.recalculateBmi
+                  : dict.calculateBmi}
               </button>
             </div>
 
-            {/* Quick Presets */}
+            {/* Quick Profiles Helper */}
             <div className="mt-5 pt-4 border-t border-[rgba(163,230,53,0.1)] flex items-center justify-between text-xs text-[#94a3b8]">
               <span>{dict.sampleProfiles}</span>
               <div className="space-x-2">
@@ -293,23 +351,21 @@ export default function BmiPage() {
                     setFeet("5");
                     setInches("9");
                     setWeightKg("70");
-                    setBmiResult(22.8);
                   }}
                   className="text-[#ccff00] hover:underline font-mono text-[11px]"
                 >
-                  Lean 5&apos;9&quot; 70kg
+                  5&apos;9&quot; 70kg
                 </button>
                 <button
                   type="button"
                   onClick={() => {
                     setFeet("6");
-                    setInches("1");
-                    setWeightKg("90");
-                    setBmiResult(26.2);
+                    setInches("0");
+                    setWeightKg("82");
                   }}
                   className="text-[#ccff00] hover:underline font-mono text-[11px]"
                 >
-                  Heavy 6&apos;1&quot; 90kg
+                  6&apos;0&quot; 82kg
                 </button>
               </div>
             </div>
@@ -326,10 +382,19 @@ export default function BmiPage() {
                   {dict.whoSpectrum}
                 </p>
               </div>
-              {bmiResult !== null && (
+              {bmiResult !== null ? (
                 <div className="text-right">
                   <div className="text-3xl font-black text-[#ccff00] font-mono leading-none">
                     {bmiResult}
+                  </div>
+                  <div className="text-[10px] font-black uppercase tracking-wider text-[#94a3b8] mt-1">
+                    {dict.indexScore}
+                  </div>
+                </div>
+              ) : (
+                <div className="text-right">
+                  <div className="text-sm font-black text-[#94a3b8] font-mono leading-none">
+                    --.-
                   </div>
                   <div className="text-[10px] font-black uppercase tracking-wider text-[#94a3b8] mt-1">
                     {dict.indexScore}
@@ -385,8 +450,8 @@ export default function BmiPage() {
             </div>
 
             {/* Personalized Neon Advice Box */}
-            {bmiData && (
-              <div className="p-4 sm:p-5 rounded-xl bg-[#07090e]/90 border border-[rgba(163,230,53,0.3)] shadow-[0_0_20px_rgba(204,255,0,0.06)]">
+            {bmiData ? (
+              <div className="p-4 sm:p-5 rounded-xl bg-[#07090e]/90 border border-[rgba(163,230,53,0.3)] shadow-[0_0_20px_rgba(204,255,0,0.06)] animate-in fade-in">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <span
@@ -405,8 +470,121 @@ export default function BmiPage() {
                   {bmiData.advice}
                 </p>
               </div>
+            ) : (
+              <div className="p-4 rounded-xl bg-[#07090e]/50 border border-[rgba(163,230,53,0.15)] text-center text-xs text-[#94a3b8]">
+                {language === "bn"
+                  ? "আপনার বিএমআই স্কোর এবং ব্যক্তিগত অ্যাথলেটিক পরামর্শ দেখতে বামপাশে উচ্চতা ও ওজন প্রবেশ করান।"
+                  : "Enter your height and weight on the left to calculate your BMI and athletic guidance protocol."}
+              </div>
             )}
           </div>
+        </div>
+
+        {/* Real Historical BMI Entries List (Live Supabase & Offline Persistence) */}
+        <div className="bg-[rgba(18,24,38,0.7)] backdrop-blur-md border border-[rgba(163,230,53,0.2)] rounded-2xl p-6 shadow-xl space-y-4">
+          <div className="flex items-center justify-between border-b border-[rgba(163,230,53,0.15)] pb-4">
+            <div>
+              <h3 className="text-base font-black uppercase text-white tracking-tight">
+                {dict.bmiHistoryTitle}
+              </h3>
+              <p className="text-xs text-[#94a3b8]">
+                {dict.bmiHistorySubtitle}
+              </p>
+            </div>
+            <span className="text-xs font-mono font-bold text-[#ccff00] bg-[#07090e] px-3 py-1 rounded-lg border border-[rgba(163,230,53,0.2)]">
+              {records.length} {language === "bn" ? "টি রেকর্ড" : "records"}
+            </span>
+          </div>
+
+          {isLoadingRecords ? (
+            <div className="py-10 text-center text-xs text-[#94a3b8] font-mono animate-pulse">
+              {language === "bn" ? "বিএমআই হিস্ট্রি লোড হচ্ছে..." : "Loading BMI records..."}
+            </div>
+          ) : records.length === 0 ? (
+            /* Authentic Zero-State */
+            <div className="py-10 px-4 rounded-xl bg-[#07090e]/60 border border-[rgba(163,230,53,0.15)] flex flex-col items-center justify-center text-center space-y-2">
+              <span className="text-2xl">📏</span>
+              <p className="text-sm font-bold text-white">
+                {dict.noBmiRecords}
+              </p>
+              <p className="text-xs text-[#94a3b8] max-w-sm">
+                {language === "bn"
+                  ? "আপনার শারীরিক পরিবর্তন ও মেটাবলিক ভারসাম্য পর্যবেক্ষণ করতে প্রথম পরিমাপ রেকর্ড করুন।"
+                  : "Your body composition telemetry will automatically accumulate here with each log."}
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {records.map((rec) => {
+                const dateLabel = rec.created_at
+                  ? new Date(rec.created_at).toLocaleDateString([], {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })
+                  : "Today";
+
+                const timeLabel = rec.created_at
+                  ? new Date(rec.created_at).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : "";
+
+                return (
+                  <div
+                    key={rec.id}
+                    className="p-4 rounded-xl bg-[#07090e]/80 border border-[rgba(163,230,53,0.15)] hover:border-[rgba(163,230,53,0.3)] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-[#121826] border border-[#a3e635]/30 flex items-center justify-center font-mono font-black text-[#ccff00] text-sm">
+                        {rec.bmi}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-black uppercase text-white">
+                            {rec.category}
+                          </span>
+                          <span className="text-[10px] font-mono text-[#a3e635] bg-[#ccff00]/10 px-2 py-0.5 rounded border border-[#ccff00]/25">
+                            {rec.weight} kg
+                          </span>
+                          <span className="text-[10px] font-mono text-[#94a3b8]">
+                            {rec.height} cm
+                          </span>
+                        </div>
+                        <div className="text-[11px] text-[#94a3b8] font-mono mt-0.5">
+                          {dateLabel} {timeLabel && `• ${timeLabel}`}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 self-end sm:self-auto">
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteRecord(rec.id)}
+                        className="text-[#94a3b8] hover:text-rose-400 p-1.5 rounded transition-colors"
+                        title={dict.deleteRecord}
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </main>
 

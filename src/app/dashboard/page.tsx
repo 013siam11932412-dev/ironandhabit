@@ -14,7 +14,16 @@ import {
   saveStoredStreak,
   checkAndRunMidnightReset,
   forceMidnightReset,
+  getTodayIsoDate,
+  formatDayLabel,
 } from "@/lib/storage";
+import {
+  fetchDailyMetrics,
+  fetchAllDailyMetrics,
+  upsertDailyMetrics,
+  fetchTodayNutritionLogs,
+  fetchTodayWorkoutLogs,
+} from "@/lib/db";
 
 export default function DashboardPage() {
   const pathname = usePathname();
@@ -22,104 +31,188 @@ export default function DashboardPage() {
   const { dict, language } = useLanguage();
   const { user, signOut } = useAuth();
 
-  // 1. Streak State: 7-Day Cyclical Tracker (Day 1 to 7)
+  // 1. Streak State: 7-Day Cyclical Tracker (0 to 7)
   const [streakDay, setStreakDay] = useState<number>(() => getStoredStreak());
   const [streakIncrementedToday, setStreakIncrementedToday] = useState(false);
 
-  // 2. 30-Day History State
+  // 2. Real Telemetry Metrics (Dynamic from Supabase / localStorage)
+  const [todayCalories, setTodayCalories] = useState<number>(0);
+  const [todayWorkoutMinutes, setTodayWorkoutMinutes] = useState<number>(0);
+
+  // 3. 30-Day History State (starts empty / authentic records only)
   const [history30Days, setHistory30Days] = useState<DailyRecord[]>(() =>
     getStoredHistory()
   );
   const [midnightNotice, setMidnightNotice] = useState<boolean>(false);
 
-  // 4. Water Hydration Tracker (8 Glasses = 250ml each = 2000ml)
-  const [glasses, setGlasses] = useState<boolean[]>([
-    true,
-    true,
-    true,
-    true,
-    true,
-    false,
-    false,
-    false,
-  ]);
-
-  // 5. Daily Quests Checklist
-  const [quests, setQuests] = useState([
-    {
-      id: 1,
-      titleEn: "Log Morning Compound Workout (Chest & Triceps)",
-      titleBn: "সকালের কম্পাউন্ড ওয়ার্কআউট সম্পন্ন করুন (বুক ও ট্রাইসেপ)",
-      categoryEn: "TRAINING",
-      categoryBn: "ট্রেনিং",
-      completed: true,
-      points: "+150 XP",
-    },
-    {
-      id: 2,
-      titleEn: "Hit 190g Daily Protein Fuel Target",
-      titleBn: "দৈনিক ১৯০ গ্রাম প্রোটিন লক্ষ্যমাত্রা পূরণ করুন",
-      categoryEn: "NUTRITION",
-      categoryBn: "পুষ্টি",
-      completed: true,
-      points: "+100 XP",
-    },
-    {
-      id: 3,
-      titleEn: "Reach 8 Glasses of Pure Hydration",
-      titleBn: "৮ গ্লাস বিশুদ্ধ পানি পান করুন",
-      categoryEn: "HYDRATION",
-      categoryBn: "পানি",
-      completed: false,
-      points: "+80 XP",
-    },
-    {
-      id: 4,
-      titleEn: "10-Min Post-Workout Mobility & Stretch",
-      titleBn: "১০ মিনিট পোস্ট-ওয়ার্কআউট স্ট্রেচিং সম্পন্ন করুন",
-      categoryEn: "RECOVERY",
-      categoryBn: "রিকভারি",
-      completed: true,
-      points: "+60 XP",
-    },
-    {
-      id: 5,
-      titleEn: "Record Fasted Weight & Resting Heart Rate",
-      titleBn: "সকালের ওজন ও হার্ট রেট রেকর্ড করুন",
-      categoryEn: "METRICS",
-      categoryBn: "পরিমাপ",
-      completed: false,
-      points: "+50 XP",
-    },
-  ]);
-
-  // Client-side date check & storage sync (ensuring zero SSR hydration mismatch)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const resetResult = checkAndRunMidnightReset({
-        glassesCount: 8,
-        completedQuests: 5,
-        totalQuests: 5,
-      });
-      if (resetResult.didReset) {
-        setGlasses([false, false, false, false, false, false, false, false]);
-        setQuests((prev) => prev.map((q) => ({ ...q, completed: false })));
-        setHistory30Days(resetResult.updatedHistory);
-        setMidnightNotice(true);
-        setTimeout(() => setMidnightNotice(false), 5000);
+  // 4. Water Hydration Tracker (8 Glasses = 250ml each = 2000ml) - Clean Zero-State
+  const [glasses, setGlasses] = useState<boolean[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("iron_water_glasses");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length === 8) return parsed;
+        }
+      } catch {
+        // ignore
       }
-    }, 0);
+    }
+    return [false, false, false, false, false, false, false, false];
+  });
+
+  // 5. Daily Quests Checklist - Clean Zero-State (All start uncompleted)
+  const [quests, setQuests] = useState(() => {
+    const defaultQuests = [
+      {
+        id: 1,
+        titleEn: "Log Morning Compound Workout (Chest & Triceps)",
+        titleBn: "সকালের কম্পাউন্ড ওয়ার্কআউট সম্পন্ন করুন (বুক ও ট্রাইসেপ)",
+        categoryEn: "TRAINING",
+        categoryBn: "ট্রেনিং",
+        completed: false,
+        points: "+150 XP",
+      },
+      {
+        id: 2,
+        titleEn: "Hit 190g Daily Protein Fuel Target",
+        titleBn: "দৈনিক ১৯০ গ্রাম প্রোটিন লক্ষ্যমাত্রা পূরণ করুন",
+        categoryEn: "NUTRITION",
+        categoryBn: "পুষ্টি",
+        completed: false,
+        points: "+100 XP",
+      },
+      {
+        id: 3,
+        titleEn: "Reach 8 Glasses of Pure Hydration",
+        titleBn: "৮ গ্লাস বিশুদ্ধ পানি পান করুন",
+        categoryEn: "HYDRATION",
+        categoryBn: "পানি",
+        completed: false,
+        points: "+80 XP",
+      },
+      {
+        id: 4,
+        titleEn: "10-Min Post-Workout Mobility & Stretch",
+        titleBn: "১০ মিনিট পোস্ট-ওয়ার্কআউট স্ট্রেচিং সম্পন্ন করুন",
+        categoryEn: "RECOVERY",
+        categoryBn: "রিকভারি",
+        completed: false,
+        points: "+60 XP",
+      },
+      {
+        id: 5,
+        titleEn: "Record Fasted Weight & Resting Heart Rate",
+        titleBn: "সকালের ওজন ও হার্ট রেট রেকর্ড করুন",
+        categoryEn: "METRICS",
+        categoryBn: "পরিমাপ",
+        completed: false,
+        points: "+50 XP",
+      },
+    ];
+
+    if (typeof window !== "undefined") {
+      try {
+        const saved = localStorage.getItem("iron_daily_quests");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length === 5) return parsed;
+        }
+      } catch {
+        // ignore
+      }
+    }
+    return defaultQuests;
+  });
+
+  // Load live data from Supabase & localStorage on mount & user change
+  useEffect(() => {
+    let mounted = true;
+    const today = getTodayIsoDate();
+
+    // 1. Fetch today's daily_metrics
+    fetchDailyMetrics(user?.id || null, today).then((metrics) => {
+      if (!mounted || !metrics) return;
+
+      if (metrics.water_ml > 0) {
+        const glassCount = Math.min(8, Math.floor(metrics.water_ml / 250));
+        setGlasses((prev) =>
+          prev.map((_, i) => i < glassCount)
+        );
+      }
+      if (metrics.calories_consumed > 0) {
+        setTodayCalories(metrics.calories_consumed);
+      }
+      if (metrics.streak_count > 0) {
+        setStreakDay(metrics.streak_count);
+      }
+    });
+
+    // 2. Fetch today's meals to calculate real calories
+    fetchTodayNutritionLogs(user?.id).then((meals) => {
+      if (!mounted || meals.length === 0) return;
+      const totalMealCals = meals.reduce((acc, m) => acc + (m.calories || 0), 0);
+      setTodayCalories((prev) => Math.max(prev, totalMealCals));
+    });
+
+    // 3. Fetch today's workout logs to calculate workout minutes
+    fetchTodayWorkoutLogs(user?.id).then((workouts) => {
+      if (!mounted || workouts.length === 0) return;
+      const completedSets = workouts.filter((w) => w.completed).length;
+      if (completedSets > 0) {
+        setTodayWorkoutMinutes(Math.min(60, completedSets * 12));
+      }
+    });
+
+    // 4. Fetch 30-day historical metrics
+    fetchAllDailyMetrics(user?.id || null).then((metricRows) => {
+      if (!mounted || metricRows.length === 0) return;
+
+      const mappedHistory: DailyRecord[] = metricRows.map((row) => {
+        const [yr, mo, dy] = row.date.split("-").map(Number);
+        const dObj = new Date(yr, (mo || 1) - 1, dy || 1);
+        const isCompleted = row.water_ml >= 2000 && row.calories_consumed >= 2000;
+        return {
+          id: String(row.id || row.date),
+          date: formatDayLabel(dObj, "en"),
+          isoDate: row.date,
+          caloriesBurned: Math.round(row.calories_consumed * 0.9),
+          waterMl: row.water_ml,
+          habitsScore: isCompleted ? 100 : row.water_ml > 0 ? 60 : 0,
+          completedQuestsCount: isCompleted ? 5 : 2,
+          totalQuestsCount: 5,
+          status: isCompleted ? "completed" : row.water_ml > 0 ? "partial" : "rest",
+        };
+      });
+
+      setHistory30Days(mappedHistory);
+    });
+
+    // Midnight rollover check
+    const resetResult = checkAndRunMidnightReset({
+      glassesCount: 8,
+      completedQuests: 5,
+      totalQuests: 5,
+    });
+    if (resetResult.didReset) {
+      setGlasses([false, false, false, false, false, false, false, false]);
+      setQuests((prev) => prev.map((q) => ({ ...q, completed: false })));
+      setHistory30Days(resetResult.updatedHistory);
+      setMidnightNotice(true);
+      setTimeout(() => setMidnightNotice(false), 5000);
+    }
 
     function handleStorage() {
       setStreakDay(getStoredStreak());
       setHistory30Days(getStoredHistory());
     }
     window.addEventListener("storage", handleStorage);
+
     return () => {
-      clearTimeout(timer);
+      mounted = false;
       window.removeEventListener("storage", handleStorage);
     };
-  }, []);
+  }, [user]);
 
   function checkAndUpdateStreak(
     updatedQuests: typeof quests,
@@ -133,24 +226,51 @@ export default function DashboardPage() {
 
     if (percentage === 100 && !streakIncrementedToday) {
       setStreakIncrementedToday(true);
-      setStreakDay((prev) => {
-        const next = prev >= 7 ? 1 : prev + 1;
-        saveStoredStreak(next);
-        return next;
+      const next = streakDay >= 7 ? 1 : streakDay + 1;
+      setStreakDay(next);
+      saveStoredStreak(next);
+
+      const today = getTodayIsoDate();
+      upsertDailyMetrics(user?.id || null, {
+        date: today,
+        water_ml: filledCount * 250,
+        calories_consumed: todayCalories,
+        streak_count: next,
       });
     }
   }
 
-  function toggleGlass(index: number) {
+  async function toggleGlass(index: number) {
     const updated = [...glasses];
     updated[index] = !updated[index];
     setGlasses(updated);
+
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("iron_water_glasses", JSON.stringify(updated));
+      } catch {
+        // ignore
+      }
+    }
 
     const allFilled = updated.filter(Boolean).length === 8;
     const nextQuests = quests.map((q) =>
       q.id === 3 ? { ...q, completed: allFilled } : q
     );
     setQuests(nextQuests);
+
+    const filledCount = updated.filter(Boolean).length;
+    const waterMl = filledCount * 250;
+    const today = getTodayIsoDate();
+
+    // Persist to Supabase public.daily_metrics & local map
+    await upsertDailyMetrics(user?.id || null, {
+      date: today,
+      water_ml: waterMl,
+      calories_consumed: todayCalories,
+      streak_count: streakDay,
+    });
+
     checkAndUpdateStreak(nextQuests, updated);
   }
 
@@ -159,6 +279,15 @@ export default function DashboardPage() {
       q.id === id ? { ...q, completed: !q.completed } : q
     );
     setQuests(nextQuests);
+
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("iron_daily_quests", JSON.stringify(nextQuests));
+      } catch {
+        // ignore
+      }
+    }
+
     checkAndUpdateStreak(nextQuests, glasses);
   }
 
@@ -332,7 +461,7 @@ export default function DashboardPage() {
 
         {/* 1. Metrics Overview Section */}
         <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Metric 1: Calories */}
+          {/* Metric 1: Calories (Real & Dynamic Zero-State) */}
           <div className="bg-[rgba(18,24,38,0.7)] backdrop-blur-md border border-[rgba(163,230,53,0.2)] rounded-2xl p-5 shadow-lg relative overflow-hidden">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-black uppercase tracking-wider text-[#94a3b8]">
@@ -342,7 +471,7 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-baseline gap-2 mb-3">
               <span className="text-2xl font-black text-white font-mono">
-                1,850
+                {todayCalories.toLocaleString()}
               </span>
               <span className="text-xs text-[#94a3b8] font-mono">
                 / 2,400 kcal
@@ -351,16 +480,18 @@ export default function DashboardPage() {
             <div className="w-full bg-[#07090e] h-2 rounded-full overflow-hidden border border-[rgba(163,230,53,0.1)]">
               <div
                 className="bg-[#ccff00] h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(204,255,0,0.4)]"
-                style={{ width: `${(1850 / 2400) * 100}%` }}
+                style={{ width: `${Math.min(100, (todayCalories / 2400) * 100)}%` }}
               />
             </div>
             <div className="flex justify-between items-center text-[10px] text-[#94a3b8] mt-2 font-mono">
-              <span>550 kcal {dict.remaining}</span>
-              <span className="text-[#ccff00] font-bold">77% {dict.target}</span>
+              <span>{Math.max(0, 2400 - todayCalories)} kcal {dict.remaining}</span>
+              <span className="text-[#ccff00] font-bold">
+                {Math.min(100, Math.round((todayCalories / 2400) * 100))}% {dict.target}
+              </span>
             </div>
           </div>
 
-          {/* Metric 2: Workout Time */}
+          {/* Metric 2: Workout Time (Real & Dynamic Zero-State) */}
           <div className="bg-[rgba(18,24,38,0.7)] backdrop-blur-md border border-[rgba(163,230,53,0.2)] rounded-2xl p-5 shadow-lg">
             <div className="flex items-center justify-between mb-2">
               <span className="text-[11px] font-black uppercase tracking-wider text-[#94a3b8]">
@@ -370,7 +501,7 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-baseline gap-2 mb-3">
               <span className="text-2xl font-black text-white font-mono">
-                58
+                {todayWorkoutMinutes}
               </span>
               <span className="text-xs text-[#94a3b8] font-mono">
                 / 60 mins
@@ -379,14 +510,18 @@ export default function DashboardPage() {
             <div className="w-full bg-[#07090e] h-2 rounded-full overflow-hidden border border-[rgba(163,230,53,0.1)]">
               <div
                 className="bg-[#a3e635] h-full rounded-full transition-all duration-500 shadow-[0_0_10px_rgba(163,230,53,0.4)]"
-                style={{ width: `${(58 / 60) * 100}%` }}
+                style={{ width: `${Math.min(100, (todayWorkoutMinutes / 60) * 100)}%` }}
               />
             </div>
             <div className="flex justify-between items-center text-[10px] text-[#94a3b8] mt-2 font-mono">
               <span>
-                {language === "bn" ? "বুক ও ট্রাইসেপ" : "Chest & Triceps"}
+                {todayWorkoutMinutes > 0
+                  ? language === "bn" ? "ওয়ার্কআউট সক্রিয়" : "Active Session"
+                  : dict.noWorkoutToday}
               </span>
-              <span className="text-[#ccff00] font-bold">{dict.completed}</span>
+              <span className="text-[#ccff00] font-bold">
+                {todayWorkoutMinutes > 0 ? dict.completed : "0%"}
+              </span>
             </div>
           </div>
 
@@ -697,8 +832,7 @@ export default function DashboardPage() {
           <ProgressChartBoard
             history={history30Days}
             todayMetrics={{
-              caloriesBurned:
-                1850 + Math.round((completionPercentage / 100) * 600),
+              caloriesBurned: todayCalories,
               waterMl: filledGlassesCount * 250,
               habitsScore: completionPercentage,
               completedQuestsCount: completedQuestsCount,

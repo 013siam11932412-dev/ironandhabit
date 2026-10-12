@@ -11,6 +11,7 @@ import CustomExerciseModal from "@/components/workout/CustomExerciseModal";
 import {
   WorkoutRoutine,
   WorkoutExercise,
+  WorkoutSet,
   DEFAULT_ROUTINES,
   getStoredRoutines,
   saveStoredRoutines,
@@ -21,7 +22,14 @@ import {
   calculateRoutineVolume,
   calculateCompletedSetsCount,
 } from "@/lib/workoutStorage";
-import { getStoredStreak, saveStoredStreak } from "@/lib/storage";
+import { getStoredStreak, saveStoredStreak, getTodayIsoDate } from "@/lib/storage";
+import {
+  fetchTodayWorkoutLogs,
+  saveWorkoutLog,
+  deleteWorkoutLog,
+  fetchDailyMetrics,
+  upsertDailyMetrics,
+} from "@/lib/db";
 
 export default function WorkoutPlannerPage() {
   const pathname = usePathname();
@@ -58,6 +66,46 @@ export default function WorkoutPlannerPage() {
     saveStoredWeightUnit(weightUnit);
   }, [weightUnit]);
 
+  // Load today's workout logs from Supabase / localStorage on mount and user change
+  useEffect(() => {
+    let mounted = true;
+    fetchTodayWorkoutLogs(user?.id).then((logs) => {
+      if (!mounted || !logs || logs.length === 0) return;
+
+      setRoutines((prev) =>
+        prev.map((routine) => ({
+          ...routine,
+          exercises: routine.exercises.map((ex) => {
+            const matchingLogs = logs.filter(
+              (l) => l.exercise_name.toLowerCase() === ex.nameEn.toLowerCase()
+            );
+            if (matchingLogs.length === 0) return ex;
+
+            // Merge logged sets into routine exercise
+            const updatedSets = ex.sets.map((s) => {
+              const matchedLog = matchingLogs.find((l) => l.set_number === s.setNumber);
+              if (matchedLog) {
+                return {
+                  ...s,
+                  id: String(matchedLog.id),
+                  weight: matchedLog.weight,
+                  reps: matchedLog.reps,
+                  completed: matchedLog.completed,
+                };
+              }
+              return s;
+            });
+            return { ...ex, sets: updatedSets };
+          }),
+        }))
+      );
+    });
+
+    return () => {
+      mounted = false;
+    };
+  }, [user]);
+
   // Current active routine
   const currentRoutine =
     routines.find((r) => r.id === activeRoutineId) || routines[0] || DEFAULT_ROUTINES[0];
@@ -70,8 +118,11 @@ export default function WorkoutPlannerPage() {
     totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
   const estimatedCalories = Math.round(completedSets * 35 + totalVolume * 0.02);
 
-  // Toggle set completed
+  // Toggle set completed (writes to public.workout_logs)
   function handleToggleSet(exerciseId: string, setId: string) {
+    let targetEx: WorkoutExercise | undefined;
+    let targetSet: WorkoutSet | undefined;
+
     setRoutines((prev) =>
       prev.map((routine) => {
         if (routine.id !== activeRoutineId) return routine;
@@ -79,26 +130,42 @@ export default function WorkoutPlannerPage() {
           ...routine,
           exercises: routine.exercises.map((ex) => {
             if (ex.id !== exerciseId) return ex;
+            targetEx = ex;
             return {
               ...ex,
               sets: ex.sets.map((s) => {
                 if (s.id !== setId) return s;
-                return { ...s, completed: !s.completed };
+                targetSet = { ...s, completed: !s.completed };
+                return targetSet;
               }),
             };
           }),
         };
       })
     );
+
+    if (targetEx && targetSet) {
+      saveWorkoutLog(user?.id || null, {
+        id: targetSet.id,
+        exercise_name: targetEx.nameEn,
+        set_number: targetSet.setNumber,
+        weight: targetSet.weight,
+        reps: targetSet.reps,
+        completed: targetSet.completed,
+      });
+    }
   }
 
-  // Update set weight or reps
+  // Update set weight or reps (writes to public.workout_logs)
   function handleUpdateSet(
     exerciseId: string,
     setId: string,
     field: "weight" | "reps",
     value: number
   ) {
+    let targetEx: WorkoutExercise | undefined;
+    let targetSet: WorkoutSet | undefined;
+
     setRoutines((prev) =>
       prev.map((routine) => {
         if (routine.id !== activeRoutineId) return routine;
@@ -106,39 +173,67 @@ export default function WorkoutPlannerPage() {
           ...routine,
           exercises: routine.exercises.map((ex) => {
             if (ex.id !== exerciseId) return ex;
+            targetEx = ex;
             return {
               ...ex,
               sets: ex.sets.map((s) => {
                 if (s.id !== setId) return s;
-                return { ...s, [field]: Math.max(0, value) };
+                targetSet = { ...s, [field]: Math.max(0, value) };
+                return targetSet;
               }),
             };
           }),
         };
       })
     );
+
+    if (targetEx && targetSet) {
+      saveWorkoutLog(user?.id || null, {
+        id: targetSet.id,
+        exercise_name: targetEx.nameEn,
+        set_number: targetSet.setNumber,
+        weight: targetSet.weight,
+        reps: targetSet.reps,
+        completed: targetSet.completed,
+      });
+    }
   }
 
-  // Add new set to exercise
-  function handleAddSet(exerciseId: string) {
+  // Add new set to exercise (inserts into public.workout_logs)
+  async function handleAddSet(exerciseId: string) {
+    const ex = currentRoutine.exercises.find((e) => e.id === exerciseId);
+    if (!ex) return;
+    const lastSet = ex.sets[ex.sets.length - 1];
+    const newSetNumber = ex.sets.length + 1;
+    const newWeight = lastSet ? lastSet.weight : 50;
+    const newReps = lastSet ? lastSet.reps : 10;
+
+    const saved = await saveWorkoutLog(user?.id || null, {
+      exercise_name: ex.nameEn,
+      set_number: newSetNumber,
+      weight: newWeight,
+      reps: newReps,
+      completed: false,
+    });
+
+    const newSet: WorkoutSet = {
+      id: String(saved.id),
+      setNumber: newSetNumber,
+      weight: newWeight,
+      reps: newReps,
+      completed: false,
+    };
+
     setRoutines((prev) =>
       prev.map((routine) => {
         if (routine.id !== activeRoutineId) return routine;
         return {
           ...routine,
-          exercises: routine.exercises.map((ex) => {
-            if (ex.id !== exerciseId) return ex;
-            const lastSet = ex.sets[ex.sets.length - 1];
-            const newSet = {
-              id: `set-${Date.now()}`,
-              setNumber: ex.sets.length + 1,
-              weight: lastSet ? lastSet.weight : 50,
-              reps: lastSet ? lastSet.reps : 10,
-              completed: false,
-            };
+          exercises: routine.exercises.map((e) => {
+            if (e.id !== exerciseId) return e;
             return {
-              ...ex,
-              sets: [...ex.sets, newSet],
+              ...e,
+              sets: [...e.sets, newSet],
             };
           }),
         };
@@ -146,8 +241,9 @@ export default function WorkoutPlannerPage() {
     );
   }
 
-  // Remove set from exercise
+  // Remove set from exercise (deletes from public.workout_logs)
   function handleRemoveSet(exerciseId: string, setId: string) {
+    deleteWorkoutLog(user?.id || null, setId);
     setRoutines((prev) =>
       prev.map((routine) => {
         if (routine.id !== activeRoutineId) return routine;
@@ -196,9 +292,9 @@ export default function WorkoutPlannerPage() {
     );
   }
 
-  // Finish workout session
-  function handleFinishWorkout() {
-    // Mark all sets completed
+  // Finish workout session (locks in all sets, updates streak and daily_metrics)
+  async function handleFinishWorkout() {
+    // Mark all sets completed and persist each to workout_logs
     setRoutines((prev) =>
       prev.map((routine) => {
         if (routine.id !== activeRoutineId) return routine;
@@ -206,17 +302,35 @@ export default function WorkoutPlannerPage() {
           ...routine,
           exercises: routine.exercises.map((ex) => ({
             ...ex,
-            sets: ex.sets.map((s) => ({ ...s, completed: true })),
+            sets: ex.sets.map((s) => {
+              saveWorkoutLog(user?.id || null, {
+                id: s.id,
+                exercise_name: ex.nameEn,
+                set_number: s.setNumber,
+                weight: s.weight,
+                reps: s.reps,
+                completed: true,
+              });
+              return { ...s, completed: true };
+            }),
           })),
         };
       })
     );
 
     // Increment streak if not at max
-    setStreakDay((prev) => {
-      const next = prev >= 7 ? 1 : prev + 1;
-      saveStoredStreak(next);
-      return next;
+    const nextStreak = streakDay >= 7 ? 1 : streakDay + 1;
+    setStreakDay(nextStreak);
+    saveStoredStreak(nextStreak);
+
+    // Sync with daily_metrics
+    const today = getTodayIsoDate();
+    const existing = await fetchDailyMetrics(user?.id || null, today);
+    await upsertDailyMetrics(user?.id || null, {
+      date: today,
+      water_ml: existing?.water_ml || 0,
+      calories_consumed: existing?.calories_consumed || 0,
+      streak_count: nextStreak,
     });
 
     setCompletedNotice(
@@ -600,9 +714,7 @@ export default function WorkoutPlannerPage() {
             <div className="p-10 rounded-2xl bg-[rgba(18,24,38,0.5)] border border-dashed border-[rgba(163,230,53,0.2)] text-center">
               <span className="text-3xl block mb-2">🏋️</span>
               <p className="text-sm text-[#94a3b8]">
-                {language === "bn"
-                  ? "এই রুটিনে এখনও কোনো ব্যায়াম যুক্ত করা হয়নি।"
-                  : "No exercises in this routine yet. Add your first exercise!"}
+                {dict.noExercisesLogged}
               </p>
               <button
                 type="button"

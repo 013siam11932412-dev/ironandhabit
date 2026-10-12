@@ -1,57 +1,139 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useTransition } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
+import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
+import {
+  NutritionLog,
+  fetchTodayNutritionLogs,
+  insertNutritionLog,
+  deleteNutritionLog,
+  fetchDailyMetrics,
+  upsertDailyMetrics,
+} from "@/lib/db";
+import { getTodayIsoDate, getStoredStreak } from "@/lib/storage";
 
 export default function NutritionPage() {
   const pathname = usePathname();
   const { dict, language } = useLanguage();
+  const { user } = useAuth();
+  const [, startTransition] = useTransition();
 
-  const [meals] = useState([
-    {
-      id: 1,
-      nameEn: "Pre-Workout Fuel: Oats & Whey",
-      nameBn: "প্রি-ওয়ার্কআউট খাবার: ওটস ও হুই প্রোটিন",
-      calories: 520,
-      protein: 48,
-      carbs: 65,
-      fats: 8,
-      time: "07:30 AM",
-    },
-    {
-      id: 2,
-      nameEn: "Post-Workout: Rice Bowl & Grilled Chicken",
-      nameBn: "পোস্ট-ওয়ার্কআউট: ভাত ও গ্রিল্ড চিকেন",
-      calories: 780,
-      protein: 62,
-      carbs: 90,
-      fats: 14,
-      time: "12:15 PM",
-    },
-    {
-      id: 3,
-      nameEn: "Afternoon Recovery Snack: Greek Yogurt & Berries",
-      nameBn: "বিকালের নাস্তা: গ্রিক দই ও বেরি",
-      calories: 320,
-      protein: 34,
-      carbs: 28,
-      fats: 6,
-      time: "04:30 PM",
-    },
-    {
-      id: 4,
-      nameEn: "Dinner: Salmon, Sweet Potato & Asparagus",
-      nameBn: "রাতের খাবার: স্যালমন, মিষ্টি আলু ও সবজি",
-      calories: 680,
-      protein: 52,
-      carbs: 55,
-      fats: 22,
-      time: "08:00 PM (Scheduled)",
-    },
-  ]);
+  const [meals, setMeals] = useState<NutritionLog[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  // Form State
+  const [mealName, setMealName] = useState<string>("");
+  const [calories, setCalories] = useState<string>("");
+  const [protein, setProtein] = useState<string>("");
+  const [carbs, setCarbs] = useState<string>("");
+  const [fat, setFat] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  // Load today's meals on mount & user change
+  useEffect(() => {
+    let mounted = true;
+    setIsLoading(true);
+
+    fetchTodayNutritionLogs(user?.id)
+      .then((data) => {
+        if (mounted) {
+          setMeals(data);
+          setIsLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load today's meals:", err);
+        if (mounted) setIsLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [user]);
+
+  // Sync calories with daily_metrics
+  const syncDailyMetricsCalories = async (updatedMeals: NutritionLog[]) => {
+    const totalCals = updatedMeals.reduce((acc, m) => acc + (m.calories || 0), 0);
+    const today = getTodayIsoDate();
+    const existingMetric = await fetchDailyMetrics(user?.id || null, today);
+    const waterMl = existingMetric?.water_ml || 0;
+    const streak = existingMetric?.streak_count ?? getStoredStreak();
+
+    await upsertDailyMetrics(user?.id || null, {
+      date: today,
+      water_ml: waterMl,
+      calories_consumed: totalCals,
+      streak_count: streak,
+    });
+  };
+
+  const handleAddMeal = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!mealName.trim()) return;
+
+    setIsSubmitting(true);
+    const calNum = Math.max(0, parseInt(calories, 10) || 0);
+    const protNum = Math.max(0, parseInt(protein, 10) || 0);
+    const carbNum = Math.max(0, parseInt(carbs, 10) || 0);
+    const fatNum = Math.max(0, parseInt(fat, 10) || 0);
+
+    try {
+      const newMeal = await insertNutritionLog(user?.id || null, {
+        meal_name: mealName.trim(),
+        calories: calNum,
+        protein: protNum,
+        carbs: carbNum,
+        fat: fatNum,
+      });
+
+      startTransition(() => {
+        const nextMeals = [...meals, newMeal];
+        setMeals(nextMeals);
+        syncDailyMetricsCalories(nextMeals);
+      });
+
+      // Reset form & close modal
+      setMealName("");
+      setCalories("");
+      setProtein("");
+      setCarbs("");
+      setFat("");
+      setIsModalOpen(false);
+    } catch (err) {
+      console.error("Error creating meal log:", err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteMeal = async (id: string | number) => {
+    try {
+      await deleteNutritionLog(user?.id || null, id);
+      const nextMeals = meals.filter((m) => String(m.id) !== String(id));
+      setMeals(nextMeals);
+      syncDailyMetricsCalories(nextMeals);
+    } catch (err) {
+      console.error("Failed to delete meal log:", err);
+    }
+  };
+
+  // Macro Calculations
+  const totalCalories = meals.reduce((sum, m) => sum + (m.calories || 0), 0);
+  const totalProtein = meals.reduce((sum, m) => sum + (m.protein || 0), 0);
+  const totalCarbs = meals.reduce((sum, m) => sum + (m.carbs || 0), 0);
+  const totalFat = meals.reduce((sum, m) => sum + (m.fat || 0), 0);
+
+  const goalCalories = 2400;
+  const goalProtein = 190;
+  const goalCarbs = 240;
+  const goalFat = 65;
+
+  const proteinPct = Math.min(100, Math.round((totalProtein / goalProtein) * 100));
 
   const navTabs = [
     { name: dict.overview, href: "/dashboard" },
@@ -82,8 +164,10 @@ export default function NutritionPage() {
 
             <div className="flex items-center gap-3">
               <LanguageToggle />
-              <div className="px-3 py-1.5 rounded-full bg-[rgba(18,24,38,0.85)] border border-[rgba(163,230,53,0.3)] text-xs font-black text-[#ccff00]">
-                {language === "bn" ? "লক্ষ্য: ২,৪০০ ক্যালরি" : "GOAL: 2,400 KCAL"}
+              <div className="px-3 py-1.5 rounded-full bg-[rgba(18,24,38,0.85)] border border-[rgba(163,230,53,0.3)] text-xs font-black text-[#ccff00] font-mono">
+                {language === "bn"
+                  ? `লক্ষ্য: ২,৪০০ ক্যালরি`
+                  : `GOAL: 2,400 KCAL`}
               </div>
               <Link
                 href="/dashboard"
@@ -131,80 +215,309 @@ export default function NutritionPage() {
           </div>
           <button
             type="button"
-            className="px-5 py-2.5 rounded-xl bg-[#ccff00] text-black font-black text-xs uppercase tracking-wider shadow-[0_0_15px_rgba(204,255,0,0.3)] self-start sm:self-auto"
+            onClick={() => setIsModalOpen(true)}
+            className="px-5 py-2.5 rounded-xl bg-[#ccff00] hover:bg-[#d8ff33] text-black font-black text-xs uppercase tracking-wider shadow-[0_0_15px_rgba(204,255,0,0.3)] transition-all cursor-pointer self-start sm:self-auto active:scale-95"
           >
             {language === "bn" ? "+ খাবার লগ করুন" : "+ LOG MEAL"}
           </button>
         </div>
 
-        {/* Macro Targets Grid */}
+        {/* Macro Targets Grid (Dynamic Totals & Zero-States) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-[rgba(18,24,38,0.7)] border border-[rgba(163,230,53,0.2)] rounded-2xl p-5">
+          {/* Energy */}
+          <div className="bg-[rgba(18,24,38,0.7)] border border-[rgba(163,230,53,0.2)] rounded-2xl p-5 shadow-lg">
             <span className="text-[10px] font-black uppercase text-[#94a3b8]">
               {language === "bn" ? "শক্তি / ক্যালরি" : "ENERGY"}
             </span>
-            <div className="text-2xl font-black text-white font-mono mt-1">1,850 / 2,400</div>
-            <span className="text-xs text-[#ccff00] font-mono">kcal</span>
+            <div className="text-2xl font-black text-white font-mono mt-1">
+              {totalCalories.toLocaleString()} / {goalCalories.toLocaleString()}
+            </div>
+            <div className="w-full bg-[#07090e] h-1.5 rounded-full mt-2.5 overflow-hidden border border-[rgba(163,230,53,0.1)]">
+              <div
+                className="bg-[#ccff00] h-full rounded-full transition-all duration-500"
+                style={{ width: `${Math.min(100, (totalCalories / goalCalories) * 100)}%` }}
+              />
+            </div>
+            <span className="text-xs text-[#ccff00] font-mono mt-1 block">
+              {Math.max(0, goalCalories - totalCalories)} kcal {dict.remaining}
+            </span>
           </div>
-          <div className="bg-[rgba(18,24,38,0.7)] border border-[rgba(163,230,53,0.2)] rounded-2xl p-5">
+
+          {/* Protein */}
+          <div className="bg-[rgba(18,24,38,0.7)] border border-[rgba(163,230,53,0.2)] rounded-2xl p-5 shadow-lg">
             <span className="text-[10px] font-black uppercase text-[#94a3b8]">
               {language === "bn" ? "প্রোটিন" : "PROTEIN"}
             </span>
-            <div className="text-2xl font-black text-[#ccff00] font-mono mt-1">144 / 190</div>
-            <span className="text-xs text-[#ccff00] font-mono">
-              {language === "bn" ? "গ্রাম (৭৬%)" : "grams (76%)"}
+            <div className="text-2xl font-black text-[#ccff00] font-mono mt-1">
+              {totalProtein} / {goalProtein}
+            </div>
+            <div className="w-full bg-[#07090e] h-1.5 rounded-full mt-2.5 overflow-hidden border border-[rgba(163,230,53,0.1)]">
+              <div
+                className="bg-[#ccff00] h-full rounded-full transition-all duration-500"
+                style={{ width: `${proteinPct}%` }}
+              />
+            </div>
+            <span className="text-xs text-[#ccff00] font-mono mt-1 block">
+              {language === "bn" ? `গ্রাম (${proteinPct}%)` : `grams (${proteinPct}%)`}
             </span>
           </div>
-          <div className="bg-[rgba(18,24,38,0.7)] border border-[rgba(163,230,53,0.2)] rounded-2xl p-5">
+
+          {/* Carbohydrates */}
+          <div className="bg-[rgba(18,24,38,0.7)] border border-[rgba(163,230,53,0.2)] rounded-2xl p-5 shadow-lg">
             <span className="text-[10px] font-black uppercase text-[#94a3b8]">
               {language === "bn" ? "কার্বোহাইড্রেট" : "CARBOHYDRATES"}
             </span>
-            <div className="text-2xl font-black text-white font-mono mt-1">183 / 240</div>
-            <span className="text-xs text-[#94a3b8] font-mono">
+            <div className="text-2xl font-black text-white font-mono mt-1">
+              {totalCarbs} / {goalCarbs}
+            </div>
+            <div className="w-full bg-[#07090e] h-1.5 rounded-full mt-2.5 overflow-hidden border border-[rgba(163,230,53,0.1)]">
+              <div
+                className="bg-[#a3e635] h-full rounded-full transition-all duration-500"
+                style={{ width: `${Math.min(100, (totalCarbs / goalCarbs) * 100)}%` }}
+              />
+            </div>
+            <span className="text-xs text-[#94a3b8] font-mono mt-1 block">
               {language === "bn" ? "গ্রাম" : "grams"}
             </span>
           </div>
-          <div className="bg-[rgba(18,24,38,0.7)] border border-[rgba(163,230,53,0.2)] rounded-2xl p-5">
+
+          {/* Healthy Fats */}
+          <div className="bg-[rgba(18,24,38,0.7)] border border-[rgba(163,230,53,0.2)] rounded-2xl p-5 shadow-lg">
             <span className="text-[10px] font-black uppercase text-[#94a3b8]">
               {language === "bn" ? "স্বাস্থ্যকর ফ্যাট" : "HEALTHY FATS"}
             </span>
-            <div className="text-2xl font-black text-white font-mono mt-1">36 / 65</div>
-            <span className="text-xs text-[#94a3b8] font-mono">
+            <div className="text-2xl font-black text-white font-mono mt-1">
+              {totalFat} / {goalFat}
+            </div>
+            <div className="w-full bg-[#07090e] h-1.5 rounded-full mt-2.5 overflow-hidden border border-[rgba(163,230,53,0.1)]">
+              <div
+                className="bg-amber-400 h-full rounded-full transition-all duration-500"
+                style={{ width: `${Math.min(100, (totalFat / goalFat) * 100)}%` }}
+              />
+            </div>
+            <span className="text-xs text-[#94a3b8] font-mono mt-1 block">
               {language === "bn" ? "গ্রাম" : "grams"}
             </span>
           </div>
         </div>
 
-        {/* Meal Logs */}
+        {/* Meal Logs Card */}
         <div className="bg-[rgba(18,24,38,0.7)] backdrop-blur-md border border-[rgba(163,230,53,0.2)] rounded-2xl p-6 shadow-xl">
-          <h3 className="text-base font-black uppercase text-white mb-4">
-            {language === "bn" ? "আজকের খাদ্যতালিকা" : "TODAY'S LOGGED MEALS"}
-          </h3>
-          <div className="space-y-3">
-            {meals.map((meal) => (
-              <div
-                key={meal.id}
-                className="p-4 rounded-xl bg-[#07090e]/80 border border-[rgba(163,230,53,0.15)] flex flex-col sm:flex-row sm:items-center justify-between gap-3"
-              >
-                <div>
-                  <h4 className="text-sm font-black text-white uppercase">
-                    {language === "bn" ? meal.nameBn : meal.nameEn}
-                  </h4>
-                  <div className="text-xs text-[#94a3b8] font-mono mt-0.5">
-                    {meal.time}
-                  </div>
-                </div>
-                <div className="flex items-center gap-4 text-xs font-mono">
-                  <span className="text-white font-bold">{meal.calories} kcal</span>
-                  <span className="text-[#ccff00] font-bold">{meal.protein}g P</span>
-                  <span className="text-[#94a3b8]">{meal.carbs}g C</span>
-                  <span className="text-[#94a3b8]">{meal.fats}g F</span>
-                </div>
-              </div>
-            ))}
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-black uppercase text-white">
+              {dict.todayLoggedMeals}
+            </h3>
+            <span className="text-xs font-mono font-bold text-[#ccff00] bg-[#07090e] px-3 py-1 rounded-lg border border-[rgba(163,230,53,0.2)]">
+              {meals.length} {language === "bn" ? "টি খাবার" : "meals"}
+            </span>
           </div>
+
+          {isLoading ? (
+            <div className="py-12 text-center text-xs text-[#94a3b8] animate-pulse font-mono">
+              {language === "bn" ? "খাবারের তথ্য লোড হচ্ছে..." : "Loading nutrition logs..."}
+            </div>
+          ) : meals.length === 0 ? (
+            /* Authentic Zero-State */
+            <div className="py-12 px-4 rounded-xl bg-[#07090e]/60 border border-[rgba(163,230,53,0.15)] flex flex-col items-center justify-center text-center space-y-3">
+              <div className="w-12 h-12 rounded-full bg-[#121826] border border-[#a3e635]/30 flex items-center justify-center text-2xl text-[#ccff00]">
+                🥗
+              </div>
+              <div className="max-w-md">
+                <p className="text-sm font-bold text-white mb-1">
+                  {dict.noMealsLogged}
+                </p>
+                <p className="text-xs text-[#94a3b8]">
+                  {language === "bn"
+                    ? "আজকের ক্যালোরি এবং প্রোটিন পর্যবেক্ষণ করতে খাবার রেকর্ড করা শুরু করুন।"
+                    : "Track your macronutrients with precision to fuel muscle recovery and optimal energy."}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(true)}
+                className="mt-2 px-4 py-2 rounded-lg bg-[#ccff00] text-black font-black text-xs uppercase tracking-wider hover:bg-[#d8ff33] transition-colors cursor-pointer"
+              >
+                {language === "bn" ? "+ প্রথম খাবার যোগ করুন" : "+ LOG FIRST MEAL"}
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {meals.map((meal) => {
+                const formattedTime = meal.created_at
+                  ? new Date(meal.created_at).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  : "Today";
+
+                return (
+                  <div
+                    key={meal.id}
+                    className="p-4 rounded-xl bg-[#07090e]/80 border border-[rgba(163,230,53,0.15)] hover:border-[rgba(163,230,53,0.3)] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group"
+                  >
+                    <div>
+                      <h4 className="text-sm font-black text-white uppercase">
+                        {meal.meal_name}
+                      </h4>
+                      <div className="text-xs text-[#94a3b8] font-mono mt-0.5">
+                        {formattedTime}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 text-xs font-mono justify-between sm:justify-end">
+                      <span className="text-white font-bold">{meal.calories} kcal</span>
+                      <span className="text-[#ccff00] font-bold">{meal.protein}g P</span>
+                      <span className="text-[#94a3b8]">{meal.carbs}g C</span>
+                      <span className="text-[#94a3b8]">{meal.fat}g F</span>
+
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteMeal(meal.id)}
+                        className="text-[#94a3b8] hover:text-rose-400 p-1 rounded transition-colors ml-2"
+                        title={dict.deleteMeal}
+                      >
+                        <svg
+                          className="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </main>
+
+      {/* Add Meal Dark Neon Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+          <div className="w-full max-w-md rounded-2xl bg-[#0c1017] border border-[rgba(163,230,53,0.35)] shadow-[0_0_40px_rgba(204,255,0,0.15)] p-6 space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-[rgba(163,230,53,0.15)]">
+              <div>
+                <h3 className="text-lg font-black uppercase text-white tracking-tight">
+                  {dict.logMealTitle}
+                </h3>
+                <p className="text-xs text-[#94a3b8] mt-0.5">
+                  {dict.logMealDesc}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsModalOpen(false)}
+                className="text-[#94a3b8] hover:text-white p-1 rounded transition-colors text-lg font-mono"
+              >
+                &times;
+              </button>
+            </div>
+
+            <form onSubmit={handleAddMeal} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-[#94a3b8] mb-1">
+                  {dict.mealNameLabel}
+                </label>
+                <input
+                  type="text"
+                  required
+                  value={mealName}
+                  onChange={(e) => setMealName(e.target.value)}
+                  placeholder={dict.mealNamePlaceholder}
+                  className="w-full bg-[#07090e] border border-[rgba(163,230,53,0.2)] rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#ccff00] focus:ring-1 focus:ring-[#ccff00] transition-colors"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#94a3b8] mb-1">
+                    {dict.caloriesLabel}
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    required
+                    value={calories}
+                    onChange={(e) => setCalories(e.target.value)}
+                    placeholder="520"
+                    className="w-full bg-[#07090e] border border-[rgba(163,230,53,0.2)] rounded-xl px-4 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-[#ccff00] focus:ring-1 focus:ring-[#ccff00] transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#94a3b8] mb-1">
+                    {dict.proteinLabel}
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    required
+                    value={protein}
+                    onChange={(e) => setProtein(e.target.value)}
+                    placeholder="45"
+                    className="w-full bg-[#07090e] border border-[rgba(163,230,53,0.2)] rounded-xl px-4 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-[#ccff00] focus:ring-1 focus:ring-[#ccff00] transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#94a3b8] mb-1">
+                    {dict.carbsLabel}
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={carbs}
+                    onChange={(e) => setCarbs(e.target.value)}
+                    placeholder="60"
+                    className="w-full bg-[#07090e] border border-[rgba(163,230,53,0.2)] rounded-xl px-4 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-[#ccff00] focus:ring-1 focus:ring-[#ccff00] transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-[#94a3b8] mb-1">
+                    {dict.fatLabel}
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    value={fat}
+                    onChange={(e) => setFat(e.target.value)}
+                    placeholder="12"
+                    className="w-full bg-[#07090e] border border-[rgba(163,230,53,0.2)] rounded-xl px-4 py-2.5 text-sm text-white font-mono focus:outline-none focus:border-[#ccff00] focus:ring-1 focus:ring-[#ccff00] transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-2 flex items-center justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2.5 rounded-xl border border-[rgba(163,230,53,0.2)] text-xs font-bold text-[#94a3b8] hover:text-white transition-colors cursor-pointer"
+                >
+                  {dict.cancel}
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-5 py-2.5 rounded-xl bg-[#ccff00] hover:bg-[#d8ff33] text-black font-black text-xs uppercase tracking-wider shadow-[0_0_15px_rgba(204,255,0,0.3)] transition-all cursor-pointer disabled:opacity-50"
+                >
+                  {isSubmitting ? dict.savedToStorage : dict.saveMealBtn}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-[rgba(163,230,53,0.12)] bg-[#07090e]/95 py-6">

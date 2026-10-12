@@ -84,56 +84,10 @@ export function formatWeekday(d: Date, lang: "en" | "bn" = "en"): string {
   return lang === "bn" ? DAY_NAMES_BN[d.getDay()] : DAY_NAMES_EN[d.getDay()];
 }
 
-// Generate default 30-day telemetry seed based on dynamic or deterministic date
-export function generateSeedHistory(referenceDate?: Date): DailyRecord[] {
-  const records: DailyRecord[] = [];
-  const base = referenceDate || (typeof window !== "undefined" ? new Date() : new Date(2026, 9, 11));
-
-  for (let i = 29; i >= 0; i--) {
-    const d = new Date(base);
-    d.setDate(d.getDate() - i);
-    const dayNum = d.getDate();
-    const month = MONTH_NAMES_EN[d.getMonth()];
-    const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(
-      2,
-      "0"
-    )}-${String(dayNum).padStart(2, "0")}`;
-
-    const isRest = i % 7 === 0;
-    const isPartial = i % 5 === 0 && !isRest;
-    const calories = isRest
-      ? 1820 + ((i * 13) % 250)
-      : 2280 + ((i * 47) % 620);
-    const water = isRest ? 1500 : Math.min(2500, 1750 + ((i * 125) % 750));
-    const habitsScore = isRest ? 60 : isPartial ? 80 : 100;
-    const completedQuests = isRest ? 3 : isPartial ? 4 : 5;
-    const status: DailyRecord["status"] = isRest
-      ? "rest"
-      : isPartial
-      ? "partial"
-      : "completed";
-
-    records.push({
-      id: `seed-day-${i}`,
-      date: `${dayNum} ${month}`,
-      isoDate: iso,
-      caloriesBurned: calories,
-      waterMl: water,
-      habitsScore,
-      workoutVolumeKg: isRest ? 0 : 7200 + ((i * 350) % 3500),
-      completedQuestsCount: completedQuests,
-      totalQuestsCount: 5,
-      status,
-    });
-  }
-
-  return records;
-}
-
 // Retrieve 30-day history from localStorage
 export function getStoredHistory(): DailyRecord[] {
   if (typeof window === "undefined") {
-    return generateSeedHistory();
+    return [];
   }
   try {
     const stored = localStorage.getItem(STORAGE_KEYS.HISTORY);
@@ -146,13 +100,7 @@ export function getStoredHistory(): DailyRecord[] {
   } catch {
     // ignore json error
   }
-  const seed = generateSeedHistory();
-  try {
-    localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(seed));
-  } catch {
-    // ignore
-  }
-  return seed;
+  return [];
 }
 
 // Persist 30-day history to localStorage (capped at 30 entries)
@@ -166,26 +114,26 @@ export function saveHistory(records: DailyRecord[]): void {
   }
 }
 
-// Retrieve streak day (1 to 7)
+// Retrieve streak day (0 to 7)
 export function getStoredStreak(): number {
-  if (typeof window === "undefined") return 5;
+  if (typeof window === "undefined") return 0;
   try {
     const val = localStorage.getItem(STORAGE_KEYS.STREAK);
-    if (val) {
+    if (val !== null && val !== undefined) {
       const parsed = parseInt(val, 10);
-      if (parsed >= 1 && parsed <= 7) return parsed;
+      if (!isNaN(parsed) && parsed >= 0 && parsed <= 7) return parsed;
     }
   } catch {
     // ignore
   }
-  return 5;
+  return 0;
 }
 
-// Persist streak day (1 to 7 cycle)
+// Persist streak day (0 to 7 cycle)
 export function saveStoredStreak(day: number): void {
   if (typeof window === "undefined") return;
   try {
-    const validDay = day > 7 ? 1 : day < 1 ? 1 : day;
+    const validDay = day > 7 ? 1 : day < 0 ? 0 : day;
     localStorage.setItem(STORAGE_KEYS.STREAK, String(validDay));
   } catch {
     // ignore
@@ -196,6 +144,11 @@ export function saveStoredStreak(day: number): void {
 export function hasCalculatedBmi(): boolean {
   if (typeof window === "undefined") return false;
   try {
+    const records = localStorage.getItem("iron_bmi_records");
+    if (records) {
+      const parsed = JSON.parse(records);
+      if (Array.isArray(parsed) && parsed.length > 0) return true;
+    }
     return !!localStorage.getItem(STORAGE_KEYS.BMI);
   } catch {
     return false;
@@ -209,7 +162,7 @@ export function checkAndRunMidnightReset(params?: {
   totalQuests?: number;
 }): { didReset: boolean; updatedHistory: DailyRecord[] } {
   if (typeof window === "undefined") {
-    return { didReset: false, updatedHistory: generateSeedHistory() };
+    return { didReset: false, updatedHistory: [] };
   }
 
   try {
@@ -225,8 +178,8 @@ export function checkAndRunMidnightReset(params?: {
 
     // Midnight rolled over (date changed)
     if (lastActive < today) {
-      const glassesCount = params?.glassesCount ?? 8;
-      const completedQuests = params?.completedQuests ?? 5;
+      const glassesCount = params?.glassesCount ?? 0;
+      const completedQuests = params?.completedQuests ?? 0;
       const totalQuests = params?.totalQuests ?? 5;
       const score = Math.round(
         ((completedQuests + glassesCount / 8) / (totalQuests + 1)) * 100
@@ -243,10 +196,10 @@ export function checkAndRunMidnightReset(params?: {
         id: `archive-${lastActive}-${Date.now()}`,
         date: formatDayLabel(prevDateObj, "en"),
         isoDate: lastActive,
-        caloriesBurned: 2420,
+        caloriesBurned: 0,
         waterMl: glassesCount * 250,
         habitsScore: score,
-        workoutVolumeKg: 8250,
+        workoutVolumeKg: 0,
         completedQuestsCount: completedQuests,
         totalQuestsCount: totalQuests,
         status: score >= 80 ? "completed" : score >= 50 ? "partial" : "rest",
@@ -286,10 +239,10 @@ export function forceMidnightReset(params: {
     id: `archive-manual-${Date.now()}`,
     date: formatDayLabel(now, "en"),
     isoDate: today,
-    caloriesBurned: 2450,
+    caloriesBurned: 0,
     waterMl: glassesCount * 250,
     habitsScore: score,
-    workoutVolumeKg: 8400,
+    workoutVolumeKg: 0,
     completedQuestsCount: completedQuests,
     totalQuestsCount: totalQuests,
     status: score >= 80 ? "completed" : score >= 50 ? "partial" : "rest",
@@ -352,22 +305,17 @@ export function buildDynamicRolling7Days(
           isToday,
         });
       } else {
-        // Sensible placeholder baseline bar for dynamic calendar day
-        const isRest = i % 7 === 0;
-        const isPartial = i % 5 === 0 && !isRest;
-        const calories = isRest ? 1850 : 2250 + ((i * 45) % 450);
-        const water = isRest ? 1500 : Math.min(2500, 1750 + ((i * 125) % 650));
-        const habitsScore = isRest ? 60 : isPartial ? 80 : 100;
+        // Zero-state baseline bar for unlogged calendar day
         result.push({
           id: `rolling-fallback-${iso}`,
           date: formatDayLabel(d, lang),
           isoDate: iso,
-          caloriesBurned: calories,
-          waterMl: water,
-          habitsScore,
-          completedQuestsCount: isRest ? 3 : isPartial ? 4 : 5,
+          caloriesBurned: 0,
+          waterMl: 0,
+          habitsScore: 0,
+          completedQuestsCount: 0,
           totalQuestsCount: 5,
-          status: isRest ? "rest" : isPartial ? "partial" : "completed",
+          status: "rest",
           weekday: formatWeekday(d, lang),
           isToday,
         });
@@ -429,21 +377,17 @@ export function buildDynamicRolling30Days(
           isToday,
         });
       } else {
-        const isRest = i % 7 === 0;
-        const isPartial = i % 5 === 0 && !isRest;
-        const calories = isRest ? 1820 + ((i * 13) % 250) : 2280 + ((i * 47) % 620);
-        const water = isRest ? 1500 : Math.min(2500, 1750 + ((i * 125) % 750));
-        const habitsScore = isRest ? 60 : isPartial ? 80 : 100;
+        // Zero-state baseline bar for unlogged calendar day
         result.push({
           id: `rolling-fallback-${iso}`,
           date: formatDayLabel(d, lang),
           isoDate: iso,
-          caloriesBurned: calories,
-          waterMl: water,
-          habitsScore,
-          completedQuestsCount: isRest ? 3 : isPartial ? 4 : 5,
+          caloriesBurned: 0,
+          waterMl: 0,
+          habitsScore: 0,
+          completedQuestsCount: 0,
           totalQuestsCount: 5,
-          status: isRest ? "rest" : isPartial ? "partial" : "completed",
+          status: "rest",
           weekday: formatWeekday(d, lang),
           isToday,
         });

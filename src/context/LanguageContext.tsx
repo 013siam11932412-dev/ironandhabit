@@ -198,6 +198,26 @@ export const translations = {
     savedToStorage: "Synced & Saved",
     finishWorkout: "COMPLETE WORKOUT SESSION",
     sessionSummary: "Session Summary",
+
+    // Nutrition Tracking & Logs
+    noMealsLogged: "No meals logged today. Click '+ Log Meal' to record your first meal.",
+    logMealTitle: "LOG MEAL",
+    logMealDesc: "Enter meal details to track your daily macronutrients and calories.",
+    mealNameLabel: "MEAL NAME",
+    mealNamePlaceholder: "e.g. Oats & Whey, Chicken Rice",
+    caloriesLabel: "CALORIES (KCAL)",
+    proteinLabel: "PROTEIN (G)",
+    carbsLabel: "CARBS (G)",
+    fatLabel: "FATS (G)",
+    saveMealBtn: "SAVE MEAL",
+    deleteMeal: "Delete meal",
+    todayLoggedMeals: "TODAY'S LOGGED MEALS",
+    noExercisesLogged: "No exercises logged today. Choose a routine or add an exercise below.",
+    noBmiRecords: "No BMI records logged yet. Use the calculator above to record your first entry.",
+    bmiHistoryTitle: "BMI & TELEMETRY HISTORY",
+    bmiHistorySubtitle: "Historical log of your BMI calculations and body mass records.",
+    deleteRecord: "Delete record",
+    noWorkoutToday: "No workout logged today",
   },
   bn: {
     // Brand & Nav
@@ -393,6 +413,26 @@ export const translations = {
     savedToStorage: "সংরক্ষিত হয়েছে",
     finishWorkout: "ওয়ার্কআউট সম্পন্ন করুন",
     sessionSummary: "সেশনের সংক্ষিপ্ত বিবরণ",
+
+    // Nutrition Tracking & Logs
+    noMealsLogged: "আজকে কোনো খাবার লগ করা হয়নি। আপনার প্রথম খাবার যোগ করতে '+ খাবার লগ করুন' এ ক্লিক করুন।",
+    logMealTitle: "খাবার লগ করুন",
+    logMealDesc: "দৈনিক ম্যাক্রো এবং ক্যালোরি পর্যবেক্ষণ করতে খাবারের বিবরণ দিন।",
+    mealNameLabel: "খাবারের নাম",
+    mealNamePlaceholder: "যেমন: ওটস ও প্রোটিন, ভাত ও চিকেন",
+    caloriesLabel: "ক্যালরি (KCAL)",
+    proteinLabel: "প্রোটিন (গ্রাম)",
+    carbsLabel: "কার্বোহাইড্রেট (গ্রাম)",
+    fatLabel: "ফ্যাট (গ্রাম)",
+    saveMealBtn: "খাবার সংরক্ষণ করুন",
+    deleteMeal: "মুছে ফেলুন",
+    todayLoggedMeals: "আজকের খাদ্যতালিকা",
+    noExercisesLogged: "আজকের কোনো ব্যায়াম লগ করা হয়নি। নিচে রুটিন নির্বাচন করুন বা ব্যায়াম যোগ করুন।",
+    noBmiRecords: "এখনও কোনো বিএমআই রেকর্ড নেই। আপনার প্রথম রেকর্ড সংরক্ষণ করতে ক্যালকুলেটর ব্যবহার করুন।",
+    bmiHistoryTitle: "বিএমআই হিস্ট্রি ও রেকর্ডস",
+    bmiHistorySubtitle: "বিএমআই গণনা ও শরীরের ওজনের পূর্ববর্তী রেকর্ড তালিকা।",
+    deleteRecord: "মুছে ফেলুন",
+    noWorkoutToday: "আজকের কোনো ওয়ার্কআউট নেই",
   },
 };
 

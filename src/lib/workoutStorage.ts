@@ -50,9 +50,9 @@ export const DEFAULT_ROUTINES: WorkoutRoutine[] = [
         nameBn: "বারবেল বেঞ্চ প্রেস",
         targetMuscle: "Chest",
         sets: [
-          { id: "s-1-1", setNumber: 1, weight: 100, reps: 8, completed: true },
-          { id: "s-1-2", setNumber: 2, weight: 100, reps: 8, completed: true },
-          { id: "s-1-3", setNumber: 3, weight: 105, reps: 6, completed: true },
+          { id: "s-1-1", setNumber: 1, weight: 100, reps: 8, completed: false },
+          { id: "s-1-2", setNumber: 2, weight: 100, reps: 8, completed: false },
+          { id: "s-1-3", setNumber: 3, weight: 105, reps: 6, completed: false },
           { id: "s-1-4", setNumber: 4, weight: 105, reps: 6, completed: false },
         ],
       },
@@ -62,8 +62,8 @@ export const DEFAULT_ROUTINES: WorkoutRoutine[] = [
         nameBn: "ইনক্লাইন ডাম্বেল প্রেস",
         targetMuscle: "Chest",
         sets: [
-          { id: "s-2-1", setNumber: 1, weight: 36, reps: 10, completed: true },
-          { id: "s-2-2", setNumber: 2, weight: 36, reps: 10, completed: true },
+          { id: "s-2-1", setNumber: 1, weight: 36, reps: 10, completed: false },
+          { id: "s-2-2", setNumber: 2, weight: 36, reps: 10, completed: false },
           { id: "s-2-3", setNumber: 3, weight: 40, reps: 8, completed: false },
         ],
       },
@@ -73,7 +73,7 @@ export const DEFAULT_ROUTINES: WorkoutRoutine[] = [
         nameBn: "ওভারহেড মিলিটারি প্রেস",
         targetMuscle: "Shoulders",
         sets: [
-          { id: "s-3-1", setNumber: 1, weight: 60, reps: 8, completed: true },
+          { id: "s-3-1", setNumber: 1, weight: 60, reps: 8, completed: false },
           { id: "s-3-2", setNumber: 2, weight: 60, reps: 8, completed: false },
           { id: "s-3-3", setNumber: 3, weight: 65, reps: 6, completed: false },
         ],
@@ -84,7 +84,7 @@ export const DEFAULT_ROUTINES: WorkoutRoutine[] = [
         nameBn: "ওয়েটেড ট্রাইসেপ ডিপস",
         targetMuscle: "Triceps",
         sets: [
-          { id: "s-4-1", setNumber: 1, weight: 20, reps: 10, completed: true },
+          { id: "s-4-1", setNumber: 1, weight: 20, reps: 10, completed: false },
           { id: "s-4-2", setNumber: 2, weight: 20, reps: 10, completed: false },
           { id: "s-4-3", setNumber: 3, weight: 20, reps: 8, completed: false },
         ],
