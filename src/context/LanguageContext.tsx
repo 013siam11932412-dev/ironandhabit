@@ -272,21 +272,6 @@ export const translations = {
     targetCaloriesSynced: "Target Calories",
     targetWaterSynced: "Target Water",
 
-    // AI Assistant
-    aiAssistant: "AI Assistant",
-    aiAssistantSubtitle: "Elite Science-Backed Fitness & Nutrition Coach",
-    assistantWelcomeMsg: "Welcome Athlete! I am your Iron & Habit Science-Backed Assistant. Ask me anything about progressive overload, meal planning, CICO, or recovery.",
-    assistantPrompt1: "Today's personalized diet plan",
-    assistantPrompt2: "Beginner workout routine",
-    assistantPrompt3: "Science of muscle building & surplus",
-    assistantPrompt4: "Home & calisthenics workout guide",
-    assistantPrompt5: "Can I spot-reduce belly fat?",
-    assistantPrompt6: "Explain RPE & Progressive Overload",
-    askAssistantPlaceholder: "Ask about workouts, diet, macros, or recovery...",
-    clearChat: "Clear Chat",
-    thinking: "Analyzing physiological telemetry...",
-    aiContextBadge: "Biometrics Synced",
-
     // Community Hub
     community: "Community",
     communitySubtitle: "Squad Network & Live Athlete Board",
@@ -580,21 +565,6 @@ export const translations = {
     targetsAppliedSuccess: "দৈনন্দিন লক্ষ্য সফলভাবে আপডেট করা হয়েছে! ড্যাশবোর্ডের সাথে সিঙ্ক হয়েছে।",
     targetCaloriesSynced: "লক্ষ্য ক্যালরি",
     targetWaterSynced: "লক্ষ্য পানি",
-
-    // AI Assistant
-    aiAssistant: "এআই সহকারী",
-    aiAssistantSubtitle: "বিজ্ঞানভিত্তিক স্পোর্টস সায়েন্স ও ডায়েট কোচ",
-    assistantWelcomeMsg: "স্বাগতম অ্যাথলেট! আমি আয়রন অ্যান্ড হ্যাবিট বিজ্ঞানভিত্তিক সহকারী। প্রোগ্রেসিভ ওভারলোড, ডায়েট প্ল্যান, ক্যালরি ঘাটতি বা রিকভারি সম্পর্কে যেকোনো প্রশ্ন করুন।",
-    assistantPrompt1: "আমার জন্য আজকের ডায়েট প্ল্যান",
-    assistantPrompt2: "নতুনদের জন্য সহজ রুটিন",
-    assistantPrompt3: "ওজন বাড়ানোর বিজ্ঞান",
-    assistantPrompt4: "হোম ওয়ার্কআউট গাইড",
-    assistantPrompt5: "বেলি ফ্যাট কমানোর সত্যিটা কী?",
-    assistantPrompt6: "RPE ও প্রোগ্রেসিভ ওভারলোড কী?",
-    askAssistantPlaceholder: "ব্যায়াম, ডায়েট, ম্যাক্রো বা রিকভারি সম্পর্কে লিখুন...",
-    clearChat: "নতুন চ্যাট",
-    thinking: "শারীরিক ডেটা ও বায়োলজি বিশ্লেষণ করছে...",
-    aiContextBadge: "শারীরিক ডেটা সিঙ্কড",
 
     // Community Hub
     community: "কমিউনিটি",
