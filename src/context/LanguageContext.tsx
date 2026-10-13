@@ -296,7 +296,8 @@ export const translations = {
     bragWorkoutPrompt: "💪 Finished today's workout!",
     bragStreakPrompt: "🔥 Kept my 7-day streak!",
     bragNutritionPrompt: "🥗 Hit my protein goal today!",
-    emptySquad: "No squad members added yet. Invite your gym bros or running partners!",
+    emptySquad: "No squad members yet. Add your friends using their phone number above!",
+    emptyFeed: "No messages yet. Be the first to share your workout or tip with the squad!",
   },
   bn: {
     // Brand & Nav
@@ -590,7 +591,8 @@ export const translations = {
     bragWorkoutPrompt: "💪 আজকের ওয়ার্কআউট সম্পন্ন করেছি!",
     bragStreakPrompt: "🔥 ৭ দিনের স্ট্রিক অক্ষুণ্ণ রেখেছি!",
     bragNutritionPrompt: "🥗 আজকের প্রোটিন টার্গেট পূরণ করেছি!",
-    emptySquad: "এখনও কোনো স্কোয়াড মেম্বার যুক্ত করা হয়নি। বন্ধুদের ফোন নম্বর দিয়ে যুক্ত করুন!",
+    emptySquad: "এখনও কোনো বন্ধু যুক্ত করা হয়নি। উপরে ফোন নম্বর দিয়ে বন্ধুদের যুক্ত করুন!",
+    emptyFeed: "এখনও কোনো বার্তা নেই। আপনার ওয়ার্কআউট বা টিপ সবার সাথে শেয়ার করতে প্রথম মেসেজটি লিখুন!",
   },
 };
 

@@ -660,45 +660,25 @@ export async function deleteBmiRecord(
 // FRIENDSHIPS (public.friendships)
 // ----------------------------------------------------
 
-export const DEFAULT_FRIENDSHIPS: Friendship[] = [
-  {
-    id: "init-friend-1",
-    friend_phone: "+880 1711 234567",
-    friend_name: "Tanvir Rahman",
-    status: "accepted",
-    streak_count: 12,
-    created_at: "2026-10-10T12:00:00.000Z",
-  },
-  {
-    id: "init-friend-2",
-    friend_phone: "+880 1819 876543",
-    friend_name: "Sabbir Hossain",
-    status: "accepted",
-    streak_count: 7,
-    created_at: "2026-10-11T14:30:00.000Z",
-  },
-  {
-    id: "init-friend-3",
-    friend_phone: "+880 1912 345678",
-    friend_name: "Ayesha Siddiqua",
-    status: "pending",
-    streak_count: 5,
-    created_at: "2026-10-12T09:15:00.000Z",
-  },
-];
+export const DEFAULT_FRIENDSHIPS: Friendship[] = [];
 
 export function getLocalFriendships(): Friendship[] {
-  if (typeof window === "undefined") return DEFAULT_FRIENDSHIPS;
+  if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(LOCAL_KEYS.FRIENDSHIPS);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed)) {
+        // Filter out any legacy sample/mock friends
+        const cleanFriends = parsed.filter(
+          (f: Friendship) => !String(f.id).startsWith("init-friend-")
+        );
+        return cleanFriends;
+      }
     }
-    localStorage.setItem(LOCAL_KEYS.FRIENDSHIPS, JSON.stringify(DEFAULT_FRIENDSHIPS));
-    return DEFAULT_FRIENDSHIPS;
+    return [];
   } catch {
-    return DEFAULT_FRIENDSHIPS;
+    return [];
   }
 }
 
@@ -821,45 +801,25 @@ export async function deleteFriendship(
 // COMMUNITY MESSAGES (public.community_messages)
 // ----------------------------------------------------
 
-export const DEFAULT_COMMUNITY_MESSAGES: CommunityMessage[] = [
-  {
-    id: "init-msg-1",
-    user_name: "Tanvir Rahman",
-    message: "Just crushed a 105kg Bench Press session today! Day 12 unbroken streak 🔥",
-    category: "workout_brag",
-    created_at: "2026-10-13T10:15:00.000Z",
-  },
-  {
-    id: "init-msg-2",
-    user_name: "Sabbir Hossain",
-    message: "Hit 180g protein target today with local eggs, lentils and grilled chicken breast. Fueling clean!",
-    category: "nutrition_tip",
-    created_at: "2026-10-13T11:45:00.000Z",
-  },
-  {
-    id: "init-msg-3",
-    user_name: "Ayesha Siddiqua",
-    message: "Morning 5K run completed + completed all 8 hydration glasses. Consistency beats motivation every single day 💪",
-    category: "general",
-    created_at: "2026-10-13T14:20:00.000Z",
-  },
-];
+export const DEFAULT_COMMUNITY_MESSAGES: CommunityMessage[] = [];
 
 export function getLocalCommunityMessages(): CommunityMessage[] {
-  if (typeof window === "undefined") return DEFAULT_COMMUNITY_MESSAGES;
+  if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(LOCAL_KEYS.COMMUNITY_MESSAGES);
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed)) {
+        // Filter out any legacy sample/mock messages
+        const cleanMessages = parsed.filter(
+          (m: CommunityMessage) => !String(m.id).startsWith("init-msg-")
+        );
+        return cleanMessages;
+      }
     }
-    localStorage.setItem(
-      LOCAL_KEYS.COMMUNITY_MESSAGES,
-      JSON.stringify(DEFAULT_COMMUNITY_MESSAGES)
-    );
-    return DEFAULT_COMMUNITY_MESSAGES;
+    return [];
   } catch {
-    return DEFAULT_COMMUNITY_MESSAGES;
+    return [];
   }
 }
 
