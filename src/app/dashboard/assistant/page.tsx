@@ -252,6 +252,7 @@ export default function AssistantPage() {
     { name: dict.workouts, href: "/dashboard/workouts" },
     { name: dict.nutrition, href: "/dashboard/nutrition" },
     { name: dict.aiAssistant, href: "/dashboard/assistant" },
+    { name: dict.community, href: "/dashboard/community" },
   ];
 
   const quickPrompts = [

@@ -42,11 +42,32 @@ export interface BmiRecord {
   category: string;
 }
 
+export interface Friendship {
+  id: string | number;
+  user_id?: string;
+  friend_phone: string;
+  friend_name: string;
+  status: "pending" | "accepted";
+  created_at?: string;
+  streak_count?: number;
+}
+
+export interface CommunityMessage {
+  id: string | number;
+  user_id?: string;
+  user_name: string;
+  message: string;
+  category: "general" | "workout_brag" | "nutrition_tip";
+  created_at: string;
+}
+
 const LOCAL_KEYS = {
   NUTRITION: "iron_nutrition_logs",
   WORKOUT: "iron_workout_logs",
   DAILY_METRICS: "iron_daily_metrics_map",
   BMI: "iron_bmi_records",
+  FRIENDSHIPS: "iron_friendships_list",
+  COMMUNITY_MESSAGES: "iron_community_messages_list",
 } as const;
 
 // Helper to check if ISO timestamp matches today's local date
@@ -632,5 +653,323 @@ export async function deleteBmiRecord(
     } catch {
       // ignore
     }
+  }
+}
+
+// ----------------------------------------------------
+// FRIENDSHIPS (public.friendships)
+// ----------------------------------------------------
+
+export const DEFAULT_FRIENDSHIPS: Friendship[] = [
+  {
+    id: "init-friend-1",
+    friend_phone: "+880 1711 234567",
+    friend_name: "Tanvir Rahman",
+    status: "accepted",
+    streak_count: 12,
+    created_at: "2026-10-10T12:00:00.000Z",
+  },
+  {
+    id: "init-friend-2",
+    friend_phone: "+880 1819 876543",
+    friend_name: "Sabbir Hossain",
+    status: "accepted",
+    streak_count: 7,
+    created_at: "2026-10-11T14:30:00.000Z",
+  },
+  {
+    id: "init-friend-3",
+    friend_phone: "+880 1912 345678",
+    friend_name: "Ayesha Siddiqua",
+    status: "pending",
+    streak_count: 5,
+    created_at: "2026-10-12T09:15:00.000Z",
+  },
+];
+
+export function getLocalFriendships(): Friendship[] {
+  if (typeof window === "undefined") return DEFAULT_FRIENDSHIPS;
+  try {
+    const raw = localStorage.getItem(LOCAL_KEYS.FRIENDSHIPS);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+    localStorage.setItem(LOCAL_KEYS.FRIENDSHIPS, JSON.stringify(DEFAULT_FRIENDSHIPS));
+    return DEFAULT_FRIENDSHIPS;
+  } catch {
+    return DEFAULT_FRIENDSHIPS;
+  }
+}
+
+export async function fetchFriendships(
+  userId?: string | null
+): Promise<Friendship[]> {
+  if (userId) {
+    try {
+      const { data, error } = await supabase
+        .from("friendships")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
+
+      if (!error && Array.isArray(data) && data.length > 0) {
+        if (typeof window !== "undefined") {
+          try {
+            localStorage.setItem(LOCAL_KEYS.FRIENDSHIPS, JSON.stringify(data));
+          } catch {
+            // ignore
+          }
+        }
+        return data as Friendship[];
+      }
+    } catch (err) {
+      console.warn("Failed to fetch friendships from Supabase:", err);
+    }
+  }
+
+  return getLocalFriendships();
+}
+
+export async function addFriendship(
+  userId: string | null,
+  friend: {
+    friend_phone: string;
+    friend_name: string;
+    status?: "pending" | "accepted";
+    streak_count?: number;
+  }
+): Promise<Friendship> {
+  const timestamp = new Date().toISOString();
+  let created: Friendship = {
+    id: `local-friend-${Date.now()}`,
+    user_id: userId || undefined,
+    friend_phone: friend.friend_phone,
+    friend_name: friend.friend_name,
+    status: friend.status || "accepted",
+    streak_count: friend.streak_count ?? 1,
+    created_at: timestamp,
+  };
+
+  if (userId) {
+    try {
+      const { data, error } = await supabase
+        .from("friendships")
+        .insert({
+          user_id: userId,
+          friend_phone: friend.friend_phone,
+          friend_name: friend.friend_name,
+          status: friend.status || "accepted",
+          created_at: timestamp,
+        })
+        .select()
+        .single();
+
+      if (!error && data) {
+        created = {
+          ...data,
+          streak_count: friend.streak_count ?? 1,
+        } as Friendship;
+      }
+    } catch (err) {
+      console.warn("Failed to insert friendship to Supabase:", err);
+    }
+  }
+
+  if (typeof window !== "undefined") {
+    try {
+      const current = getLocalFriendships();
+      localStorage.setItem(
+        LOCAL_KEYS.FRIENDSHIPS,
+        JSON.stringify([created, ...current])
+      );
+    } catch {
+      // ignore
+    }
+  }
+
+  return created;
+}
+
+export async function deleteFriendship(
+  userId: string | null,
+  friendshipId: string | number
+): Promise<void> {
+  const isRealDbId =
+    typeof friendshipId !== "string" || !friendshipId.startsWith("local-");
+
+  if (userId && isRealDbId) {
+    try {
+      await supabase.from("friendships").delete().eq("id", friendshipId);
+    } catch (err) {
+      console.warn("Failed to delete friendship from Supabase:", err);
+    }
+  }
+
+  if (typeof window !== "undefined") {
+    try {
+      const current = getLocalFriendships();
+      const updated = current.filter((f) => String(f.id) !== String(friendshipId));
+      localStorage.setItem(LOCAL_KEYS.FRIENDSHIPS, JSON.stringify(updated));
+    } catch {
+      // ignore
+    }
+  }
+}
+
+// ----------------------------------------------------
+// COMMUNITY MESSAGES (public.community_messages)
+// ----------------------------------------------------
+
+export const DEFAULT_COMMUNITY_MESSAGES: CommunityMessage[] = [
+  {
+    id: "init-msg-1",
+    user_name: "Tanvir Rahman",
+    message: "Just crushed a 105kg Bench Press session today! Day 12 unbroken streak 🔥",
+    category: "workout_brag",
+    created_at: "2026-10-13T10:15:00.000Z",
+  },
+  {
+    id: "init-msg-2",
+    user_name: "Sabbir Hossain",
+    message: "Hit 180g protein target today with local eggs, lentils and grilled chicken breast. Fueling clean!",
+    category: "nutrition_tip",
+    created_at: "2026-10-13T11:45:00.000Z",
+  },
+  {
+    id: "init-msg-3",
+    user_name: "Ayesha Siddiqua",
+    message: "Morning 5K run completed + completed all 8 hydration glasses. Consistency beats motivation every single day 💪",
+    category: "general",
+    created_at: "2026-10-13T14:20:00.000Z",
+  },
+];
+
+export function getLocalCommunityMessages(): CommunityMessage[] {
+  if (typeof window === "undefined") return DEFAULT_COMMUNITY_MESSAGES;
+  try {
+    const raw = localStorage.getItem(LOCAL_KEYS.COMMUNITY_MESSAGES);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+    localStorage.setItem(
+      LOCAL_KEYS.COMMUNITY_MESSAGES,
+      JSON.stringify(DEFAULT_COMMUNITY_MESSAGES)
+    );
+    return DEFAULT_COMMUNITY_MESSAGES;
+  } catch {
+    return DEFAULT_COMMUNITY_MESSAGES;
+  }
+}
+
+export async function fetchCommunityMessages(
+  limit = 50
+): Promise<CommunityMessage[]> {
+  try {
+    const { data, error } = await supabase
+      .from("community_messages")
+      .select("*")
+      .order("created_at", { ascending: true })
+      .limit(limit);
+
+    if (!error && Array.isArray(data) && data.length > 0) {
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem(
+            LOCAL_KEYS.COMMUNITY_MESSAGES,
+            JSON.stringify(data)
+          );
+        } catch {
+          // ignore
+        }
+      }
+      return data as CommunityMessage[];
+    }
+  } catch (err) {
+    console.warn("Failed to fetch community messages from Supabase:", err);
+  }
+
+  return getLocalCommunityMessages();
+}
+
+export async function insertCommunityMessage(msg: {
+  user_id?: string;
+  user_name: string;
+  message: string;
+  category: "general" | "workout_brag" | "nutrition_tip";
+}): Promise<CommunityMessage> {
+  const timestamp = new Date().toISOString();
+  let created: CommunityMessage = {
+    id: `local-msg-${Date.now()}`,
+    user_id: msg.user_id,
+    user_name: msg.user_name,
+    message: msg.message,
+    category: msg.category,
+    created_at: timestamp,
+  };
+
+  try {
+    const { data, error } = await supabase
+      .from("community_messages")
+      .insert({
+        user_id: msg.user_id,
+        user_name: msg.user_name,
+        message: msg.message,
+        category: msg.category,
+        created_at: timestamp,
+      })
+      .select()
+      .single();
+
+    if (!error && data) {
+      created = data as CommunityMessage;
+    }
+  } catch (err) {
+    console.warn("Failed to insert community message to Supabase:", err);
+  }
+
+  if (typeof window !== "undefined") {
+    try {
+      const current = getLocalCommunityMessages();
+      localStorage.setItem(
+        LOCAL_KEYS.COMMUNITY_MESSAGES,
+        JSON.stringify([...current, created])
+      );
+    } catch {
+      // ignore
+    }
+  }
+
+  return created;
+}
+
+export function subscribeCommunityMessages(
+  onNewMessage: (msg: CommunityMessage) => void
+): () => void {
+  try {
+    const channel = supabase
+      .channel("public:community_messages")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "community_messages",
+        },
+        (payload) => {
+          if (payload.new) {
+            onNewMessage(payload.new as CommunityMessage);
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  } catch (err) {
+    console.warn("Realtime subscription failed:", err);
+    return () => {};
   }
 }

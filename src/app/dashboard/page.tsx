@@ -329,6 +329,7 @@ export default function DashboardPage() {
     { name: dict.workouts, href: "/dashboard/workouts" },
     { name: dict.nutrition, href: "/dashboard/nutrition" },
     { name: dict.aiAssistant, href: "/dashboard/assistant" },
+    { name: dict.community, href: "/dashboard/community" },
   ];
 
   // Manual trigger for testing midnight reset (00:00)
