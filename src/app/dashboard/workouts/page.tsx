@@ -346,6 +346,7 @@ export default function WorkoutPlannerPage() {
     { name: dict.bmi, href: "/dashboard/bmi" },
     { name: dict.workouts, href: "/dashboard/workouts" },
     { name: dict.nutrition, href: "/dashboard/nutrition" },
+    { name: dict.aiAssistant, href: "/dashboard/assistant" },
     { name: dict.community, href: "/dashboard/community" },
   ];
 

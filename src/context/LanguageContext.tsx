@@ -272,6 +272,19 @@ export const translations = {
     targetCaloriesSynced: "Target Calories",
     targetWaterSynced: "Target Water",
 
+    // AI Assistant
+    aiAssistant: "AI Assistant",
+    aiAssistantSubtitle: "Empathic Socratic Fitness & Nutrition Mentor",
+    assistantWelcomeMsg: "Welcome friend! I am your Iron & Habit mentor. Whether you're taking your very first step or building unstoppable consistency, I'm here with you. What's on your mind today?",
+    assistantPrompt1: "🌱 I'm a total beginner, where should I start?",
+    assistantPrompt2: "🥗 Staying healthy with simple home-cooked meals",
+    assistantPrompt3: "⏱️ Effective 10-minute workout for busy days",
+    assistantPrompt4: "🔥 The secret to staying consistent & motivated",
+    askAssistantPlaceholder: "Ask about workouts, home meals, habits, or starting out...",
+    clearChat: "Clear Chat",
+    thinking: "Reflecting on your journey and science...",
+    aiContextBadge: "Biometrics Synced",
+
     // Community Hub
     community: "Community",
     communitySubtitle: "Squad Network & Live Athlete Board",
@@ -566,6 +579,19 @@ export const translations = {
     targetsAppliedSuccess: "দৈনন্দিন লক্ষ্য সফলভাবে আপডেট করা হয়েছে! ড্যাশবোর্ডের সাথে সিঙ্ক হয়েছে।",
     targetCaloriesSynced: "লক্ষ্য ক্যালরি",
     targetWaterSynced: "লক্ষ্য পানি",
+
+    // AI Assistant
+    aiAssistant: "এআই সহকারী",
+    aiAssistantSubtitle: "সহানুভূতিশীল ও বিজ্ঞানভিত্তিক ফিটনেস মেন্টর",
+    assistantWelcomeMsg: "স্বাগতম বন্ধু! আমি আয়রন অ্যান্ড হ্যাবিট মেন্টর। আপনি একেবারে নতুন শুরু করতে চান কিংবা শরীরচর্চায় অনড় থাকতে চান—আমি আপনার পাশে আছি। আপনার ফিটনেস জার্নি নিয়ে আজ কী জানতে চান?",
+    assistantPrompt1: "🌱 আমি একদম নতুন, কোথা থেকে শুরু করব? (I'm a total beginner)",
+    assistantPrompt2: "🥗 সহজে ঘরোয়া খাবার দিয়ে সুস্থ থাকার উপায়",
+    assistantPrompt3: "⏱️ ব্যস্ত দিনে ১০ মিনিটের কার্যকর ব্যায়াম",
+    assistantPrompt4: "🔥 ব্যায়ামে আগ্রহ ধরে রাখার রহস্য কী?",
+    askAssistantPlaceholder: "শরীরচর্চা, ঘরোয়া খাবার, নতুন অভ্যাস বা যেকোনো প্রশ্ন লিখুন...",
+    clearChat: "নতুন চ্যাট",
+    thinking: "আপনার ফিটনেস লক্ষ্য ও বিজ্ঞান বিশ্লেষণ করছে...",
+    aiContextBadge: "শারীরিক ডেটা সিঙ্কড",
 
     // Community Hub
     community: "কমিউনিটি",
