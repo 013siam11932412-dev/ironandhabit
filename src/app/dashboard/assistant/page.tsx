@@ -335,7 +335,8 @@ export default function AssistantPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: newMessages.map((m) => ({
+          message: textToSend.trim(),
+          history: messages.map((m) => ({
             role: m.role,
             content: m.id === "welcome-system-init" ? welcomeContent : m.content,
           })),
