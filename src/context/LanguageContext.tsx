@@ -311,6 +311,13 @@ export const translations = {
     bragNutritionPrompt: "🥗 Hit my protein goal today!",
     emptySquad: "No squad members yet. Add your friends using their phone number above!",
     emptyFeed: "No messages yet. Be the first to share your workout or tip with the squad!",
+    squadChatTitle: "Iron & Habit Squad Chat",
+    squadChatSubtitle: "Open community chatroom. Join anytime, leave anytime without admin restrictions.",
+    joinGroupBtn: "Join Group",
+    leaveGroupBtn: "Leave Group",
+    typeMessagePlaceholder: "Type a message...",
+    liveBadge: "Live",
+    noMessagesInChat: "No messages in the chatroom yet. Say hello to the squad!",
   },
   bn: {
     // Brand & Nav
@@ -619,6 +626,13 @@ export const translations = {
     bragNutritionPrompt: "🥗 আজকের প্রোটিন টার্গেট পূরণ করেছি!",
     emptySquad: "এখনও কোনো বন্ধু যুক্ত করা হয়নি। উপরে ফোন নম্বর দিয়ে বন্ধুদের যুক্ত করুন!",
     emptyFeed: "এখনও কোনো বার্তা নেই। আপনার ওয়ার্কআউট বা টিপ সবার সাথে শেয়ার করতে প্রথম মেসেজটি লিখুন!",
+    squadChatTitle: "স্কোয়াড গ্রুপ চ্যাট",
+    squadChatSubtitle: "উন্মুক্ত কমিউনিটি চ্যাটরুম। যেকোনো সময় অ্যাডমিন অনুমতি ছাড়াই যোগ দিন ও ত্যাগ করুন।",
+    joinGroupBtn: "গ্রুপে যুক্ত হোন",
+    leaveGroupBtn: "গ্রুপ ত্যাগ করুন",
+    typeMessagePlaceholder: "মেসেজ লিখুন...",
+    liveBadge: "লাইভ",
+    noMessagesInChat: "গ্রুপে এখনও কোনো বার্তা নেই। প্রথম বার্তা পাঠিয়ে আলোচনা শুরু করুন!",
   },
 };
 
