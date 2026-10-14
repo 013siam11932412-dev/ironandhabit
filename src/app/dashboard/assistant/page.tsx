@@ -378,8 +378,8 @@ export default function AssistantPage() {
         role: "assistant",
         content:
           language === "bn"
-            ? "⚠️ সার্ভারের সাথে সংযোগে সাময়িক সমস্যা হয়েছে। আপনার ইন্টারনেট বা API Key যাচাই করে আবার মেসেজ পাঠান।"
-            : "⚠️ Temporary connection issue. Please verify your network or API configuration and try again.",
+            ? "⚠️ সার্ভারে সাময়িক চাপ রয়েছে। অনুগ্রহ করে ৫-১০ সেকেন্ড পর আবার চেষ্টা করুন।"
+            : "⚠️ The AI server is experiencing high demand right now. Please try again in 5–10 seconds.",
         timestamp: getNowTimeStr(),
       };
       setMessages((prev) => [...prev, fallbackErrorMsg]);

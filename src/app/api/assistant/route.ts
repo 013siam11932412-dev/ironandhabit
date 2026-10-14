@@ -159,10 +159,10 @@ export async function POST(req: Request) {
     };
 
     const modelsToTry = [
-      "gemini-2.5-flash",
-      "gemini-2.0-flash",
       "gemini-1.5-flash",
-      "gemini-3.8-flash",
+      "gemini-1.5-pro",
+      "gemini-2.0-flash",
+      "gemini-2.5-flash",
     ];
     let lastError: string | null = null;
     let replyText: string | null = null;
@@ -182,31 +182,53 @@ export async function POST(req: Request) {
           const data = await geminiRes.json();
           const candidateText =
             data?.candidates?.[0]?.content?.parts?.[0]?.text;
-          if (candidateText) {
+          if (candidateText && candidateText.trim()) {
             replyText = candidateText;
             break;
           }
         } else {
           const errData = await geminiRes.text();
           lastError = `[${geminiRes.status}] ${errData}`;
-          if (geminiRes.status === 404) {
+          console.warn(`Model ${model} returned ${geminiRes.status}:`, errData);
+
+          // Retryable / overload status codes: 503 (Overloaded/Service Unavailable), 429 (Rate Limit/High Demand), 500, 502, 504, 404 (Model not found in region)
+          if (
+            geminiRes.status === 503 ||
+            geminiRes.status === 429 ||
+            geminiRes.status === 500 ||
+            geminiRes.status === 502 ||
+            geminiRes.status === 504 ||
+            geminiRes.status === 404 ||
+            errData.includes("UNAVAILABLE") ||
+            errData.includes("RESOURCE_EXHAUSTED") ||
+            errData.includes("overloaded")
+          ) {
+            // Instantly try next model in fallback list
             continue;
           }
-          if (geminiRes.status === 400 || geminiRes.status === 403) {
+
+          // If auth error (invalid key), no point in retrying other models
+          if (
+            geminiRes.status === 401 ||
+            (geminiRes.status === 403 && errData.includes("API_KEY_INVALID"))
+          ) {
             break;
           }
         }
       } catch (err: unknown) {
         lastError = err instanceof Error ? err.message : String(err);
+        console.warn(`Model ${model} threw error:`, lastError);
+        // Continue to fallback model
+        continue;
       }
     }
 
     if (!replyText) {
-      console.error("Gemini API call failed:", lastError);
+      console.error("All Gemini fallback models exhausted:", lastError);
       return NextResponse.json({
         reply: isBn
-          ? `⚠️ **Gemini AI সংযোগে সমস্যা হয়েছে:**\n\n${lastError || "অনুরোধ প্রক্রিয়া করতে ব্যর্থ হয়েছে।"}\n\nঅনুগ্রহ করে আপনার \`GEMINI_API_KEY\` এবং ইন্টারনেট সংযোগ যাচাই করুন।`
-          : `⚠️ **Gemini AI Connection Error:**\n\n${lastError || "Failed to process request."}\n\nPlease verify your \`GEMINI_API_KEY\` and network connection.`,
+          ? "⚠️ **সার্ভারে সাময়িক চাপ রয়েছে। অনুগ্রহ করে ৫-১০ সেকেন্ড পর আবার চেষ্টা করুন।**"
+          : "⚠️ **The AI server is experiencing high demand right now. Please try again in 5–10 seconds.**",
         error: lastError,
       });
     }
@@ -214,12 +236,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ reply: replyText });
   } catch (error: unknown) {
     console.error("Assistant route error:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Internal server error occurred.";
     return NextResponse.json(
       {
-        error: "INTERNAL_ERROR",
-        message: errorMessage,
+        reply:
+          "⚠️ **সার্ভারে সাময়িক চাপ রয়েছে। অনুগ্রহ করে ৫-১০ সেকেন্ড পর আবার চেষ্টা করুন।**",
       },
       { status: 500 }
     );
