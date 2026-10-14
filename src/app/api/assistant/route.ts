@@ -91,11 +91,19 @@ export async function POST(req: Request) {
       );
     }
 
-    const apiKey = process.env.GEMINI_API_KEY?.trim();
+    const apiKey = (
+      process.env.GEMINI_API_KEY ||
+      process.env.NEXT_PUBLIC_GEMINI_API_KEY ||
+      process.env.GOOGLE_API_KEY ||
+      ""
+    )
+      .replace(/["']/g, "")
+      .trim();
     const isBn = userContext?.language === "bn";
 
     // If Gemini API Key is missing, alert the user with setup instructions
     if (!apiKey) {
+      console.warn("Gemini API Warning: No GEMINI_API_KEY detected in environment variables.");
       return NextResponse.json({
         reply: isBn
           ? "⚠️ **Gemini API Key সংযুক্ত নেই।**\n\nGoogle Gemini AI এজেন্টের সাথে সরাসরি যুক্ত হতে অনুগ্রহ করে আপনার `.env.local` ফাইলে `GEMINI_API_KEY=your_api_key_here` সেট করুন এবং সার্ভার রিস্টার্ট করুন।\n\n*(Google AI Studio থেকে সহজেই একটি ফ্রি API Key তৈরি করতে পারেন।)*"
@@ -146,11 +154,13 @@ export async function POST(req: Request) {
       );
     }
 
+    // Official Gemini REST API v1beta spec:
+    // Uses "systemInstruction" (camelCase) instead of snake_case
     const requestPayload = {
-      system_instruction: {
+      contents: formattedContents,
+      systemInstruction: {
         parts: [{ text: systemInstructionText }],
       },
-      contents: formattedContents,
       generationConfig: {
         temperature: 0.7,
         maxOutputTokens: 2048,
@@ -180,18 +190,21 @@ export async function POST(req: Request) {
 
         if (geminiRes.ok) {
           const data = await geminiRes.json();
-          const candidateText =
-            data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          const candidateParts = data?.candidates?.[0]?.content?.parts;
+          const candidateText = Array.isArray(candidateParts)
+            ? candidateParts.map((p: { text?: string }) => p.text || "").join("")
+            : null;
+
           if (candidateText && candidateText.trim()) {
-            replyText = candidateText;
+            replyText = candidateText.trim();
             break;
           }
         } else {
           const errData = await geminiRes.text();
           lastError = `[${geminiRes.status}] ${errData}`;
-          console.warn(`Model ${model} returned ${geminiRes.status}:`, errData);
+          console.error("Gemini API Error:", geminiRes.status, errData);
 
-          // Retryable / overload status codes: 503 (Overloaded/Service Unavailable), 429 (Rate Limit/High Demand), 500, 502, 504, 404 (Model not found in region)
+          // Retryable / overload status codes: 503 (Overloaded), 429 (Rate Limit), 500, 502, 504, 404
           if (
             geminiRes.status === 503 ||
             geminiRes.status === 429 ||
@@ -203,11 +216,10 @@ export async function POST(req: Request) {
             errData.includes("RESOURCE_EXHAUSTED") ||
             errData.includes("overloaded")
           ) {
-            // Instantly try next model in fallback list
             continue;
           }
 
-          // If auth error (invalid key), no point in retrying other models
+          // If auth error (invalid key), do not hammer other models
           if (
             geminiRes.status === 401 ||
             (geminiRes.status === 403 && errData.includes("API_KEY_INVALID"))
@@ -217,14 +229,13 @@ export async function POST(req: Request) {
         }
       } catch (err: unknown) {
         lastError = err instanceof Error ? err.message : String(err);
-        console.warn(`Model ${model} threw error:`, lastError);
-        // Continue to fallback model
+        console.error(`Gemini API Fetch Exception (${model}):`, lastError);
         continue;
       }
     }
 
     if (!replyText) {
-      console.error("All Gemini fallback models exhausted:", lastError);
+      console.error("All Gemini fallback models exhausted. Last error:", lastError);
       return NextResponse.json({
         reply: isBn
           ? "⚠️ **সার্ভারে সাময়িক চাপ রয়েছে। অনুগ্রহ করে ৫-১০ সেকেন্ড পর আবার চেষ্টা করুন।**"
