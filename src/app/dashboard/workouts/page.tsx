@@ -458,62 +458,6 @@ export default function WorkoutPlannerPage() {
           </div>
         )}
 
-        {/* 1. Top Section: Title & Routine Day Selector */}
-        <section className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-2 border-b border-[rgba(163,230,53,0.12)]">
-          <div>
-            <div className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#ccff00] mb-1">
-              <span className="w-2 h-2 rounded-full bg-[#ccff00] animate-pulse" />
-              <span>{dict.activeRoutine}</span>
-              <span className="text-[#94a3b8] font-mono">
-                • {language === "bn" ? currentRoutine.dayNameBn : currentRoutine.dayNameEn}
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-black uppercase text-white tracking-tight">
-              {language === "bn" ? currentRoutine.nameBn : currentRoutine.nameEn}
-            </h1>
-            <p className="text-xs text-[#94a3b8] mt-1 max-w-2xl">
-              {dict.workoutPlannerSubtitle}
-            </p>
-          </div>
-
-          {/* Routine Switcher Tabs */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            {/* Unit Switcher: KG vs LBS */}
-            <div className="inline-flex items-center p-1 rounded-xl bg-[#07090e] border border-[rgba(163,230,53,0.25)]">
-              <button
-                type="button"
-                onClick={() => setWeightUnit("kg")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-black uppercase transition-all ${
-                  weightUnit === "kg"
-                    ? "bg-[#ccff00] text-black shadow-[0_0_12px_rgba(204,255,0,0.3)]"
-                    : "text-[#94a3b8] hover:text-white"
-                }`}
-              >
-                {dict.unitKg}
-              </button>
-              <button
-                type="button"
-                onClick={() => setWeightUnit("lbs")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono font-black uppercase transition-all ${
-                  weightUnit === "lbs"
-                    ? "bg-[#ccff00] text-black shadow-[0_0_12px_rgba(204,255,0,0.3)]"
-                    : "text-[#94a3b8] hover:text-white"
-                }`}
-              >
-                {dict.unitLbs}
-              </button>
-            </div>
-
-            {/* Add Exercise Modal Trigger */}
-            <button
-              type="button"
-              onClick={() => setIsCustomModalOpen(true)}
-              className="px-5 py-2.5 rounded-xl bg-[#ccff00] hover:bg-[#d8ff33] text-black font-black text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(204,255,0,0.35)] active:scale-95 transition-all whitespace-nowrap"
-            >
-              {dict.addExerciseBtn}
-            </button>
-          </div>
-        </section>
 
 
         {/* 3. Built-In Rest Timer */}
