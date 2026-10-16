@@ -10,10 +10,14 @@ export default function RestTimer() {
     let interval: NodeJS.Timeout | null = null;
     if (isActive && seconds > 0) {
       interval = setInterval(() => {
-        setSeconds((prev) => prev - 1);
+        setSeconds((prev) => {
+          if (prev <= 1) {
+            setIsActive(false);
+            return 0;
+          }
+          return prev - 1;
+        });
       }, 1000);
-    } else if (seconds === 0) {
-      setIsActive(false);
     }
     return () => {
       if (interval) clearInterval(interval);
@@ -41,15 +45,15 @@ export default function RestTimer() {
   };
 
   return (
-    <div className="w-full max-w-sm sm:max-w-md bg-[#0d131f] border border-slate-800 rounded-3xl p-6 flex flex-col items-center shadow-2xl text-slate-100">
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-xl">⏱️</span>
-        <h2 className="text-lg font-bold text-slate-200">রেস্ট টাইমার</h2>
+    <div className="w-full max-w-xs sm:max-w-sm bg-[#0d131f] border border-slate-800 rounded-3xl p-4 sm:p-5 flex flex-col items-center shadow-2xl text-slate-100">
+      <div className="flex items-center gap-2 mb-1.5">
+        <span className="text-lg">⏱️</span>
+        <h2 className="text-base font-bold text-slate-200">রেস্ট টাইমার</h2>
       </div>
-      <p className="text-xs text-slate-400 mb-6">সেটের মাঝে পর্যাপ্ত রিকভারি নিশ্চিত করুন</p>
+      <p className="text-[11px] text-slate-400 mb-4 text-center">সেটের মাঝে পর্যাপ্ত রিকভারি নিশ্চিত করুন</p>
 
       {/* Strictly Sized Bounded Circular Ring */}
-      <div className="relative w-56 h-56 sm:w-60 sm:h-60 flex items-center justify-center mb-6">
+      <div className="relative w-44 h-44 sm:w-48 sm:h-48 flex items-center justify-center mb-4">
         <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
           <circle
             cx="50"
@@ -72,10 +76,10 @@ export default function RestTimer() {
           />
         </svg>
         <div className="absolute flex flex-col items-center justify-center">
-          <span className="text-4xl font-extrabold tracking-wider font-mono text-[#ccff00]">
+          <span className="text-3xl sm:text-4xl font-extrabold tracking-wider font-mono text-[#ccff00]">
             {formatTime(seconds)}
           </span>
-          <span className="text-xs text-slate-400 mt-1">বাকি সময়</span>
+          <span className="text-[10px] text-slate-400 mt-0.5">বাকি সময়</span>
         </div>
       </div>
 

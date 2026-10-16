@@ -6,8 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
-import RestTimer from "@/components/workout/RestTimer";
-import WorkoutLocationSelector from "@/components/workout/WorkoutLocationSelector";
+import WorkoutFlow from "@/components/workout/WorkoutFlow";
 import {
   WorkoutRoutine,
   WorkoutExercise,
@@ -460,10 +459,9 @@ export default function WorkoutPlannerPage() {
 
 
 
-        {/* 3. Built-In Rest Timer & Location Selector */}
-        <section className="flex flex-col items-center justify-center gap-6">
-          <RestTimer />
-          <WorkoutLocationSelector />
+        {/* Workout Flow: Location -> Level -> Exercise Guides + RestTimer */}
+        <section className="w-full flex justify-center">
+          <WorkoutFlow />
         </section>
 
       </main>
