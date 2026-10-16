@@ -559,40 +559,6 @@ export default function WorkoutPlannerPage() {
             })}
           </div>
 
-          {/* Routine Templates Selector Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
-            {routines.map((routine) => {
-              const isSelected = activeRoutineId === routine.id;
-              return (
-                <button
-                  key={routine.id}
-                  type="button"
-                  onClick={() => setActiveRoutineId(routine.id)}
-                  className={`p-3 rounded-xl border text-left transition-all ${
-                    isSelected
-                      ? "bg-[rgba(18,24,38,0.9)] border-[#ccff00] shadow-[0_0_15px_rgba(204,255,0,0.2)]"
-                      : "bg-[#07090e]/70 border-[rgba(163,230,53,0.15)] hover:border-[rgba(163,230,53,0.35)]"
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span
-                      className={`text-xs font-black uppercase ${
-                        isSelected ? "text-[#ccff00]" : "text-white"
-                      }`}
-                    >
-                      {routine.category.toUpperCase()}
-                    </span>
-                    {isSelected && (
-                      <span className="w-2 h-2 rounded-full bg-[#ccff00] animate-pulse" />
-                    )}
-                  </div>
-                  <div className="text-[10px] text-[#94a3b8] truncate">
-                    {routine.exercises.length} {dict.exercisesCount}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
         </section>
 
         {/* 3. Stats & Summary Widget + Rest Timer Grid */}
