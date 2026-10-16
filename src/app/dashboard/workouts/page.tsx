@@ -19,8 +19,6 @@ import {
   saveStoredActiveRoutineId,
   getStoredWeightUnit,
   saveStoredWeightUnit,
-  calculateRoutineVolume,
-  calculateCompletedSetsCount,
 } from "@/lib/workoutStorage";
 import { getStoredStreak, saveStoredStreak, getTodayIsoDate } from "@/lib/storage";
 import {
@@ -110,13 +108,6 @@ export default function WorkoutPlannerPage() {
   const currentRoutine =
     routines.find((r) => r.id === activeRoutineId) || routines[0] || DEFAULT_ROUTINES[0];
 
-  // Telemetry aggregates
-  const { completed: completedSets, total: totalSets } =
-    calculateCompletedSetsCount(currentRoutine);
-  const totalVolume = calculateRoutineVolume(currentRoutine);
-  const completionPercentage =
-    totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
-  const estimatedCalories = Math.round(completedSets * 35 + totalVolume * 0.02);
 
   // Toggle set completed (writes to public.workout_logs)
   function handleToggleSet(exerciseId: string, setId: string) {
@@ -561,110 +552,9 @@ export default function WorkoutPlannerPage() {
 
         </section>
 
-        {/* 3. Stats & Summary Widget + Rest Timer Grid */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* Left Column (7 cols): Telemetry Stats Cards */}
-          <div className="lg:col-span-7 space-y-4">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {/* Stat 1: Sets Completed */}
-              <div className="bg-[rgba(18,24,38,0.7)] backdrop-blur-md border border-[rgba(163,230,53,0.2)] rounded-2xl p-4 shadow-md">
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#94a3b8] block">
-                  {dict.setsCompleted}
-                </span>
-                <div className="flex items-baseline gap-1 mt-1">
-                  <span className="text-2xl font-black text-[#ccff00] font-mono">
-                    {completedSets}
-                  </span>
-                  <span className="text-xs text-[#94a3b8] font-mono">
-                    / {totalSets}
-                  </span>
-                </div>
-                <div className="w-full bg-[#07090e] h-1.5 rounded-full overflow-hidden mt-2">
-                  <div
-                    className="bg-[#ccff00] h-full rounded-full transition-all duration-300"
-                    style={{ width: `${completionPercentage}%` }}
-                  />
-                </div>
-              </div>
-
-              {/* Stat 2: Total Volume */}
-              <div className="bg-[rgba(18,24,38,0.7)] backdrop-blur-md border border-[rgba(163,230,53,0.2)] rounded-2xl p-4 shadow-md">
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#94a3b8] block">
-                  {dict.totalVolume}
-                </span>
-                <div className="flex items-baseline gap-1 mt-1">
-                  <span className="text-2xl font-black text-white font-mono">
-                    {totalVolume.toLocaleString()}
-                  </span>
-                  <span className="text-xs text-[#ccff00] font-mono uppercase">
-                    {weightUnit}
-                  </span>
-                </div>
-                <span className="text-[10px] text-[#94a3b8] font-mono mt-1 block">
-                  {completedSets > 0 ? "Active Load" : "Pending Sets"}
-                </span>
-              </div>
-
-              {/* Stat 3: Completion Streak */}
-              <div className="bg-[rgba(18,24,38,0.7)] backdrop-blur-md border border-[rgba(163,230,53,0.2)] rounded-2xl p-4 shadow-md">
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#94a3b8] block">
-                  {dict.workoutStreak}
-                </span>
-                <div className="text-2xl font-black text-[#ccff00] font-mono mt-1">
-                  {language === "bn" ? `দিন ${streakDay}` : `Day ${streakDay}`}
-                </div>
-                <span className="text-[10px] text-[#94a3b8] font-mono mt-1 block">
-                  {streakDay >= 7 ? "Cycle Ready 🔥" : "7-Day Peak"}
-                </span>
-              </div>
-
-              {/* Stat 4: Estimated Calories */}
-              <div className="bg-[rgba(18,24,38,0.7)] backdrop-blur-md border border-[rgba(163,230,53,0.2)] rounded-2xl p-4 shadow-md">
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#94a3b8] block">
-                  {dict.dailyCalories}
-                </span>
-                <div className="flex items-baseline gap-1 mt-1">
-                  <span className="text-2xl font-black text-white font-mono">
-                    {estimatedCalories}
-                  </span>
-                  <span className="text-xs text-[#94a3b8] font-mono">kcal</span>
-                </div>
-                <span className="text-[10px] text-emerald-400 font-mono mt-1 block">
-                  Burn Rate: Live
-                </span>
-              </div>
-            </div>
-
-            {/* Quick Finish Session CTA */}
-            <div className="p-4 rounded-2xl bg-[rgba(18,24,38,0.6)] border border-[rgba(163,230,53,0.18)] flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div>
-                <h4 className="text-sm font-black uppercase text-white">
-                  {dict.sessionSummary}
-                </h4>
-                <p className="text-xs text-[#94a3b8] mt-0.5">
-                  {completedSets === totalSets && totalSets > 0
-                    ? language === "bn"
-                      ? "সবগুলো সেট সম্পন্ন হয়েছে! অধিবেশনটি সংরক্ষণ করুন।"
-                      : "All sets crushed! Lock in this session to boost your streak."
-                    : `${totalSets - completedSets} ${
-                        language === "bn" ? "সেট বাকি রয়েছে" : "sets remaining"
-                      }`}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={handleFinishWorkout}
-                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-[#a3e635] to-[#ccff00] hover:brightness-110 text-black font-black text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(204,255,0,0.35)] active:scale-95 transition-all whitespace-nowrap"
-              >
-                {dict.finishWorkout} &rarr;
-              </button>
-            </div>
-          </div>
-
-          {/* Right Column (5 cols): Built-In Rest Timer */}
-          <div className="lg:col-span-5">
-            <RestTimer />
-          </div>
+        {/* 3. Built-In Rest Timer */}
+        <section className="flex justify-center">
+          <RestTimer />
         </section>
 
         {/* 4. Main Exercise Logging Board */}
