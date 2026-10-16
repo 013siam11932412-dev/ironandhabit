@@ -341,15 +341,6 @@ export default function WorkoutPlannerPage() {
     { name: dict.community, href: "/dashboard/community" },
   ];
 
-  const daysOfWeek = [
-    { id: "push", labelEn: "MON", labelBn: "সোম", routineId: "push" },
-    { id: "pull", labelEn: "TUE", labelBn: "মঙ্গল", routineId: "pull" },
-    { id: "legs", labelEn: "WED", labelBn: "বুধ", routineId: "legs" },
-    { id: "push2", labelEn: "THU", labelBn: "বৃহ", routineId: "push" },
-    { id: "pull2", labelEn: "FRI", labelBn: "শুক্র", routineId: "pull" },
-    { id: "legs2", labelEn: "SAT", labelBn: "শনি", routineId: "legs" },
-    { id: "rest", labelEn: "SUN", labelBn: "রবি", routineId: "rest" },
-  ];
 
   return (
     <div className="relative min-h-screen bg-[#07090e] text-[#f9fafb] flex flex-col justify-between selection:bg-[#ccff00] selection:text-black">
@@ -524,33 +515,6 @@ export default function WorkoutPlannerPage() {
           </div>
         </section>
 
-        {/* 2. Daily Routine Template Pills & Day of Week Selector */}
-        <section className="space-y-3">
-          {/* Day of Week Quick Switcher */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1">
-            <span className="text-[11px] font-black uppercase tracking-wider text-[#94a3b8] whitespace-nowrap mr-1">
-              {dict.dailyRoutines}:
-            </span>
-            {daysOfWeek.map((day) => {
-              const isSelected = activeRoutineId === day.routineId;
-              return (
-                <button
-                  key={day.id}
-                  type="button"
-                  onClick={() => setActiveRoutineId(day.routineId)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold uppercase transition-all whitespace-nowrap border ${
-                    isSelected
-                      ? "bg-[#ccff00] text-black border-[#ccff00] shadow-[0_0_12px_rgba(204,255,0,0.25)]"
-                      : "bg-[#07090e] border-[rgba(163,230,53,0.15)] text-[#94a3b8] hover:text-white"
-                  }`}
-                >
-                  {language === "bn" ? day.labelBn : day.labelEn}
-                </button>
-              );
-            })}
-          </div>
-
-        </section>
 
         {/* 3. Built-In Rest Timer */}
         <section className="flex justify-center">
