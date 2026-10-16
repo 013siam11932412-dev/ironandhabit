@@ -17,9 +17,21 @@ interface Exercise {
   tip: string;
   durationOrReps: string;
   imageUrl: string;
+  formCue: string;
+  formDescription: string;
 }
 
-const EXERCISES_DATA: Record<WorkoutLevel, { titleBn: string; titleEn: string; badge: string; color: string; duration: string; exercises: Exercise[] }> = {
+const EXERCISES_DATA: Record<
+  WorkoutLevel,
+  {
+    titleBn: string;
+    titleEn: string;
+    badge: string;
+    color: string;
+    duration: string;
+    exercises: Exercise[];
+  }
+> = {
   beginner: {
     titleBn: "বেসিক (Beginner)",
     titleEn: "Beginner Bodyweight Routine",
@@ -34,10 +46,14 @@ const EXERCISES_DATA: Record<WorkoutLevel, { titleBn: string; titleEn: string; b
         tag: "ওয়ার্মআপ ও কার্ডিও",
         tagColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
         target: "🎯 পুরো শরীর, হৃদস্পন্দন ও রক্ত সঞ্চালন বৃদ্ধি",
-        instructions: "📋 সোজা হয়ে দাঁড়ান, একসাথে লাফ দিয়ে পা দুদিকে ছড়ান এবং হাত মাথার উপরে তুলুন। শুরুতে আরামদায়ক ছন্দে করুন।",
+        instructions:
+          "📋 সোজা হয়ে দাঁড়ান, একসাথে লাফ দিয়ে পা দুদিকে ছড়ান এবং হাত মাথার উপরে তুলুন। শুরুতে আরামদায়ক ছন্দে করুন।",
         tip: "💡 হালকা পায়ের আঙুলের ওপর ভর দিয়ে সফট ল্যান্ডিং করুন।",
         durationOrReps: "৩০ সেকেন্ড x ২-৩ সেট",
-        imageUrl: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 স্টার-জাম্প ভঙ্গিমা: পা দুদিকে ও হাত মাথার ওপর",
+        formDescription: "Sequential feet-together to star-jump pose on mat",
       },
       {
         id: "b2",
@@ -46,22 +62,30 @@ const EXERCISES_DATA: Record<WorkoutLevel, { titleBn: string; titleEn: string; b
         tag: "লোয়ার বডি",
         tagColor: "bg-blue-500/10 text-blue-400 border-blue-500/20",
         target: "🎯 কোয়াড্রিসেপস, হ্যামস্ট্রিংস এবং গ্লুটস",
-        instructions: "📋 পা কাঁধের সমান চওড়া রাখুন, বুক সোজা রেখে চেয়ারে বসার মতো নিতম্ব নিচে নামান। ঊরু মেঝের সমান্তরাল হলে আবার দাঁড়ান।",
+        instructions:
+          "📋 পা কাঁধের সমান চওড়া রাখুন, বুক সোজা রেখে চেয়ারে বসার মতো নিতম্ব নিচে নামান। ঊরু মেঝের সমান্তরাল হলে আবার দাঁড়ান।",
         tip: "💡 হাঁটু যেন পায়ের পাতার বাইরে না যায় এবং গোড়ালি মাটিতে স্থির রাখুন।",
         durationOrReps: "১০-১২ রেপস x ৩ সেট",
-        imageUrl: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 সঠিক স্কোয়াট: নিতম্ব পেছনে, ঊরু সমান্তরাল (৯০°)",
+        formDescription: "Hips back and thighs parallel to ground",
       },
       {
         id: "b3",
-        nameBn: "ওয়াল বা নি পুশ-আপ",
-        nameEn: "Wall / Knee Push-up",
+        nameBn: "হাঁটুতে পুশ-আপ (নি পুশ-আপ)",
+        nameEn: "Knee / Wall Push-up",
         tag: "আপার বডি প্রেস",
         tagColor: "bg-[#ccff00]/10 text-[#ccff00] border-[#ccff00]/20",
         target: "🎯 বুক, সামনের কাঁধ এবং ট্রাইসেপস",
-        instructions: "📋 দেয়ালে হাত রেখে অথবা মেঝেতে হাঁটু গেড়ে শরীর সোজা রেখে বুক নিচে নামান ও নিয়ন্ত্রিতভাবে পুশ করুন।",
+        instructions:
+          "📋 মেঝেতে হাঁটু গেড়ে শরীর মাথা থেকে হাঁটু পর্যন্ত সোজা তির্যক রেখায় রেখে বুক নিচে নামান ও নিয়ন্ত্রিতভাবে পুশ করুন।",
         tip: "💡 কনুই শরীরের সাথে প্রায় ৪৫ ডিগ্রি কোণে রাখুন, পিঠ সোজা রাখুন।",
         durationOrReps: "৮-১০ রেপস x ৩ সেট",
-        imageUrl: "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 নি পুশ-আপ: হাঁটু মাটিতে, শরীর সোজা তির্যক রেখায়",
+        formDescription: "Knees on mat, body in straight diagonal line, chest dropping",
       },
       {
         id: "b4",
@@ -70,34 +94,46 @@ const EXERCISES_DATA: Record<WorkoutLevel, { titleBn: string; titleEn: string; b
         tag: "পোস্টেরিয়র চেইন",
         tagColor: "bg-purple-500/10 text-purple-400 border-purple-500/20",
         target: "🎯 গ্লুটস, লোয়ার ব্যাক ও পেলভিক স্টেবিলিটি",
-        instructions: "📋 পিঠের ওপর শুয়ে হাঁটু ভাঁজ করে পা মাটিতে রাখুন। নিতম্ব ওপরের দিকে ঠেলে ২ সেকেন্ড হোল্ড করে নামান।",
+        instructions:
+          "📋 পিঠের ওপর শুয়ে হাঁটু ভাঁজ করে পা মাটিতে রাখুন। নিতম্ব ওপরের দিকে ঠেলে ২ সেকেন্ড হোল্ড করে নামান।",
         tip: "💡 ওপরে ওঠার সময় পেটের পেশী শক্ত রাখুন এবং অতিরিক্ত পিঠ বাঁকাবেন না।",
         durationOrReps: "১২-১৫ রেপস x ৩ সেট",
-        imageUrl: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 ব্রিজ পজিশন: পিঠ ফ্ল্যাট, নিতম্ব সোজা উঁচুতে লক",
+        formDescription: "Lie on back, knees bent, hips raised high",
       },
       {
         id: "b5",
         nameBn: "প্ল্যাঙ্ক (১০-২০ সেকেন্ড)",
-        nameEn: "Standard Plank",
+        nameEn: "Standard Forearm Plank",
         tag: "কোর স্টেবিলিটি",
         tagColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
         target: "🎯 সম্পূর্ণ কোর, পেটের গভীর পেশী ও পিঠের সুরক্ষা",
-        instructions: "📋 কনুই ও পায়ের আঙুলের ওপর ভর দিয়ে শরীর মাথা থেকে গোড়ালি পর্যন্ত একদম সোজা রেখায় ধরে রাখুন।",
+        instructions:
+          "📋 কনুই ও পায়ের আঙুলের ওপর ভর দিয়ে শরীর মাথা থেকে গোড়ালি পর্যন্ত একদম সোজা রেখায় টানটান ধরে রাখুন।",
         tip: "💡 শ্বাস স্বাভাবিক রাখুন, নিতম্ব বেশি ওপরে তুলবেন না বা ঝুলিয়ে দেবেন না।",
         durationOrReps: "১৫-২০ সেকেন্ড x ৩ সেট",
-        imageUrl: "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 পারফেক্ট প্ল্যাঙ্ক: কনুই ও আঙুলে ভর, সোজা ফ্ল্যাট ব্যাক",
+        formDescription: "Forearms and toes on ground, flat back and core tight",
       },
       {
         id: "b6",
         nameBn: "কুলডাউন স্ট্রেচিং",
-        nameEn: "Cooldown Body Stretch",
+        nameEn: "15-min Routine Stretching",
         tag: "রিকভারি ও ফ্লেক্সিবিলিটি",
         tagColor: "bg-teal-500/10 text-teal-400 border-teal-500/20",
         target: "🎯 সারা শরীরের নমনীয়তা ও পেশীর ক্লান্তি দূর করা",
-        instructions: "📋 কোয়াডস, হ্যামস্ট্রিং, কাঁধ ও পিঠের স্ট্রেচ প্রতিটি ১৫-২০ সেকেন্ড ধরে রেখে গভীর শ্বাস নিন।",
-        tip: "💡 কোনো ঝাঁকুনি দেবেন না, মৃদু আরামদায়ক টান অনুভব পর্যন্ত রাখুন।",
+        instructions:
+          "📋 কোয়াডস, হ্যামস্ট্রিং, বুক ও পিঠের প্রতিটি স্ট্রেচ ১৫-২০ সেকেন্ড শান্তভাবে ধরে রাখুন।",
+        tip: "💡 কোনো ঝাঁকুনি দেবেন না, আরামদায়ক মৃদু টান পর্যন্ত রাখুন।",
         durationOrReps: "৩-৫ মিনিট",
-        imageUrl: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 স্ট্রেচ রিকভারি: ডিপ নিঃশ্বাসে পেশীর প্রসারণ",
+        formDescription: "Full body post-workout gentle stretch routine",
       },
     ],
   },
@@ -115,10 +151,14 @@ const EXERCISES_DATA: Record<WorkoutLevel, { titleBn: string; titleEn: string; b
         tag: "আপার বডি প্রেস",
         tagColor: "bg-[#ccff00]/10 text-[#ccff00] border-[#ccff00]/20",
         target: "🎯 বুক, ট্রাইসেপস ও সামনের কাঁধের পেশী",
-        instructions: "📋 হাত কাঁধের সমান দূরত্বে মাটিতে রেখে শরীর সোজা রাখুন। বুক মেঝের প্রায় স্পর্শ করা পর্যন্ত নামিয়ে পুশ করুন।",
+        instructions:
+          "📋 হাত কাঁধের সমান দূরত্বে মাটিতে রেখে শরীর সোজা রাখুন। বুক মেঝের প্রায় স্পর্শ করা পর্যন্ত নামিয়ে নিয়ন্ত্রিতভাবে পুশ করুন।",
         tip: "💡 কোর শক্ত রাখুন যাতে কোমর নিচে ঝুলে না যায়।",
         durationOrReps: "১০-১৫ রেপস x ৩ সেট",
-        imageUrl: "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 ফুল পুশ-আপ: পায়ের আঙুলে সোজা প্ল্যাঙ্ক ও ডিপ প্রেস",
+        formDescription: "Perfect plank pose on toes, lowering the body",
       },
       {
         id: "i2",
@@ -127,10 +167,14 @@ const EXERCISES_DATA: Record<WorkoutLevel, { titleBn: string; titleEn: string; b
         tag: "লোয়ার বডি",
         tagColor: "bg-blue-500/10 text-blue-400 border-blue-500/20",
         target: "🎯 কোয়াডস, হ্যামস্ট্রিংস ও ভারসাম্য রক্ষা",
-        instructions: "📋 এক পা সামনে এগিয়ে উভয় হাঁটু ৯০ ডিগ্রি কোণে বাঁকান। পেছনের হাঁটু মেঝের কাছাকাছি এনে আগের অবস্থানে ফিরে আসুন।",
+        instructions:
+          "📋 বড় পদক্ষেপে এক পা সামনে এগিয়ে উভয় হাঁটু ৯০ ডিগ্রি কোণে বাঁকান। পেছনের হাঁটু মেঝের কাছাকাছি এনে ফিরে আসুন।",
         tip: "💡 সামনের হাঁটু যেন বুড়ো আঙুল অতিক্রম না করে।",
         durationOrReps: "১০ রেপস প্রতি পায়ে x ৩ সেট",
-        imageUrl: "https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 লাঞ্জেস ফর্ম: সামনে বড় স্টেপ, পেছনের হাঁটু মেঝের কাছে",
+        formDescription: "Big step forward, back knee hovering just off the ground",
       },
       {
         id: "i3",
@@ -139,22 +183,30 @@ const EXERCISES_DATA: Record<WorkoutLevel, { titleBn: string; titleEn: string; b
         tag: "অ্যাবডমিনালস",
         tagColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
         target: "🎯 পেটের উপরিভাগ ও পাশের ওবলিক পেশী",
-        instructions: "📋 পিঠে শুয়ে হাত মাথার পেছনে রাখুন। এক হাঁটু বুকের কাছে এনে বিপরীত কনুই তার কাছে আনুন এবং সাইকেলের মতো পরিবর্তন করুন।",
-        tip: "💡 ঘাড়ে জোর দিয়ে টানবেন না, কোর দিয়ে শরীর ঘোরান।",
+        instructions:
+          "📋 পিঠে শুয়ে হাত মাথার পেছনে রাখুন। এক হাঁটু বুকের কাছে এনে বিপরীত কনুই তার কাছে আনুন এবং পর্যায়ক্রমে ঘোরান।",
+        tip: "💡 ঘাড়ে টানবেন না, কোর দিয়ে কাঁধ ওপরে তুলুন।",
         durationOrReps: "১৫-২০ রেপস x ৩ সেট",
-        imageUrl: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 ক্রাঞ্চ টুইস্ট: পিঠ ফ্ল্যাট, বিপরীত কনুই ও হাঁটু একত্রিত",
+        formDescription: "Lie flat, twist elbow to opposite knee",
       },
       {
         id: "i4",
-        nameBn: "মাউন্টেন ক্লাইম্বারস",
+        nameBn: "মাউন্টেন ক্লাইম্বার্স",
         nameEn: "Mountain Climbers",
         tag: "কোর ও কার্ডিও",
         tagColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
         target: "🎯 কোর পেশী, কাঁধের সহনশীলতা ও চর্বি পোড়ানো",
-        instructions: "📋 পুশ-আপ পজিশনে থাকুন। দ্রুত পর্যায়ক্রমে একটি করে হাঁটু বুকের দিকে টেনে আনুন যেন খাড়া পাহাড়ে উঠছেন।",
+        instructions:
+          "📋 হাই প্ল্যাঙ্ক পজিশনে থাকুন। দ্রুত পর্যায়ক্রমে একটি করে হাঁটু বুকের দিকে টেনে আনুন যেন পাহাড়ে উঠছেন।",
         tip: "💡 হাত কাঁধের নিচে দৃঢ় রাখুন এবং পিঠ সোজা রাখুন।",
         durationOrReps: "৩০-৪০ সেকেন্ড x ৩ সেট",
-        imageUrl: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 মাউন্টেন ড্রাইভ: হাই প্ল্যাঙ্ক, দ্রুত হাঁটু বুকের দিকে",
+        formDescription: "High plank, knees driving aggressively towards chest",
       },
       {
         id: "i5",
@@ -163,10 +215,14 @@ const EXERCISES_DATA: Record<WorkoutLevel, { titleBn: string; titleEn: string; b
         tag: "হিপ ও গ্লুট ড্রাইভ",
         tagColor: "bg-purple-500/10 text-purple-400 border-purple-500/20",
         target: "🎯 গ্লুটস ও হ্যামস্ট্রিংস (হাঁটু-বান্ধব ব্যায়াম)",
-        instructions: "📋 সোজা দাঁড়িয়ে এক পা পেছনের দিকে নিয়ে শরীর নামান। এটি হাঁটুর ওপর বাড়তি চাপ ছাড়া গ্লুটস শক্তিশালী করে।",
-        tip: "💡 সামনের পায়ের গোড়ালিতে ওজন রেখে ওপরে উঠুন।",
+        instructions:
+          "📋 সোজা দাঁড়িয়ে এক পা পেছনের দিকে নিয়ে শরীর নামান। এটি হাঁটুর ওপর বাড়তি চাপ ছাড়া গ্লুটস সক্রিয় করে।",
+        tip: "💡 সামনের পায়ের গোড়ালিতে ভর রেখে ওপরে উঠুন।",
         durationOrReps: "১০-১২ রেপস প্রতি পায়ে x ৩ সেট",
-        imageUrl: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 রিভার্স লাঞ্জ: পেছনের পা নামিয়ে নিয়ন্ত্রিত লোয়ার",
+        formDescription: "Step backward with one leg, lower hips smoothly",
       },
     ],
   },
@@ -184,22 +240,30 @@ const EXERCISES_DATA: Record<WorkoutLevel, { titleBn: string; titleEn: string; b
         tag: "শোল্ডার প্রেস",
         tagColor: "bg-[#ccff00]/10 text-[#ccff00] border-[#ccff00]/20",
         target: "🎯 কাঁধের পেশী (ডেল্টয়েড) ও ট্রাইসেপস",
-        instructions: "📋 শরীর উল্টো 'V' আকারে রেখে মাথা দুই হাতের মাঝখানে মেঝের দিকে নামান এবং চাপ দিয়ে ওপরে তুলুন।",
-        tip: "💡 চোখ পায়ের দিকে রাখুন এবং শরীর শক্ত রাখুন।",
+        instructions:
+          "📋 শরীর উল্টো 'V' আকারে কোমর উঁচুতে রেখে মাথা দুই হাতের মাঝখানে মেঝের দিকে নামান এবং চাপ দিয়ে ওপরে তুলুন।",
+        tip: "💡 চোখ পায়ের দিকে রাখুন এবং কোর শক্ত রাখুন।",
         durationOrReps: "৮-১২ রেপস x ৩ সেট",
-        imageUrl: "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 পাইক শেপ: কোমর উল্টো 'V' আকারে, মাথা মেঝের দিকে পুশ",
+        formDescription: "Hips high in 'V' shape, head pointing toward ground",
       },
       {
         id: "a2",
-        nameBn: "ফুল বারপিস",
-        nameEn: "Full Burpees with Jump",
+        nameBn: "ফুল বার্পি",
+        nameEn: "Full Burpees with Push-up & Jump",
         tag: "ফুল বডি পাওয়ার",
         tagColor: "bg-red-500/10 text-red-400 border-red-500/20",
         target: "🎯 সম্পূর্ণ শরীর ও দ্রুত ক্যালরি বার্ন",
-        instructions: "📋 স্কোয়াট করে হাত মাটিতে রাখুন, পা পেছনে ছুড়ে পুশ-আপ করুন, আবার পা ফিরিয়ে এনে ওপরে লাফ দিন।",
+        instructions:
+          "📋 স্কোয়াট করে হাত মাটিতে রাখুন, পা পেছনে ছুড়ে পুশ-আপ করুন, আবার পা ফিরিয়ে এনে ওপরে হাত তুলে লাফ দিন।",
         tip: "💡 গতি ও নিয়ন্ত্রণের মধ্যে ভারসাম্য বজায় রাখুন।",
         durationOrReps: "১০-১৫ রেপস x ৩ সেট",
-        imageUrl: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 বার্পি সিকোয়েন্স: ডিপ স্কোয়াট ➔ প্ল্যাঙ্ক ➔ পুশ ➔ জাম্প",
+        formDescription: "Deep squat to plank, push-up, jump back in, jump up",
       },
       {
         id: "a3",
@@ -208,22 +272,30 @@ const EXERCISES_DATA: Record<WorkoutLevel, { titleBn: string; titleEn: string; b
         tag: "ফাংশনাল কোর",
         tagColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
         target: "🎯 কোর স্ট্যাবিলিটি, কাঁধ ও কোঅর্ডিনেশন",
-        instructions: "📋 হাঁটু মাটির সামান্য ওপরে রেখে বিপরীত হাত ও পা একযোগে সামনে বাড়িয়ে চার পায়ে নিঃশব্দে হাঁটুন।",
+        instructions:
+          "📋 হাত ও পায়ের আঙুলে ভর দিয়ে হাঁটু মাটির মাত্র ১-২ ইঞ্চি ওপরে রেখে চার পায়ে নিঃশব্দে সামনে ও পেছনে হাঁটুন।",
         tip: "💡 পিঠ একদম সমতল রাখুন, কোমর দোলাবেন না।",
         durationOrReps: "৩০-৪৫ সেকেন্ড x ৩ সেট",
-        imageUrl: "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 বেয়ার ক্রল: হাত ও আঙুলে ভর, হাঁটু মেঝের সামান্য ওপরে",
+        formDescription: "Hands and toes, knees bent hovering off the floor",
       },
       {
         id: "a4",
-        nameBn: "ইঞ্চওয়ার্ম",
+        nameBn: "ইঞ্চিওয়ার্ম",
         nameEn: "Inchworm Walkouts",
         tag: "মোবিলিটি ও কোর",
         tagColor: "bg-teal-500/10 text-teal-400 border-teal-500/20",
         target: "🎯 হ্যামস্ট্রিং স্ট্রেচ, কোর ও শোল্ডার স্ট্যাবিলিটি",
-        instructions: "📋 সোজা দাঁড়িয়ে হাত মাটিতে নামিয়ে হেঁটে হেঁটে প্ল্যাঙ্ক পজিশনে যান, ২ সেকেন্ড হোল্ড করে আবার হাত পিছিয়ে উঠে দাঁড়ান।",
+        instructions:
+          "📋 সোজা দাঁড়িয়ে হাত মাটিতে নামিয়ে হেঁটে হেঁটে প্ল্যাঙ্ক পজিশনে যান, ২ সেকেন্ড হোল্ড করে আবার হাত পিছিয়ে উঠে দাঁড়ান।",
         tip: "💡 পা যতদূর সম্ভব সোজা রাখার চেষ্টা করুন।",
         durationOrReps: "৮-১০ রেপস x ৩ সেট",
-        imageUrl: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 ইঞ্চিওয়ার্ম: হাত হেঁটে প্ল্যাঙ্কে যান ও আবার উঠে দাঁড়ান",
+        formDescription: "Walk hands out to plank, walk feet back to hands",
       },
       {
         id: "a5",
@@ -232,10 +304,14 @@ const EXERCISES_DATA: Record<WorkoutLevel, { titleBn: string; titleEn: string; b
         tag: "প্লায়োমেট্রিক্স",
         tagColor: "bg-blue-500/10 text-blue-400 border-blue-500/20",
         target: "🎯 এক্সপ্লোসিভ লেগ পাওয়ার ও ক্যালরি বার্ন",
-        instructions: "📋 সাধারণ স্কোয়াট পজিশনে নেমে সর্বোচ্চ শক্তিতে ওপরে লাফ দিন এবং কোমলভাবে আবার স্কোয়াটে নামুন।",
+        instructions:
+          "📋 সাধারণ স্কোয়াট পজিশনে নেমে সর্বোচ্চ শক্তিতে ওপরে লাফ দিন এবং কোমলভাবে আবার স্কোয়াটে নামুন।",
         tip: "💡 ল্যান্ডিংয়ের সময় হাঁটু আলতো করে ভাঁজ করে শক অ্যাবসর্ব করুন।",
         durationOrReps: "১০-১২ রেপস x ৩ সেট",
-        imageUrl: "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=600&auto=format&fit=crop&q=80",
+        imageUrl:
+          "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 জাম্প স্কোয়াট: ডিপ স্কোয়াট থেকে এক্সপ্লোসিভ উল্লম্ফন",
+        formDescription: "Explosive vertical jump from deep squat position",
       },
     ],
   },
@@ -399,7 +475,7 @@ export default function WorkoutFlow() {
                     </span>
                   </div>
                   <p className="text-xs text-slate-400 mt-1">
-                    স্ট্যান্ডার্ড পুশ-আপ, লাঞ্জেস, বাইসাইকেল ক্রাঞ্চ, মাউন্টেন ক্লাইম্বারস
+                    স্ট্যান্ডার্ড পুশ-আপ, লাঞ্জেস, বাইসাইকেল ক্রাঞ্চ, মাউন্টেন ক্লাইম্বার্স
                   </p>
                 </div>
               </div>
@@ -428,7 +504,7 @@ export default function WorkoutFlow() {
                     </span>
                   </div>
                   <p className="text-xs text-slate-400 mt-1">
-                    পাইক পুশ-আপ, ফুল বারপিস, বেয়ার ক্রল, ইঞ্চওয়ার্ম, জাম্প স্কোয়াট
+                    পাইক পুশ-আপ, ফুল বার্পি, বেয়ার ক্রল, ইঞ্চিওয়ার্ম, জাম্প স্কোয়াট
                   </p>
                 </div>
               </div>
@@ -509,16 +585,20 @@ export default function WorkoutFlow() {
                     </span>
                   </div>
 
-                  {/* Strictly Bounded Image Container */}
-                  <div className="relative w-full h-44 overflow-hidden rounded-xl bg-slate-900 border border-slate-800/80 mb-3.5">
+                  {/* Strictly Bounded Responsive Image Container */}
+                  <div className="relative w-full h-44 sm:h-48 overflow-hidden rounded-xl bg-slate-900 border border-slate-800/80 mb-3.5">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={ex.imageUrl}
-                      alt={ex.nameEn}
+                      alt={ex.formDescription}
                       className="w-full h-full object-cover brightness-90 hover:scale-105 transition-transform duration-300"
                       loading="lazy"
                     />
-                    <div className="absolute bottom-2 right-2 px-2.5 py-1 rounded-md bg-black/80 backdrop-blur-sm text-[11px] font-mono text-[#ccff00] border border-slate-800">
+                    {/* Visual Form Indicator Overlay */}
+                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/85 backdrop-blur-md text-[10px] font-mono text-slate-200 border border-slate-700/80 max-w-[88%] truncate shadow">
+                      {ex.formCue}
+                    </div>
+                    <div className="absolute bottom-2 right-2 px-2.5 py-1 rounded-md bg-black/85 backdrop-blur-sm text-[11px] font-mono text-[#ccff00] border border-slate-800 font-bold shadow">
                       {ex.durationOrReps}
                     </div>
                   </div>
