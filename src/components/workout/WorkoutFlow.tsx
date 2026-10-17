@@ -19,7 +19,7 @@ interface Exercise {
   imageUrl: string;
   formCue: string;
   formDescription: string;
-  customGraphic?: "jumping-jacks" | "bodyweight-squat";
+  customGraphic?: "jumping-jacks" | "bodyweight-squat" | "standard-pushup";
 }
 
 const EXERCISES_DATA: Record<
@@ -172,10 +172,11 @@ const EXERCISES_DATA: Record<
           "📋 পায়ের আঙুল ও হাতে ভর দিয়ে পুরো শরীর তক্তার মতো সোজা রাখুন। বুক মেঝের কাছাকাছি এনে শক্তিশালী চাপে ওপরে উঠুন।",
         tip: "💡 কনুই শরীরের সাথে প্রায় ৪৫ ডিগ্রি কোণে রাখুন, কোমর যেন নিচে ঝুলে না যায়।",
         durationOrReps: "১০-১৫ রেপস x ৩ সেট",
-        imageUrl:
-          "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=700&auto=format&fit=crop&q=80",
+        imageUrl: "",
         formCue: "📐 ফুল পুশ-আপ: পায়ের আঙুলে সোজা প্ল্যাঙ্ক, চেস্ট টু ফ্লোর",
-        formDescription: "Strict plank posture on toes with full chest-to-floor depth",
+        formDescription:
+          "2-step guide: পদক্ষেপ ১: হাই প্ল্যাঙ্ক (শুরু) to পদক্ষেপ ২: লোয়ার পুশ (৯০° কনুই)",
+        customGraphic: "standard-pushup",
       },
       {
         id: "i3",
@@ -563,6 +564,133 @@ function SquatTwoStepGraphic() {
   );
 }
 
+function PushUpTwoStepGraphic() {
+  return (
+    <svg
+      viewBox="0 0 600 320"
+      className="w-full h-full select-none"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
+    >
+      <defs>
+        <linearGradient id="puBg" x1="0" y1="0" x2="600" y2="320" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#080e1a" />
+          <stop offset="1" stopColor="#0f172a" />
+        </linearGradient>
+        <linearGradient id="matGradAmber" x1="0" y1="0" x2="1" y2="0">
+          <stop stopColor="#b45309" stopOpacity="0.45" />
+          <stop offset="1" stopColor="#d97706" stopOpacity="0.65" />
+        </linearGradient>
+        <linearGradient id="puTorso1" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#38bdf8" />
+          <stop offset="1" stopColor="#0284c7" />
+        </linearGradient>
+        <linearGradient id="puTorso2" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#ccff00" />
+          <stop offset="1" stopColor="#84cc16" />
+        </linearGradient>
+      </defs>
+      <rect width="600" height="320" fill="url(#puBg)" />
+
+      {/* Floor & Guideline */}
+      <line x1="0" y1="262" x2="600" y2="262" stroke="#1e293b" strokeWidth="1.5" />
+      <line x1="0" y1="285" x2="600" y2="285" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="4 4" />
+
+      {/* Center Separation Divider */}
+      <line x1="300" y1="35" x2="300" y2="265" stroke="#334155" strokeWidth="1.5" strokeDasharray="4 4" />
+      <g transform="translate(286, 136)">
+        <circle cx="14" cy="14" r="14" fill="#1e293b" stroke="#475569" strokeWidth="1.5" />
+        <path d="M10 14h8m-3-3l3 3-3 3" stroke="#ccff00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+
+      {/* ================= LEFT PANEL: STEP 1 (HIGH PLANK START) ================= */}
+      {/* Step Badge */}
+      <rect x="25" y="16" width="145" height="26" rx="13" fill="#0284c7" fillOpacity="0.25" stroke="#38bdf8" strokeWidth="1" />
+      <circle cx="38" cy="29" r="4" fill="#38bdf8" />
+      <text x="48" y="33" fill="#7dd3fc" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ১: হাই প্ল্যাঙ্ক
+      </text>
+
+      {/* Floor Yoga Mat */}
+      <rect x="35" y="244" width="230" height="15" rx="5" fill="url(#matGradAmber)" stroke="#f59e0b" strokeWidth="1" strokeOpacity="0.5" />
+
+      {/* Alignment Guideline (Head to Heel Straight Line) */}
+      <line x1="75" y1="130" x2="245" y2="235" stroke="#38bdf8" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.6" />
+      <rect x="135" y="148" width="65" height="18" rx="4" fill="#000" fillOpacity="0.85" stroke="#38bdf8" strokeWidth="0.8" />
+      <text x="167" y="161" textAnchor="middle" fill="#38bdf8" fontSize="10" fontWeight="700" fontFamily="monospace">
+        সোজা রেখা
+      </text>
+
+      {/* Human Figure: Top of Push-up (High Plank on Hands and Toes) */}
+      <g transform="translate(20, 10)">
+        {/* Head */}
+        <circle cx="65" cy="122" r="12" fill="#cbd5e1" />
+        {/* Neck */}
+        <line x1="74" y1="128" x2="84" y2="135" stroke="#cbd5e1" strokeWidth="6" strokeLinecap="round" />
+        {/* Torso & Hips */}
+        <path d="M82 135 L145 170 L138 186 L76 150 Z" fill="url(#puTorso1)" />
+        {/* Arms: Extended straight down to mat */}
+        <line x1="88" y1="145" x2="88" y2="234" stroke="#cbd5e1" strokeWidth="7" strokeLinecap="round" />
+        {/* Hand on floor */}
+        <ellipse cx="88" cy="235" rx="8" ry="3.5" fill="#0284c7" />
+        {/* Legs: Straight back to toes */}
+        <line x1="140" y1="178" x2="225" y2="230" stroke="#cbd5e1" strokeWidth="8" strokeLinecap="round" />
+        {/* Toes planted on mat */}
+        <ellipse cx="227" cy="232" rx="7" ry="4" fill="#0284c7" />
+      </g>
+
+      <text x="150" y="292" textAnchor="middle" fill="#94a3b8" fontSize="11" fontFamily="sans-serif">
+        হাতে ও পায়ের আঙুলে ভর, শরীর তক্তার মতো সোজা
+      </text>
+
+      {/* ================= RIGHT PANEL: STEP 2 (CHEST LOWERED / 90° ELBOWS) ================= */}
+      {/* Step Badge */}
+      <rect x="325" y="16" width="150" height="26" rx="13" fill="#84cc16" fillOpacity="0.2" stroke="#ccff00" strokeWidth="1.2" />
+      <circle cx="338" cy="29" r="4" fill="#ccff00" />
+      <text x="348" y="33" fill="#ccff00" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ২: লোয়ার পুশ
+      </text>
+
+      {/* Floor Yoga Mat */}
+      <rect x="335" y="244" width="230" height="15" rx="5" fill="url(#matGradAmber)" stroke="#f59e0b" strokeWidth="1" strokeOpacity="0.5" />
+
+      {/* 90° Elbow Guideline Indicator */}
+      <path d="M380 188 L380 162 L405 162" stroke="#ccff00" strokeWidth="1.5" fill="none" opacity="0.9" />
+      <rect x="345" y="145" width="55" height="18" rx="4" fill="#000" fillOpacity="0.85" stroke="#ccff00" strokeWidth="0.8" />
+      <text x="372" y="158" textAnchor="middle" fill="#ccff00" fontSize="10" fontWeight="700" fontFamily="monospace">
+        ৯০° কনুই
+      </text>
+
+      {/* Downward Chest Movement Indicator Arrow */}
+      <path d="M420 165 L420 195" stroke="#ccff00" strokeWidth="2" strokeDasharray="3 3" fill="none" opacity="0.8" />
+      <polygon points="416,193 424,193 420,200" fill="#ccff00" opacity="0.9" />
+
+      {/* Human Figure: Bottom of Push-up (Chest near mat, 90° bent elbows) */}
+      <g transform="translate(320, 25)">
+        {/* Head */}
+        <circle cx="65" cy="180" r="12" fill="#f8fafc" />
+        {/* Neck */}
+        <line x1="74" y1="184" x2="84" y2="188" stroke="#f8fafc" strokeWidth="6" strokeLinecap="round" />
+        {/* Torso & Hips: Lowered horizontal near floor */}
+        <path d="M84 188 L155 196 L152 210 L82 202 Z" fill="url(#puTorso2)" />
+        {/* Arms: Bent at 90° (Shoulder to Elbow pointing back-up, then down to hand) */}
+        <polyline points="88,193 68,172 88,219" stroke="#f8fafc" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+        {/* Hand on floor */}
+        <ellipse cx="88" cy="220" rx="8" ry="3.5" fill="#65a30d" />
+        {/* Legs: Flat straight line from hips to toes */}
+        <line x1="152" y1="203" x2="225" y2="217" stroke="#f8fafc" strokeWidth="8" strokeLinecap="round" />
+        {/* Toes planted on mat */}
+        <ellipse cx="227" cy="218" rx="7" ry="4" fill="#65a30d" />
+      </g>
+
+      <text x="450" y="292" textAnchor="middle" fill="#ccff00" fontSize="11" fontWeight="600" fontFamily="sans-serif">
+        বুক মেঝের ১ ইঞ্চি ওপরে, কনুই ৯০° কোণে পেছনের দিকে
+      </text>
+    </svg>
+  );
+}
+
 export default function WorkoutFlow() {
   const [step, setStep] = useState<"location" | "level" | "exercises" | "gym">("location");
   const [location, setLocation] = useState<WorkoutLocation>("home");
@@ -837,6 +965,8 @@ export default function WorkoutFlow() {
                       <JumpingJacksTwoStepGraphic />
                     ) : ex.customGraphic === "bodyweight-squat" ? (
                       <SquatTwoStepGraphic />
+                    ) : ex.customGraphic === "standard-pushup" ? (
+                      <PushUpTwoStepGraphic />
                     ) : (
                       /* eslint-disable-next-line @next/next/no-img-element */
                       <img
