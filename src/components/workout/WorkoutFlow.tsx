@@ -147,83 +147,83 @@ const EXERCISES_DATA: Record<
     exercises: [
       {
         id: "i1",
-        nameBn: "স্ট্যান্ডার্ড পুশ-আপ",
-        nameEn: "Standard Push-up",
-        tag: "আপার বডি প্রেস",
-        tagColor: "bg-[#ccff00]/10 text-[#ccff00] border-[#ccff00]/20",
-        target: "🎯 বুক, ট্রাইসেপস ও সামনের কাঁধের পেশী",
+        nameBn: "হাই নিজ (ডাইনামিক কার্ডিও)",
+        nameEn: "High Knees Running",
+        tag: "ডাইনামিক কার্ডিও ও ওয়ার্মআপ",
+        tagColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+        target: "🎯 দ্রুত হৃদস্পন্দন বৃদ্ধি, কোর অ্যাক্টিভেশন ও ক্যালরি বার্ন",
         instructions:
-          "📋 হাত কাঁধের সমান দূরত্বে মাটিতে রেখে শরীর সোজা রাখুন। বুক মেঝের প্রায় স্পর্শ করা পর্যন্ত নামিয়ে নিয়ন্ত্রিতভাবে পুশ করুন।",
-        tip: "💡 কোর শক্ত রাখুন যাতে কোমর নিচে ঝুলে না যায়।",
-        durationOrReps: "১০-১৫ রেপস x ৩ সেট",
+          "📋 সোজা দাঁড়িয়ে ছন্দময় গতিতে একটি করে হাঁটু কোমরের উচ্চতায় দ্রুত তুলুন এবং দুই হাত স্বাভাবিকভাবে পাম্প করুন।",
+        tip: "💡 পায়ের পাতার সামনের অংশে হালকা বাউন্স করুন এবং বুক খাড়া রাখুন।",
+        durationOrReps: "৩০-৪৫ সেকেন্ড x ৩ সেট",
         imageUrl:
-          "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=700&auto=format&fit=crop&q=80",
-        formCue: "📐 ফুল পুশ-আপ: পায়ের আঙুলে সোজা প্ল্যাঙ্ক ও ডিপ প্রেস",
-        formDescription: "Perfect plank pose on toes, lowering the body",
+          "https://images.unsplash.com/photo-1538805060514-97d9cc17730c?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 হাই নিজ: হাঁটু কোমর পর্যন্ত তোলা ও রিদমিক আর্ম ড্রাইভ",
+        formDescription: "High knees sprint in place with rhythmic arm movement",
       },
       {
         id: "i2",
-        nameBn: "অল্টারনেটিং লাঞ্জেস",
-        nameEn: "Walking / Alternating Lunges",
-        tag: "লোয়ার বডি",
-        tagColor: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-        target: "🎯 কোয়াডস, হ্যামস্ট্রিংস ও ভারসাম্য রক্ষা",
+        nameBn: "স্ট্যান্ডার্ড ফ্লোর পুশ-আপ",
+        nameEn: "Standard Full Floor Push-up",
+        tag: "আপার বডি প্রেস",
+        tagColor: "bg-[#ccff00]/10 text-[#ccff00] border-[#ccff00]/20",
+        target: "🎯 বুক (চেস্ট), ট্রাইসেপস ও সামনের কাঁধের পেশী",
         instructions:
-          "📋 বড় পদক্ষেপে এক পা সামনে এগিয়ে উভয় হাঁটু ৯০ ডিগ্রি কোণে বাঁকান। পেছনের হাঁটু মেঝের কাছাকাছি এনে ফিরে আসুন।",
-        tip: "💡 সামনের হাঁটু যেন বুড়ো আঙুল অতিক্রম না করে।",
-        durationOrReps: "১০ রেপস প্রতি পায়ে x ৩ সেট",
+          "📋 পায়ের আঙুল ও হাতে ভর দিয়ে পুরো শরীর তক্তার মতো সোজা রাখুন। বুক মেঝের কাছাকাছি এনে শক্তিশালী চাপে ওপরে উঠুন।",
+        tip: "💡 কনুই শরীরের সাথে প্রায় ৪৫ ডিগ্রি কোণে রাখুন, কোমর যেন নিচে ঝুলে না যায়।",
+        durationOrReps: "১০-১৫ রেপস x ৩ সেট",
         imageUrl:
-          "https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=700&auto=format&fit=crop&q=80",
-        formCue: "📐 লাঞ্জেস ফর্ম: সামনে বড় স্টেপ, পেছনের হাঁটু মেঝের কাছে",
-        formDescription: "Big step forward, back knee hovering just off the ground",
+          "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 ফুল পুশ-আপ: পায়ের আঙুলে সোজা প্ল্যাঙ্ক, চেস্ট টু ফ্লোর",
+        formDescription: "Strict plank posture on toes with full chest-to-floor depth",
       },
       {
         id: "i3",
-        nameBn: "বাইসাইকেল ক্রাঞ্চ",
-        nameEn: "Bicycle Crunch",
-        tag: "অ্যাবডমিনালস",
-        tagColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-        target: "🎯 পেটের উপরিভাগ ও পাশের ওবলিক পেশী",
+        nameBn: "অল্টারনেটিং রিভার্স লাঞ্জেস",
+        nameEn: "Alternating Reverse Lunges",
+        tag: "লোয়ার বডি ও স্ট্যাবিলিটি",
+        tagColor: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+        target: "🎯 কোয়াডস, হ্যামস্ট্রিংস, গ্লুটস ও ব্যালান্স",
         instructions:
-          "📋 পিঠে শুয়ে হাত মাথার পেছনে রাখুন। এক হাঁটু বুকের কাছে এনে বিপরীত কনুই তার কাছে আনুন এবং পর্যায়ক্রমে ঘোরান।",
-        tip: "💡 ঘাড়ে টানবেন না, কোর দিয়ে কাঁধ ওপরে তুলুন।",
-        durationOrReps: "১৫-২০ রেপস x ৩ সেট",
-        imageUrl:
-          "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=700&auto=format&fit=crop&q=80",
-        formCue: "📐 ক্রাঞ্চ টুইস্ট: পিঠ ফ্ল্যাট, বিপরীত কনুই ও হাঁটু একত্রিত",
-        formDescription: "Lie flat, twist elbow to opposite knee",
-      },
-      {
-        id: "i4",
-        nameBn: "মাউন্টেন ক্লাইম্বার্স",
-        nameEn: "Mountain Climbers",
-        tag: "কোর ও কার্ডিও",
-        tagColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-        target: "🎯 কোর পেশী, কাঁধের সহনশীলতা ও চর্বি পোড়ানো",
-        instructions:
-          "📋 হাই প্ল্যাঙ্ক পজিশনে থাকুন। দ্রুত পর্যায়ক্রমে একটি করে হাঁটু বুকের দিকে টেনে আনুন যেন পাহাড়ে উঠছেন।",
-        tip: "💡 হাত কাঁধের নিচে দৃঢ় রাখুন এবং পিঠ সোজা রাখুন।",
-        durationOrReps: "৩০-৪০ সেকেন্ড x ৩ সেট",
-        imageUrl:
-          "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=700&auto=format&fit=crop&q=80",
-        formCue: "📐 মাউন্টেন ড্রাইভ: হাই প্ল্যাঙ্ক, দ্রুত হাঁটু বুকের দিকে",
-        formDescription: "High plank, knees driving aggressively towards chest",
-      },
-      {
-        id: "i5",
-        nameBn: "স্টেপ-ব্যাক লাঞ্জেস",
-        nameEn: "Step-back Reverse Lunges",
-        tag: "হিপ ও গ্লুট ড্রাইভ",
-        tagColor: "bg-purple-500/10 text-purple-400 border-purple-500/20",
-        target: "🎯 গ্লুটস ও হ্যামস্ট্রিংস (হাঁটু-বান্ধব ব্যায়াম)",
-        instructions:
-          "📋 সোজা দাঁড়িয়ে এক পা পেছনের দিকে নিয়ে শরীর নামান। এটি হাঁটুর ওপর বাড়তি চাপ ছাড়া গ্লুটস সক্রিয় করে।",
-        tip: "💡 সামনের পায়ের গোড়ালিতে ভর রেখে ওপরে উঠুন।",
+          "📋 সোজা দাঁড়িয়ে এক পা পেছনের দিকে বড় পদক্ষেপে নিন এবং উভয় হাঁটু ৯০° কোণে নামান। সামনের পায়ের গোড়ালিতে ভর দিয়ে ফিরে আসুন।",
+        tip: "💡 পেছনের হাঁটু মেঝের কাছাকাছি আনুন কিন্তু মাটিতে আঘাত করবেন না; ধড় একদম সোজা রাখুন।",
         durationOrReps: "১০-১২ রেপস প্রতি পায়ে x ৩ সেট",
         imageUrl:
           "https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=700&auto=format&fit=crop&q=80",
-        formCue: "📐 রিভার্স লাঞ্জ: পেছনের পা নামিয়ে নিয়ন্ত্রিত লোয়ার",
-        formDescription: "Step backward with one leg, lower hips smoothly",
+        formCue: "📐 রিভার্স লাঞ্জ: পেছনের হাঁটু ৯০° মেঝের কাছে, ধড় খাড়া",
+        formDescription: "Controlled step backward into deep 90-degree lunging stance",
+      },
+      {
+        id: "i4",
+        nameBn: "বাইসাইকেল ক্রাঞ্চ",
+        nameEn: "Bicycle Crunches",
+        tag: "অ্যাবডমিনালস ও ওবলিক",
+        tagColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+        target: "🎯 সম্পূর্ণ কোর, পেটের উপরিভাগ ও পাশের ওবলিক পেশী",
+        instructions:
+          "📋 পিঠে শুয়ে হাত আলতো করে কানের পাশে রাখুন। এক হাঁটু বুকের কাছে এনে বিপরীত কনুই তার কাছে আনুন এবং পর্যায়ক্রমে সাইকেল প্যাডেলের মতো ঘোরান।",
+        tip: "💡 ঘাড়ে টেনে জোর দেবেন না; কাঁধ মেঝে থেকে তুলে কোর দিয়ে শরীর ঘোরান।",
+        durationOrReps: "১৬-২০ রেপস x ৩ সেট",
+        imageUrl:
+          "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 ক্রাঞ্চ টুইস্ট: নিয়ন্ত্রিত রোটেশন, বিপরীত কনুই ও হাঁটু",
+        formDescription: "Lie flat on back, rotating elbow to opposite knee smoothly",
+      },
+      {
+        id: "i5",
+        nameBn: "সিঙ্গেল-লেগ গ্লুট ব্রিজ",
+        nameEn: "Single-Leg Glute Bridge",
+        tag: "আইসোলেটেড পোস্টেরিয়র",
+        tagColor: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+        target: "🎯 একপেশে গ্লুট পাওয়ার, হ্যামস্ট্রিংস ও পেলভিক ব্যালান্স",
+        instructions:
+          "📋 চিত হয়ে শুয়ে এক হাঁটু ভাঁজ করে পা মাটিতে রাখুন এবং অন্য পা সোজা ওপরে রাখুন। মাটিতে থাকা পায়ের গোড়ালিতে ভর দিয়ে নিতম্ব উঁচুতে তুলুন।",
+        tip: "💡 নিতম্ব সমান্তরালে রাখুন যাতে কোমর একপাশে হেলে না পড়ে; শীর্ষে গ্লুট স্কুইজ করুন।",
+        durationOrReps: "৮-১০ রেপস প্রতি পায়ে x ৩ সেট",
+        imageUrl:
+          "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=700&auto=format&fit=crop&q=80",
+        formCue: "📐 সিঙ্গেল-লেগ ব্রিজ: এক পায়ে ভর দিয়ে নিতম্ব উঁচুতে তোলা",
+        formDescription: "Single foot planted, opposite leg raised straight, hips elevated",
       },
     ],
   },
@@ -721,7 +721,7 @@ export default function WorkoutFlow() {
                     </span>
                   </div>
                   <p className="text-xs text-slate-400 mt-1">
-                    স্ট্যান্ডার্ড পুশ-আপ, লাঞ্জেস, বাইসাইকেল ক্রাঞ্চ, মাউন্টেন ক্লাইম্বার্স
+                    হাই নিজ, ফুল পুশ-আপ, রিভার্স লাঞ্জেস, বাইসাইকেল ক্রাঞ্চ ও সিঙ্গেল-লেগ ব্রিজ
                   </p>
                 </div>
               </div>
