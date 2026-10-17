@@ -51,7 +51,7 @@ const EXERCISES_DATA: Record<
         tip: "💡 হালকা পায়ের আঙুলের ওপর ভর দিয়ে সফট ল্যান্ডিং করুন।",
         durationOrReps: "৩০ সেকেন্ড x ২-৩ সেট",
         imageUrl:
-          "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=700&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=700&auto=format&fit=crop&q=80",
         formCue: "📐 স্টার-জাম্প ভঙ্গিমা: পা দুদিকে ও হাত মাথার ওপর",
         formDescription: "Sequential feet-together to star-jump pose on mat",
       },
@@ -67,7 +67,7 @@ const EXERCISES_DATA: Record<
         tip: "💡 হাঁটু যেন পায়ের পাতার বাইরে না যায় এবং গোড়ালি মাটিতে স্থির রাখুন।",
         durationOrReps: "১০-১২ রেপস x ৩ সেট",
         imageUrl:
-          "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=700&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=700&auto=format&fit=crop&q=80",
         formCue: "📐 সঠিক স্কোয়াট: নিতম্ব পেছনে, ঊরু সমান্তরাল (৯০°)",
         formDescription: "Hips back and thighs parallel to ground",
       },
@@ -83,7 +83,7 @@ const EXERCISES_DATA: Record<
         tip: "💡 কনুই শরীরের সাথে প্রায় ৪৫ ডিগ্রি কোণে রাখুন, পিঠ সোজা রাখুন।",
         durationOrReps: "৮-১০ রেপস x ৩ সেট",
         imageUrl:
-          "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=700&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=700&auto=format&fit=crop&q=80",
         formCue: "📐 নি পুশ-আপ: হাঁটু মাটিতে, শরীর সোজা তির্যক রেখায়",
         formDescription: "Knees on mat, body in straight diagonal line, chest dropping",
       },
@@ -99,7 +99,7 @@ const EXERCISES_DATA: Record<
         tip: "💡 ওপরে ওঠার সময় পেটের পেশী শক্ত রাখুন এবং অতিরিক্ত পিঠ বাঁকাবেন না।",
         durationOrReps: "১২-১৫ রেপস x ৩ সেট",
         imageUrl:
-          "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=700&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=700&auto=format&fit=crop&q=80",
         formCue: "📐 ব্রিজ পজিশন: পিঠ ফ্ল্যাট, নিতম্ব সোজা উঁচুতে লক",
         formDescription: "Lie on back, knees bent, hips raised high",
       },
@@ -188,7 +188,7 @@ const EXERCISES_DATA: Record<
         tip: "💡 ঘাড়ে টানবেন না, কোর দিয়ে কাঁধ ওপরে তুলুন।",
         durationOrReps: "১৫-২০ রেপস x ৩ সেট",
         imageUrl:
-          "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=700&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=700&auto=format&fit=crop&q=80",
         formCue: "📐 ক্রাঞ্চ টুইস্ট: পিঠ ফ্ল্যাট, বিপরীত কনুই ও হাঁটু একত্রিত",
         formDescription: "Lie flat, twist elbow to opposite knee",
       },
@@ -204,7 +204,7 @@ const EXERCISES_DATA: Record<
         tip: "💡 হাত কাঁধের নিচে দৃঢ় রাখুন এবং পিঠ সোজা রাখুন।",
         durationOrReps: "৩০-৪০ সেকেন্ড x ৩ সেট",
         imageUrl:
-          "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=700&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=700&auto=format&fit=crop&q=80",
         formCue: "📐 মাউন্টেন ড্রাইভ: হাই প্ল্যাঙ্ক, দ্রুত হাঁটু বুকের দিকে",
         formDescription: "High plank, knees driving aggressively towards chest",
       },
@@ -220,7 +220,7 @@ const EXERCISES_DATA: Record<
         tip: "💡 সামনের পায়ের গোড়ালিতে ভর রেখে ওপরে উঠুন।",
         durationOrReps: "১০-১২ রেপস প্রতি পায়ে x ৩ সেট",
         imageUrl:
-          "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=700&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=700&auto=format&fit=crop&q=80",
         formCue: "📐 রিভার্স লাঞ্জ: পেছনের পা নামিয়ে নিয়ন্ত্রিত লোয়ার",
         formDescription: "Step backward with one leg, lower hips smoothly",
       },
@@ -245,7 +245,7 @@ const EXERCISES_DATA: Record<
         tip: "💡 চোখ পায়ের দিকে রাখুন এবং কোর শক্ত রাখুন।",
         durationOrReps: "৮-১২ রেপস x ৩ সেট",
         imageUrl:
-          "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=700&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=700&auto=format&fit=crop&q=80",
         formCue: "📐 পাইক শেপ: কোমর উল্টো 'V' আকারে, মাথা মেঝের দিকে পুশ",
         formDescription: "Hips high in 'V' shape, head pointing toward ground",
       },
@@ -309,7 +309,7 @@ const EXERCISES_DATA: Record<
         tip: "💡 ল্যান্ডিংয়ের সময় হাঁটু আলতো করে ভাঁজ করে শক অ্যাবসর্ব করুন।",
         durationOrReps: "১০-১২ রেপস x ৩ সেট",
         imageUrl:
-          "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=700&auto=format&fit=crop&q=80",
+          "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=700&auto=format&fit=crop&q=80",
         formCue: "📐 জাম্প স্কোয়াট: ডিপ স্কোয়াট থেকে এক্সপ্লোসিভ উল্লম্ফন",
         formDescription: "Explosive vertical jump from deep squat position",
       },
