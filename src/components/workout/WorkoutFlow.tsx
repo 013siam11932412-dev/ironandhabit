@@ -51,8 +51,7 @@ const EXERCISES_DATA: Record<
           "📋 সোজা হয়ে দাঁড়ান, একসাথে লাফ দিয়ে পা দুদিকে ছড়ান এবং হাত মাথার উপরে তুলুন। শুরুতে আরামদায়ক ছন্দে করুন।",
         tip: "💡 হালকা পায়ের আঙুলের ওপর ভর দিয়ে সফট ল্যান্ডিং করুন।",
         durationOrReps: "৩০ সেকেন্ড x ২-৩ সেট",
-        imageUrl:
-          "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=700&auto=format&fit=crop&q=80",
+        imageUrl: "",
         formCue: "📐 স্টার-জাম্প ভঙ্গিমা: পা দুদিকে ও হাত মাথার ওপর",
         formDescription: "2-step guide: পদক্ষেপ ১: শুরু (সোজা দাঁড়ানো) to পদক্ষেপ ২: লাফ (স্টার-জাম্প)",
         customGraphic: "jumping-jacks",
@@ -68,8 +67,7 @@ const EXERCISES_DATA: Record<
           "📋 পা কাঁধের সমান চওড়া রাখুন, বুক সোজা রেখে চেয়ারে বসার মতো নিতম্ব নিচে নামান। ঊরু মেঝের সমান্তরাল হলে আবার দাঁড়ান।",
         tip: "💡 হাঁটু যেন পায়ের পাতার বাইরে না যায় এবং গোড়ালি মাটিতে স্থির রাখুন।",
         durationOrReps: "১০-১২ রেপস x ৩ সেট",
-        imageUrl:
-          "https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=700&auto=format&fit=crop&q=80",
+        imageUrl: "",
         formCue: "📐 সঠিক স্কোয়াট: নিতম্ব পেছনে, ঊরু সমান্তরাল (৯০°)",
         formDescription: "2-step guide: পদক্ষেপ ১: শুরু (স্বাভাবিক অবস্থান) to পদক্ষেপ ২: স্কোয়াট (৯০° মেঝের সমান্তরাল)",
         customGraphic: "bodyweight-squat",
@@ -322,87 +320,246 @@ const EXERCISES_DATA: Record<
 
 function JumpingJacksTwoStepGraphic() {
   return (
-    <div className="w-full h-full grid grid-cols-2 divide-x divide-slate-800/80 relative bg-slate-950 select-none">
-      {/* Panel 1: Step 1 (Start) */}
-      <div className="relative w-full h-full overflow-hidden group">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600&auto=format&fit=crop&q=80"
-          alt="পদক্ষেপ ১: শুরু - সোজা হয়ে দাঁড়ানো, হাত পাশে ও পা একত্র"
-          className="w-full h-full object-cover object-center brightness-90 group-hover:scale-105 transition-transform duration-300"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-        <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/85 backdrop-blur-md text-[10px] font-semibold text-emerald-400 border border-emerald-500/30 flex items-center gap-1 shadow">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          পদক্ষেপ ১: শুরু
-        </div>
-      </div>
+    <svg
+      viewBox="0 0 600 320"
+      className="w-full h-full select-none"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
+    >
+      <defs>
+        <linearGradient id="jjBg" x1="0" y1="0" x2="600" y2="320" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#080e1a" />
+          <stop offset="1" stopColor="#0f172a" />
+        </linearGradient>
+        <linearGradient id="matGrad1" x1="0" y1="0" x2="1" y2="0">
+          <stop stopColor="#065f46" stopOpacity="0.45" />
+          <stop offset="1" stopColor="#047857" stopOpacity="0.65" />
+        </linearGradient>
+        <linearGradient id="jjTorso1" x1="0" y1="0" x2="0" y2="1">
+          <stop stopColor="#38bdf8" />
+          <stop offset="1" stopColor="#0284c7" />
+        </linearGradient>
+        <linearGradient id="jjTorso2" x1="0" y1="0" x2="0" y2="1">
+          <stop stopColor="#ccff00" />
+          <stop offset="1" stopColor="#84cc16" />
+        </linearGradient>
+      </defs>
+      <rect width="600" height="320" fill="url(#jjBg)" />
 
-      {/* Panel 2: Step 2 (Star Jump) */}
-      <div className="relative w-full h-full overflow-hidden group">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&auto=format&fit=crop&q=80"
-          alt="পদক্ষেপ ২: লাফ - স্টার-জাম্প ভঙ্গিমা, পা দুদিকে ও হাত মাথার ওপর"
-          className="w-full h-full object-cover object-center brightness-90 group-hover:scale-105 transition-transform duration-300"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-        <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/85 backdrop-blur-md text-[10px] font-semibold text-[#ccff00] border border-[#ccff00]/30 flex items-center gap-1 shadow">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#ccff00] animate-pulse" />
-          পদক্ষেপ ২: লাফ
-        </div>
-      </div>
+      {/* Floor & Guideline */}
+      <line x1="0" y1="262" x2="600" y2="262" stroke="#1e293b" strokeWidth="1.5" />
+      <line x1="0" y1="285" x2="600" y2="285" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="4 4" />
 
-      {/* Center Flow Transition Arrow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-slate-900/90 border border-slate-700/80 flex items-center justify-center text-xs text-[#ccff00] shadow-lg pointer-events-none">
-        →
-      </div>
-    </div>
+      {/* Center Separation Divider */}
+      <line x1="300" y1="35" x2="300" y2="265" stroke="#334155" strokeWidth="1.5" strokeDasharray="4 4" />
+      <g transform="translate(286, 136)">
+        <circle cx="14" cy="14" r="14" fill="#1e293b" stroke="#475569" strokeWidth="1.5" />
+        <path d="M10 14h8m-3-3l3 3-3 3" stroke="#ccff00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+
+      {/* ================= LEFT PANEL: STEP 1 (START) ================= */}
+      {/* Step Badge */}
+      <rect x="25" y="16" width="125" height="26" rx="13" fill="#065f46" fillOpacity="0.35" stroke="#10b981" strokeWidth="1" />
+      <circle cx="38" cy="29" r="4" fill="#34d399" />
+      <text x="48" y="33" fill="#6ee7b7" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ১: শুরু
+      </text>
+
+      {/* Yoga Mat */}
+      <ellipse cx="150" cy="256" rx="90" ry="12" fill="url(#matGrad1)" stroke="#10b981" strokeWidth="1" strokeOpacity="0.6" />
+
+      {/* Human Figure: Standing upright, feet together, arms relaxed */}
+      <g transform="translate(150, 72)">
+        {/* Head */}
+        <circle cx="0" cy="16" r="13" fill="#cbd5e1" />
+        {/* Neck */}
+        <line x1="0" y1="29" x2="0" y2="38" stroke="#cbd5e1" strokeWidth="6" strokeLinecap="round" />
+        {/* Torso: Upright neutral spine */}
+        <path d="M-15 42 Q0 38 15 42 L11 102 Q0 105 -11 102 Z" fill="url(#jjTorso1)" />
+        {/* Relaxed Arms down alongside body */}
+        <path d="M-15 45 L-22 90 L-21 115" stroke="#cbd5e1" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M15 45 L22 90 L21 115" stroke="#cbd5e1" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+        {/* Shorts */}
+        <path d="M-12 102 L12 102 L14 122 L-14 122 Z" fill="#0f172a" />
+        {/* Legs: Straight, feet together */}
+        <line x1="-6" y1="122" x2="-6" y2="182" stroke="#cbd5e1" strokeWidth="8" strokeLinecap="round" />
+        <line x1="6" y1="122" x2="6" y2="182" stroke="#cbd5e1" strokeWidth="8" strokeLinecap="round" />
+        {/* Feet: Resting together on mat */}
+        <ellipse cx="-7" cy="183" rx="8" ry="4" fill="#0284c7" />
+        <ellipse cx="7" cy="183" rx="8" ry="4" fill="#0284c7" />
+      </g>
+
+      <text x="150" y="292" textAnchor="middle" fill="#94a3b8" fontSize="11" fontFamily="sans-serif">
+        সোজা হয়ে দাঁড়ান, হাত পাশে ও পা একত্র
+      </text>
+
+      {/* ================= RIGHT PANEL: STEP 2 (STAR JUMP) ================= */}
+      {/* Step Badge */}
+      <rect x="325" y="16" width="125" height="26" rx="13" fill="#84cc16" fillOpacity="0.2" stroke="#ccff00" strokeWidth="1.2" />
+      <circle cx="338" cy="29" r="4" fill="#ccff00" />
+      <text x="348" y="33" fill="#ccff00" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ২: লাফ
+      </text>
+
+      {/* Yoga Mat */}
+      <ellipse cx="450" cy="256" rx="100" ry="13" fill="url(#matGrad1)" stroke="#10b981" strokeWidth="1" strokeOpacity="0.6" />
+
+      {/* Dynamic Motion Arcs */}
+      <path d="M375 125 C365 90 385 55 415 40" stroke="#ccff00" strokeWidth="2" strokeDasharray="3 3" fill="none" opacity="0.75" />
+      <path d="M525 125 C535 90 515 55 485 40" stroke="#ccff00" strokeWidth="2" strokeDasharray="3 3" fill="none" opacity="0.75" />
+      <ellipse cx="450" cy="250" rx="42" ry="6" stroke="#ccff00" strokeWidth="1.2" strokeOpacity="0.5" fill="none" />
+
+      {/* Human Figure: Star Jump (wide legs, arms up in high V-shape) */}
+      <g transform="translate(450, 60)">
+        {/* Head */}
+        <circle cx="0" cy="16" r="13" fill="#f8fafc" />
+        {/* Neck */}
+        <line x1="0" y1="29" x2="0" y2="38" stroke="#f8fafc" strokeWidth="6" strokeLinecap="round" />
+        {/* Torso */}
+        <path d="M-15 42 Q0 38 15 42 L12 102 Q0 105 -12 102 Z" fill="url(#jjTorso2)" />
+        {/* Arms: Extended overhead in dynamic V-shape */}
+        <path d="M-15 42 L-42 16 L-62 -12" stroke="#f8fafc" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M15 42 L42 16 L62 -12" stroke="#f8fafc" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+        {/* Shorts */}
+        <path d="M-13 102 L13 102 L16 123 L-16 123 Z" fill="#0f172a" />
+        {/* Legs: Spread wide in star posture */}
+        <line x1="-8" y1="123" x2="-38" y2="183" stroke="#f8fafc" strokeWidth="8" strokeLinecap="round" />
+        <line x1="8" y1="123" x2="38" y2="183" stroke="#f8fafc" strokeWidth="8" strokeLinecap="round" />
+        {/* Feet: Soft landing on mat */}
+        <ellipse cx="-40" cy="184" rx="9" ry="4" fill="#65a30d" transform="rotate(-15 -40 184)" />
+        <ellipse cx="40" cy="184" rx="9" ry="4" fill="#65a30d" transform="rotate(15 40 184)" />
+      </g>
+
+      <text x="450" y="292" textAnchor="middle" fill="#ccff00" fontSize="11" fontWeight="600" fontFamily="sans-serif">
+        লাফ দিয়ে পা দুদিকে ও দুই হাত মাথার ওপর V-আকারে
+      </text>
+    </svg>
   );
 }
 
 function SquatTwoStepGraphic() {
   return (
-    <div className="w-full h-full grid grid-cols-2 divide-x divide-slate-800/80 relative bg-slate-950 select-none">
-      {/* Panel 1: Step 1 (Start) */}
-      <div className="relative w-full h-full overflow-hidden group">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600&auto=format&fit=crop&q=80"
-          alt="পদক্ষেপ ১: শুরু - স্বাভাবিক অবস্থান, পা কাঁধ বরাবর চওড়া"
-          className="w-full h-full object-cover object-center brightness-90 group-hover:scale-105 transition-transform duration-300"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-        <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/85 backdrop-blur-md text-[10px] font-semibold text-blue-400 border border-blue-500/30 flex items-center gap-1 shadow">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-          পদক্ষেপ ১: শুরু
-        </div>
-      </div>
+    <svg
+      viewBox="0 0 600 320"
+      className="w-full h-full select-none"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
+    >
+      <defs>
+        <linearGradient id="sqBg" x1="0" y1="0" x2="600" y2="320" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#080e1a" />
+          <stop offset="1" stopColor="#0f172a" />
+        </linearGradient>
+        <linearGradient id="matGradBlue" x1="0" y1="0" x2="1" y2="0">
+          <stop stopColor="#1e3a8a" stopOpacity="0.45" />
+          <stop offset="1" stopColor="#2563eb" stopOpacity="0.65" />
+        </linearGradient>
+        <linearGradient id="sqTorso1" x1="0" y1="0" x2="0" y2="1">
+          <stop stopColor="#38bdf8" />
+          <stop offset="1" stopColor="#0284c7" />
+        </linearGradient>
+        <linearGradient id="sqTorso2" x1="0" y1="0" x2="0" y2="1">
+          <stop stopColor="#ccff00" />
+          <stop offset="1" stopColor="#84cc16" />
+        </linearGradient>
+      </defs>
+      <rect width="600" height="320" fill="url(#sqBg)" />
 
-      {/* Panel 2: Step 2 (Air Squat 90°) */}
-      <div className="relative w-full h-full overflow-hidden group">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=600&auto=format&fit=crop&q=80"
-          alt="পদক্ষেপ ২: স্কোয়াট - নিতম্ব পেছনে, ঊরু সমান্তরাল ৯০°"
-          className="w-full h-full object-cover object-center brightness-90 group-hover:scale-105 transition-transform duration-300"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent pointer-events-none" />
-        <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/85 backdrop-blur-md text-[10px] font-semibold text-[#ccff00] border border-[#ccff00]/30 flex items-center gap-1 shadow">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#ccff00] animate-pulse" />
-          পদক্ষেপ ২: স্কোয়াট
-        </div>
-      </div>
+      {/* Floor & Guideline */}
+      <line x1="0" y1="262" x2="600" y2="262" stroke="#1e293b" strokeWidth="1.5" />
+      <line x1="0" y1="285" x2="600" y2="285" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="4 4" />
 
-      {/* Center Flow Transition Arrow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-slate-900/90 border border-slate-700/80 flex items-center justify-center text-xs text-[#ccff00] shadow-lg pointer-events-none">
-        →
-      </div>
-    </div>
+      {/* Center Separation Divider */}
+      <line x1="300" y1="35" x2="300" y2="265" stroke="#334155" strokeWidth="1.5" strokeDasharray="4 4" />
+      <g transform="translate(286, 136)">
+        <circle cx="14" cy="14" r="14" fill="#1e293b" stroke="#475569" strokeWidth="1.5" />
+        <path d="M10 14h8m-3-3l3 3-3 3" stroke="#ccff00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+
+      {/* ================= LEFT PANEL: STEP 1 (START) ================= */}
+      {/* Step Badge */}
+      <rect x="25" y="16" width="125" height="26" rx="13" fill="#1e3a8a" fillOpacity="0.35" stroke="#3b82f6" strokeWidth="1" />
+      <circle cx="38" cy="29" r="4" fill="#60a5fa" />
+      <text x="48" y="33" fill="#93c5fd" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ১: শুরু
+      </text>
+
+      {/* Floor Mat Marker */}
+      <ellipse cx="150" cy="256" rx="85" ry="12" fill="url(#matGradBlue)" stroke="#3b82f6" strokeWidth="1" strokeOpacity="0.5" />
+
+      {/* Human Figure: Standing naturally with shoulder-width stance */}
+      <g transform="translate(150, 72)">
+        {/* Head */}
+        <circle cx="0" cy="16" r="13" fill="#cbd5e1" />
+        {/* Neck */}
+        <line x1="0" y1="29" x2="0" y2="38" stroke="#cbd5e1" strokeWidth="6" strokeLinecap="round" />
+        {/* Torso upright */}
+        <path d="M-15 42 Q0 38 15 42 L12 102 Q0 105 -12 102 Z" fill="url(#sqTorso1)" />
+        {/* Arms: Forward ready stance */}
+        <path d="M-14 45 L-10 82 L10 85" stroke="#cbd5e1" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M14 45 L18 82 L2 85" stroke="#cbd5e1" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" />
+        {/* Shorts */}
+        <path d="M-13 102 L13 102 L15 122 L-15 122 Z" fill="#0f172a" />
+        {/* Legs: Shoulder-width stance */}
+        <line x1="-10" y1="122" x2="-14" y2="182" stroke="#cbd5e1" strokeWidth="8" strokeLinecap="round" />
+        <line x1="10" y1="122" x2="14" y2="182" stroke="#cbd5e1" strokeWidth="8" strokeLinecap="round" />
+        {/* Feet: Flat on ground */}
+        <ellipse cx="-16" cy="183" rx="9" ry="4" fill="#0284c7" />
+        <ellipse cx="16" cy="183" rx="9" ry="4" fill="#0284c7" />
+      </g>
+
+      <text x="150" y="292" textAnchor="middle" fill="#94a3b8" fontSize="11" fontFamily="sans-serif">
+        পা কাঁধ বরাবর চওড়া, বুক সোজা ও চোখ সামনে
+      </text>
+
+      {/* ================= RIGHT PANEL: STEP 2 (AIR SQUAT 90°) ================= */}
+      {/* Step Badge */}
+      <rect x="325" y="16" width="140" height="26" rx="13" fill="#84cc16" fillOpacity="0.2" stroke="#ccff00" strokeWidth="1.2" />
+      <circle cx="338" cy="29" r="4" fill="#ccff00" />
+      <text x="348" y="33" fill="#ccff00" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ২: স্কোয়াট
+      </text>
+
+      {/* Floor Mat Marker */}
+      <ellipse cx="450" cy="256" rx="95" ry="12" fill="url(#matGradBlue)" stroke="#3b82f6" strokeWidth="1" strokeOpacity="0.5" />
+
+      {/* 90° Parallel Thigh Guideline Indicator */}
+      <line x1="385" y1="205" x2="480" y2="205" stroke="#ccff00" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.85" />
+      <rect x="375" y="212" width="60" height="18" rx="4" fill="#000" fillOpacity="0.85" stroke="#ccff00" strokeWidth="0.8" />
+      <text x="405" y="225" textAnchor="middle" fill="#ccff00" fontSize="10" fontWeight="700" fontFamily="monospace">
+        ৯০° সমান্তরাল
+      </text>
+
+      {/* Downward Hip Movement Indicator Arc */}
+      <path d="M485 140 C495 160 490 185 475 200" stroke="#ccff00" strokeWidth="2" strokeDasharray="3 3" fill="none" opacity="0.75" />
+      <polygon points="472,202 480,200 476,193" fill="#ccff00" opacity="0.85" />
+
+      {/* Human Figure: Deep Air Squat without any bar or rack */}
+      <g transform="translate(435, 110)">
+        {/* Head */}
+        <circle cx="0" cy="15" r="13" fill="#f8fafc" />
+        {/* Neck */}
+        <line x1="0" y1="28" x2="3" y2="36" stroke="#f8fafc" strokeWidth="6" strokeLinecap="round" />
+        {/* Torso: Natural inclined angle (~45 deg) */}
+        <path d="M-8 40 L16 38 L25 90 L-4 92 Z" fill="url(#sqTorso2)" />
+        {/* Arms: Stretched straight outward for counterbalance and stability */}
+        <line x1="12" y1="48" x2="-48" y2="52" stroke="#f8fafc" strokeWidth="7" strokeLinecap="round" />
+        {/* Shorts: Hips seated back */}
+        <path d="M-5 92 L25 90 L38 108 L10 112 Z" fill="#0f172a" />
+        {/* Thighs: Parallel to floor (Hips back, thighs horizontal at 90°) */}
+        <line x1="28" y1="98" x2="-18" y2="98" stroke="#f8fafc" strokeWidth="10" strokeLinecap="round" />
+        {/* Shins: Stable angle, knees over toes */}
+        <line x1="-18" y1="98" x2="-12" y2="150" stroke="#f8fafc" strokeWidth="8" strokeLinecap="round" />
+        {/* Feet: Flat on ground */}
+        <ellipse cx="-18" cy="151" rx="12" ry="4.5" fill="#65a30d" />
+      </g>
+
+      <text x="450" y="292" textAnchor="middle" fill="#ccff00" fontSize="11" fontWeight="600" fontFamily="sans-serif">
+        নিতম্ব পেছনে চেয়ারের মতো নামান, ঊরু মেঝের সমান্তরাল (৯০°)
+      </text>
+    </svg>
   );
 }
 
