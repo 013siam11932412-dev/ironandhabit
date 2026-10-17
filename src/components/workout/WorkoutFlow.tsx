@@ -17,9 +17,9 @@ interface Exercise {
   tip: string;
   durationOrReps: string;
   imageUrl: string;
+  imageClassName?: string;
   formCue: string;
   formDescription: string;
-  customGraphic?: "jumping-jacks" | "bodyweight-squat";
 }
 
 const EXERCISES_DATA: Record<
@@ -51,11 +51,10 @@ const EXERCISES_DATA: Record<
           "📋 সোজা হয়ে দাঁড়ান, একসাথে লাফ দিয়ে পা দুদিকে ছড়ান এবং হাত মাথার উপরে তুলুন। শুরুতে আরামদায়ক ছন্দে করুন।",
         tip: "💡 হালকা পায়ের আঙুলের ওপর ভর দিয়ে সফট ল্যান্ডিং করুন।",
         durationOrReps: "৩০ সেকেন্ড x ২-৩ সেট",
-        imageUrl:
-          "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=700&auto=format&fit=crop&q=80",
+        imageUrl: "/workout-guides.jpg",
+        imageClassName: "object-cover object-left",
         formCue: "📐 স্টার-জাম্প ভঙ্গিমা: পা দুদিকে ও হাত মাথার ওপর",
         formDescription: "2-step guide: পদক্ষেপ ১: শুরু (সোজা দাঁড়ানো) to পদক্ষেপ ২: লাফ (স্টার-জাম্প)",
-        customGraphic: "jumping-jacks",
       },
       {
         id: "b2",
@@ -68,11 +67,10 @@ const EXERCISES_DATA: Record<
           "📋 পা কাঁধের সমান চওড়া রাখুন, বুক সোজা রেখে চেয়ারে বসার মতো নিতম্ব নিচে নামান। ঊরু মেঝের সমান্তরাল হলে আবার দাঁড়ান।",
         tip: "💡 হাঁটু যেন পায়ের পাতার বাইরে না যায় এবং গোড়ালি মাটিতে স্থির রাখুন।",
         durationOrReps: "১০-১২ রেপস x ৩ সেট",
-        imageUrl:
-          "https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=700&auto=format&fit=crop&q=80",
+        imageUrl: "/workout-guides.jpg",
+        imageClassName: "object-cover object-right",
         formCue: "📐 সঠিক স্কোয়াট: নিতম্ব পেছনে, ঊরু সমান্তরাল (৯০°)",
         formDescription: "2-step guide: পদক্ষেপ ১: শুরু (স্বাভাবিক অবস্থান) to পদক্ষেপ ২: স্কোয়াট (৯০° মেঝের সমান্তরাল)",
-        customGraphic: "bodyweight-squat",
       },
       {
         id: "b3",
@@ -319,92 +317,6 @@ const EXERCISES_DATA: Record<
     ],
   },
 };
-
-function JumpingJacksTwoStepGraphic() {
-  return (
-    <div className="w-full h-full grid grid-cols-2 divide-x divide-slate-800/80 relative bg-slate-950">
-      {/* Panel 1: Step 1 (Start) */}
-      <div className="relative w-full h-full overflow-hidden group">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600&auto=format&fit=crop&q=80"
-          alt="পদক্ষেপ ১: শুরু - সোজা হয়ে দাঁড়ানো, হাত পাশে ও পা একত্র"
-          className="w-full h-full object-cover object-center brightness-90 group-hover:scale-105 transition-transform duration-300"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
-        <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/85 backdrop-blur-md text-[10px] font-semibold text-emerald-400 border border-emerald-500/30 flex items-center gap-1 shadow">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          পদক্ষেপ ১: শুরু
-        </div>
-      </div>
-
-      {/* Panel 2: Step 2 (Star Jump) */}
-      <div className="relative w-full h-full overflow-hidden group">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=600&auto=format&fit=crop&q=80"
-          alt="পদক্ষেপ ২: লাফ - স্টার-জাম্প ভঙ্গিমা, পা দুদিকে ও হাত মাথার ওপর"
-          className="w-full h-full object-cover object-center brightness-90 group-hover:scale-105 transition-transform duration-300"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
-        <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/85 backdrop-blur-md text-[10px] font-semibold text-[#ccff00] border border-[#ccff00]/30 flex items-center gap-1 shadow">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#ccff00] animate-pulse" />
-          পদক্ষেপ ২: লাফ
-        </div>
-      </div>
-
-      {/* Center Flow Transition Arrow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-slate-900/90 border border-slate-700/80 flex items-center justify-center text-xs text-[#ccff00] shadow-lg pointer-events-none">
-        →
-      </div>
-    </div>
-  );
-}
-
-function SquatTwoStepGraphic() {
-  return (
-    <div className="w-full h-full grid grid-cols-2 divide-x divide-slate-800/80 relative bg-slate-950">
-      {/* Panel 1: Step 1 (Start) */}
-      <div className="relative w-full h-full overflow-hidden group">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=600&auto=format&fit=crop&q=80"
-          alt="পদক্ষেপ ১: শুরু - স্বাভাবিক অবস্থান, পা কাঁধ বরাবর চওড়া"
-          className="w-full h-full object-cover object-center brightness-90 group-hover:scale-105 transition-transform duration-300"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
-        <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/85 backdrop-blur-md text-[10px] font-semibold text-blue-400 border border-blue-500/30 flex items-center gap-1 shadow">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
-          পদক্ষেপ ১: শুরু
-        </div>
-      </div>
-
-      {/* Panel 2: Step 2 (Air Squat 90°) */}
-      <div className="relative w-full h-full overflow-hidden group">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=600&auto=format&fit=crop&q=80"
-          alt="পদক্ষেপ ২: স্কোয়াট - নিতম্ব পেছনে, ঊরু সমান্তরাল ৯০°"
-          className="w-full h-full object-cover object-center brightness-90 group-hover:scale-105 transition-transform duration-300"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 pointer-events-none" />
-        <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-md bg-black/85 backdrop-blur-md text-[10px] font-semibold text-[#ccff00] border border-[#ccff00]/30 flex items-center gap-1 shadow">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#ccff00] animate-pulse" />
-          পদক্ষেপ ২: স্কোয়াট
-        </div>
-      </div>
-
-      {/* Center Flow Transition Arrow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-slate-900/90 border border-slate-700/80 flex items-center justify-center text-xs text-[#ccff00] shadow-lg pointer-events-none">
-        →
-      </div>
-    </div>
-  );
-}
 
 export default function WorkoutFlow() {
   const [step, setStep] = useState<"location" | "level" | "exercises" | "gym">("location");
@@ -676,19 +588,13 @@ export default function WorkoutFlow() {
 
                   {/* Strictly Bounded Responsive Image Container */}
                   <div className="relative w-full h-44 sm:h-48 overflow-hidden rounded-xl bg-slate-900 border border-slate-800/80 mb-3.5 flex items-center justify-center">
-                    {ex.customGraphic === "jumping-jacks" ? (
-                      <JumpingJacksTwoStepGraphic />
-                    ) : ex.customGraphic === "bodyweight-squat" ? (
-                      <SquatTwoStepGraphic />
-                    ) : (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img
-                        src={ex.imageUrl}
-                        alt={ex.formDescription}
-                        className="w-full h-full object-cover brightness-90 hover:scale-105 transition-transform duration-300"
-                        loading="lazy"
-                      />
-                    )}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={ex.imageUrl}
+                      alt={ex.formDescription}
+                      className={`w-full h-full ${ex.imageClassName || "object-cover"} brightness-90 hover:scale-105 transition-transform duration-300`}
+                      loading="lazy"
+                    />
                     {/* Visual Form Indicator Overlay */}
                     <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/85 backdrop-blur-md text-[10px] font-mono text-slate-200 border border-slate-700/80 max-w-[88%] truncate shadow">
                       {ex.formCue}
