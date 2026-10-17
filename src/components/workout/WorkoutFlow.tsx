@@ -28,7 +28,8 @@ interface Exercise {
     | "diamond-pushup"
     | "jump-squats"
     | "hollow-body-hold"
-    | "side-plank-hip-dips";
+    | "side-plank-hip-dips"
+    | "knee-pushup";
 }
 
 const EXERCISES_DATA: Record<
@@ -92,10 +93,11 @@ const EXERCISES_DATA: Record<
           "📋 মেঝেতে হাঁটু গেড়ে (অথবা দেয়ালে হাত রেখে) শরীর মাথা থেকে হাঁটু পর্যন্ত সরলরেখায় রাখুন। বুক মেঝের কাছে নামিয়ে নিয়ন্ত্রিতভাবে ধাক্কা দিয়ে তুলুন।",
         tip: "💡 মেঝেতে কঠিন মনে হলে দেয়ালের সাহায্যে বা ইনক্লাইন সারফেসে শুরু করুন। কোমর ঝুলিয়ে দেবেন না।",
         durationOrReps: "৬-১০ রেপস x ৩ সেট",
-        imageUrl:
-          "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=700&auto=format&fit=crop&q=80",
+        imageUrl: "",
         formCue: "📐 নি পুশ-আপ: হাঁটু মাটিতে, শরীর সোজা তির্যক রেখায়",
-        formDescription: "Knees on mat, body in straight diagonal line, chest dropping",
+        formDescription:
+          "2-step guide: পদক্ষেপ ১: শুরু (নি-প্ল্যাঙ্ক) to পদক্ষেপ ২: পুশ-আপ (৯০° কনুই ফ্লেকশন)",
+        customGraphic: "knee-pushup",
       },
       {
         id: "b4",
@@ -1400,6 +1402,121 @@ function SidePlankHipDipsTwoStepGraphic() {
   );
 }
 
+function KneePushUpTwoStepGraphic() {
+  return (
+    <svg
+      viewBox="0 0 600 320"
+      className="w-full h-full select-none"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
+    >
+      <defs>
+        <linearGradient id="kpBg" x1="0" y1="0" x2="600" y2="320" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#080e1a" />
+          <stop offset="1" stopColor="#0f172a" />
+        </linearGradient>
+        <linearGradient id="matGradLimeKP" x1="0" y1="0" x2="1" y2="0">
+          <stop stopColor="#365314" stopOpacity="0.45" />
+          <stop offset="1" stopColor="#4d7c0f" stopOpacity="0.65" />
+        </linearGradient>
+        <linearGradient id="kpTorso1" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#38bdf8" />
+          <stop offset="1" stopColor="#0284c7" />
+        </linearGradient>
+        <linearGradient id="kpTorso2" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#ccff00" />
+          <stop offset="1" stopColor="#84cc16" />
+        </linearGradient>
+      </defs>
+      <rect width="600" height="320" fill="url(#kpBg)" />
+
+      {/* Floor & Guideline */}
+      <line x1="0" y1="262" x2="600" y2="262" stroke="#1e293b" strokeWidth="1.5" />
+      <line x1="0" y1="285" x2="600" y2="285" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="4 4" />
+
+      {/* Center Separation Divider */}
+      <line x1="300" y1="35" x2="300" y2="265" stroke="#334155" strokeWidth="1.5" strokeDasharray="4 4" />
+      <g transform="translate(286, 136)">
+        <circle cx="14" cy="14" r="14" fill="#1e293b" stroke="#475569" strokeWidth="1.5" />
+        <path d="M10 14h8m-3-3l3 3-3 3" stroke="#ccff00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+
+      {/* ================= LEFT PANEL: STEP 1 (KNEE PLANK START) ================= */}
+      <rect x="25" y="16" width="145" height="26" rx="13" fill="#0284c7" fillOpacity="0.25" stroke="#38bdf8" strokeWidth="1" />
+      <circle cx="38" cy="29" r="4" fill="#38bdf8" />
+      <text x="48" y="33" fill="#7dd3fc" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ১: শুরু
+      </text>
+
+      {/* Mat */}
+      <rect x="35" y="244" width="230" height="15" rx="5" fill="url(#matGradLimeKP)" stroke="#84cc16" strokeWidth="1" strokeOpacity="0.5" />
+
+      {/* Head-to-Knee Straight Line Indicator */}
+      <line x1="75" y1="130" x2="195" y2="235" stroke="#38bdf8" strokeWidth="1.5" strokeDasharray="3 3" opacity="0.6" />
+      <rect x="100" y="145" width="125" height="18" rx="4" fill="#000" fillOpacity="0.85" stroke="#38bdf8" strokeWidth="0.8" />
+      <text x="162" y="158" textAnchor="middle" fill="#38bdf8" fontSize="10" fontWeight="700" fontFamily="monospace">
+        মাথা থেকে হাঁটু সোজা
+      </text>
+
+      {/* Figure in Knee Plank Position */}
+      <g transform="translate(20, 15)">
+        <circle cx="65" cy="122" r="12" fill="#cbd5e1" />
+        <line x1="74" y1="128" x2="84" y2="135" stroke="#cbd5e1" strokeWidth="6" strokeLinecap="round" />
+        <path d="M82 135 L145 170 L138 186 L76 150 Z" fill="url(#kpTorso1)" />
+        <line x1="88" y1="145" x2="88" y2="229" stroke="#cbd5e1" strokeWidth="7" strokeLinecap="round" />
+        <ellipse cx="88" cy="230" rx="8" ry="3.5" fill="#0284c7" />
+        <line x1="140" y1="178" x2="185" y2="225" stroke="#cbd5e1" strokeWidth="9" strokeLinecap="round" />
+        <ellipse cx="187" cy="227" rx="9" ry="5" fill="#0284c7" />
+        <line x1="187" y1="227" x2="220" y2="205" stroke="#cbd5e1" strokeWidth="6" strokeLinecap="round" />
+        <ellipse cx="221" cy="204" rx="5" ry="3.5" fill="#0284c7" />
+      </g>
+
+      <text x="150" y="292" textAnchor="middle" fill="#94a3b8" fontSize="11" fontFamily="sans-serif">
+        হাঁটু মাটিতে রেখে শরীর মাথা থেকে হাঁটু সোজা রাখুন
+      </text>
+
+      {/* ================= RIGHT PANEL: STEP 2 (PUSH-UP 90°) ================= */}
+      <rect x="325" y="16" width="150" height="26" rx="13" fill="#84cc16" fillOpacity="0.2" stroke="#ccff00" strokeWidth="1.2" />
+      <circle cx="338" cy="29" r="4" fill="#ccff00" />
+      <text x="348" y="33" fill="#ccff00" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ২: পুশ-আপ
+      </text>
+
+      {/* Mat */}
+      <rect x="335" y="244" width="230" height="15" rx="5" fill="url(#matGradLimeKP)" stroke="#84cc16" strokeWidth="1" strokeOpacity="0.5" />
+
+      {/* 90° Elbow Indicator */}
+      <path d="M380 188 L380 162 L405 162" stroke="#ccff00" strokeWidth="1.5" fill="none" opacity="0.9" />
+      <rect x="345" y="145" width="55" height="18" rx="4" fill="#000" fillOpacity="0.85" stroke="#ccff00" strokeWidth="0.8" />
+      <text x="372" y="158" textAnchor="middle" fill="#ccff00" fontSize="10" fontWeight="700" fontFamily="monospace">
+        ৯০° কনুই
+      </text>
+
+      {/* Downward Chest Movement Arrow */}
+      <path d="M420 165 L420 195" stroke="#ccff00" strokeWidth="2" strokeDasharray="3 3" fill="none" opacity="0.8" />
+      <polygon points="416,193 424,193 420,200" fill="#ccff00" opacity="0.9" />
+
+      {/* Figure Lowered with Knees on Mat */}
+      <g transform="translate(320, 30)">
+        <circle cx="65" cy="180" r="12" fill="#f8fafc" />
+        <line x1="74" y1="184" x2="84" y2="188" stroke="#f8fafc" strokeWidth="6" strokeLinecap="round" />
+        <path d="M84 188 L145 196 L142 208 L82 202 Z" fill="url(#kpTorso2)" />
+        <polyline points="88,193 68,172 88,214" stroke="#f8fafc" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" />
+        <ellipse cx="88" cy="215" rx="8" ry="3.5" fill="#65a30d" />
+        <line x1="142" y1="202" x2="185" y2="210" stroke="#f8fafc" strokeWidth="9" strokeLinecap="round" />
+        <ellipse cx="187" cy="212" rx="9" ry="5" fill="#65a30d" />
+        <line x1="187" y1="212" x2="220" y2="190" stroke="#f8fafc" strokeWidth="6" strokeLinecap="round" />
+        <ellipse cx="221" cy="189" rx="5" ry="3.5" fill="#65a30d" />
+      </g>
+
+      <text x="450" y="292" textAnchor="middle" fill="#ccff00" fontSize="11" fontWeight="600" fontFamily="sans-serif">
+        কনুই ৪৫° রেখে বুক মেঝের কাছে নামান ও তুলুন
+      </text>
+    </svg>
+  );
+}
+
 export default function WorkoutFlow() {
   const [step, setStep] = useState<"location" | "level" | "exercises" | "gym">("location");
   const [location, setLocation] = useState<WorkoutLocation>("home");
@@ -1688,6 +1805,8 @@ export default function WorkoutFlow() {
                       <HollowBodyHoldTwoStepGraphic />
                     ) : ex.customGraphic === "side-plank-hip-dips" ? (
                       <SidePlankHipDipsTwoStepGraphic />
+                    ) : ex.customGraphic === "knee-pushup" ? (
+                      <KneePushUpTwoStepGraphic />
                     ) : (
                       /* eslint-disable-next-line @next/next/no-img-element */
                       <img
