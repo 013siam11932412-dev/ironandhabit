@@ -19,7 +19,11 @@ interface Exercise {
   imageUrl: string;
   formCue: string;
   formDescription: string;
-  customGraphic?: "jumping-jacks" | "bodyweight-squat" | "standard-pushup";
+  customGraphic?:
+    | "jumping-jacks"
+    | "bodyweight-squat"
+    | "standard-pushup"
+    | "reverse-lunge";
 }
 
 const EXERCISES_DATA: Record<
@@ -189,10 +193,11 @@ const EXERCISES_DATA: Record<
           "📋 সোজা দাঁড়িয়ে এক পা পেছনের দিকে বড় পদক্ষেপে নিন এবং উভয় হাঁটু ৯০° কোণে নামান। সামনের পায়ের গোড়ালিতে ভর দিয়ে ফিরে আসুন।",
         tip: "💡 পেছনের হাঁটু মেঝের কাছাকাছি আনুন কিন্তু মাটিতে আঘাত করবেন না; ধড় একদম সোজা রাখুন।",
         durationOrReps: "১০-১২ রেপস প্রতি পায়ে x ৩ সেট",
-        imageUrl:
-          "https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=700&auto=format&fit=crop&q=80",
+        imageUrl: "",
         formCue: "📐 রিভার্স লাঞ্জ: পেছনের হাঁটু ৯০° মেঝের কাছে, ধড় খাড়া",
-        formDescription: "Controlled step backward into deep 90-degree lunging stance",
+        formDescription:
+          "2-step guide: পদক্ষেপ ১: শুরু (সোজা দাঁড়ানো) to পদক্ষেপ ২: রিভার্স লাঞ্জ (উভয় হাঁটু ৯০°)",
+        customGraphic: "reverse-lunge",
       },
       {
         id: "i4",
@@ -691,6 +696,148 @@ function PushUpTwoStepGraphic() {
   );
 }
 
+function ReverseLungeTwoStepGraphic() {
+  return (
+    <svg
+      viewBox="0 0 600 320"
+      className="w-full h-full select-none"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
+    >
+      <defs>
+        <linearGradient id="rlBg" x1="0" y1="0" x2="600" y2="320" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#080e1a" />
+          <stop offset="1" stopColor="#0f172a" />
+        </linearGradient>
+        <linearGradient id="matGradBlue" x1="0" y1="0" x2="1" y2="0">
+          <stop stopColor="#1e3a8a" stopOpacity="0.45" />
+          <stop offset="1" stopColor="#2563eb" stopOpacity="0.65" />
+        </linearGradient>
+        <linearGradient id="rlTorso1" x1="0" y1="0" x2="0" y2="1">
+          <stop stopColor="#38bdf8" />
+          <stop offset="1" stopColor="#0284c7" />
+        </linearGradient>
+        <linearGradient id="rlTorso2" x1="0" y1="0" x2="0" y2="1">
+          <stop stopColor="#ccff00" />
+          <stop offset="1" stopColor="#84cc16" />
+        </linearGradient>
+      </defs>
+      <rect width="600" height="320" fill="url(#rlBg)" />
+
+      {/* Floor & Guideline */}
+      <line x1="0" y1="262" x2="600" y2="262" stroke="#1e293b" strokeWidth="1.5" />
+      <line x1="0" y1="285" x2="600" y2="285" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="4 4" />
+
+      {/* Center Separation Divider */}
+      <line x1="300" y1="35" x2="300" y2="265" stroke="#334155" strokeWidth="1.5" strokeDasharray="4 4" />
+      <g transform="translate(286, 136)">
+        <circle cx="14" cy="14" r="14" fill="#1e293b" stroke="#475569" strokeWidth="1.5" />
+        <path d="M10 14h8m-3-3l3 3-3 3" stroke="#ccff00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+
+      {/* ================= LEFT PANEL: STEP 1 (START) ================= */}
+      {/* Step Badge */}
+      <rect x="25" y="16" width="125" height="26" rx="13" fill="#1e3a8a" fillOpacity="0.35" stroke="#3b82f6" strokeWidth="1" />
+      <circle cx="38" cy="29" r="4" fill="#60a5fa" />
+      <text x="48" y="33" fill="#93c5fd" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ১: শুরু
+      </text>
+
+      {/* Floor Mat Marker */}
+      <ellipse cx="150" cy="256" rx="85" ry="12" fill="url(#matGradBlue)" stroke="#3b82f6" strokeWidth="1" strokeOpacity="0.5" />
+
+      {/* Human Figure: Standing upright, hands on hips */}
+      <g transform="translate(150, 72)">
+        {/* Head */}
+        <circle cx="0" cy="16" r="13" fill="#cbd5e1" />
+        {/* Neck */}
+        <line x1="0" y1="29" x2="0" y2="38" stroke="#cbd5e1" strokeWidth="6" strokeLinecap="round" />
+        {/* Torso upright */}
+        <path d="M-15 42 Q0 38 15 42 L12 102 Q0 105 -12 102 Z" fill="url(#rlTorso1)" />
+        {/* Arms: Hands on hips */}
+        <path d="M-15 45 L-25 78 L-12 88" stroke="#cbd5e1" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <path d="M15 45 L25 78 L12 88" stroke="#cbd5e1" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        {/* Shorts */}
+        <path d="M-13 102 L13 102 L15 122 L-15 122 Z" fill="#0f172a" />
+        {/* Legs: Hip-width neutral stance */}
+        <line x1="-8" y1="122" x2="-8" y2="182" stroke="#cbd5e1" strokeWidth="8" strokeLinecap="round" />
+        <line x1="8" y1="122" x2="8" y2="182" stroke="#cbd5e1" strokeWidth="8" strokeLinecap="round" />
+        {/* Feet: Flat on ground */}
+        <ellipse cx="-8" cy="183" rx="9" ry="4" fill="#0284c7" />
+        <ellipse cx="8" cy="183" rx="9" ry="4" fill="#0284c7" />
+      </g>
+
+      <text x="150" y="292" textAnchor="middle" fill="#94a3b8" fontSize="11" fontFamily="sans-serif">
+        সোজা হয়ে দাঁড়ান, পা স্বাভাবিক ও হাত কোমরে
+      </text>
+
+      {/* ================= RIGHT PANEL: STEP 2 (REVERSE LUNGE) ================= */}
+      {/* Step Badge */}
+      <rect x="325" y="16" width="160" height="26" rx="13" fill="#84cc16" fillOpacity="0.2" stroke="#ccff00" strokeWidth="1.2" />
+      <circle cx="338" cy="29" r="4" fill="#ccff00" />
+      <text x="348" y="33" fill="#ccff00" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ২: রিভার্স লাঞ্জ
+      </text>
+
+      {/* Floor Mat Marker */}
+      <ellipse cx="460" cy="256" rx="105" ry="12" fill="url(#matGradBlue)" stroke="#3b82f6" strokeWidth="1" strokeOpacity="0.5" />
+
+      {/* 90° Front Knee Indicator */}
+      <path d="M405 160 L405 140 L425 140" stroke="#ccff00" strokeWidth="1.5" fill="none" opacity="0.9" />
+      <rect x="375" y="125" width="45" height="18" rx="4" fill="#000" fillOpacity="0.85" stroke="#ccff00" strokeWidth="0.8" />
+      <text x="397" y="138" textAnchor="middle" fill="#ccff00" fontSize="10" fontWeight="700" fontFamily="monospace">
+        ৯০°
+      </text>
+
+      {/* 90° Back Knee Indicator */}
+      <rect x="480" y="175" width="75" height="18" rx="4" fill="#000" fillOpacity="0.85" stroke="#ccff00" strokeWidth="0.8" />
+      <text x="517" y="188" textAnchor="middle" fill="#ccff00" fontSize="10" fontWeight="700" fontFamily="monospace">
+        উভয় হাঁটু ৯০°
+      </text>
+
+      {/* Step-Back Motion Indicator Arrow */}
+      <path d="M440 220 C460 210 490 215 515 235" stroke="#ccff00" strokeWidth="1.8" strokeDasharray="3 3" fill="none" opacity="0.8" />
+      <polygon points="513,230 520,237 510,238" fill="#ccff00" opacity="0.9" />
+
+      {/* Human Figure: Deep 90-degree Reverse Lunge */}
+      <g transform="translate(450, 75)">
+        {/* Head */}
+        <circle cx="10" cy="15" r="13" fill="#f8fafc" />
+        {/* Neck */}
+        <line x1="10" y1="28" x2="10" y2="38" stroke="#f8fafc" strokeWidth="6" strokeLinecap="round" />
+        {/* Torso: Perfectly Upright */}
+        <path d="M-3 42 Q10 38 23 42 L20 102 Q10 105 0 102 Z" fill="url(#rlTorso2)" />
+        {/* Hands on Hips */}
+        <path d="M-3 45 L-15 75 L0 85" stroke="#f8fafc" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <path d="M23 45 L35 75 L20 85" stroke="#f8fafc" strokeWidth="6.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        {/* Shorts */}
+        <path d="M-1 102 L21 102 L23 120 L-3 120 Z" fill="#0f172a" />
+
+        {/* Front Leg: Thigh horizontal at 90°, shin vertical downwards */}
+        {/* Front Thigh (hip to knee forward) */}
+        <line x1="10" y1="115" x2="-45" y2="115" stroke="#f8fafc" strokeWidth="10" strokeLinecap="round" />
+        {/* Front Shin (knee down to foot) */}
+        <line x1="-45" y1="115" x2="-45" y2="175" stroke="#f8fafc" strokeWidth="8" strokeLinecap="round" />
+        {/* Front Foot flat on ground */}
+        <ellipse cx="-45" cy="177" rx="10" ry="4" fill="#65a30d" />
+
+        {/* Back Leg: Stepped backward, thigh down vertical, back knee hovering off floor */}
+        {/* Back Thigh (hip down to hovering knee) */}
+        <line x1="12" y1="115" x2="25" y2="165" stroke="#f8fafc" strokeWidth="10" strokeLinecap="round" />
+        {/* Back Shin (hovering knee back to toes) */}
+        <line x1="25" y1="165" x2="75" y2="173" stroke="#f8fafc" strokeWidth="8" strokeLinecap="round" />
+        {/* Back Toes on floor */}
+        <ellipse cx="76" cy="175" rx="7" ry="4" fill="#65a30d" />
+      </g>
+
+      <text x="450" y="292" textAnchor="middle" fill="#ccff00" fontSize="11" fontWeight="600" fontFamily="sans-serif">
+        এক পা পেছনে নিন, উভয় হাঁটু ৯০° কোণে ও ধড় সোজা
+      </text>
+    </svg>
+  );
+}
+
 export default function WorkoutFlow() {
   const [step, setStep] = useState<"location" | "level" | "exercises" | "gym">("location");
   const [location, setLocation] = useState<WorkoutLocation>("home");
@@ -967,6 +1114,8 @@ export default function WorkoutFlow() {
                       <SquatTwoStepGraphic />
                     ) : ex.customGraphic === "standard-pushup" ? (
                       <PushUpTwoStepGraphic />
+                    ) : ex.customGraphic === "reverse-lunge" ? (
+                      <ReverseLungeTwoStepGraphic />
                     ) : (
                       /* eslint-disable-next-line @next/next/no-img-element */
                       <img
