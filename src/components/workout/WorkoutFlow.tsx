@@ -39,7 +39,12 @@ interface Exercise {
     | "gym-barbell-bench-press"
     | "gym-bent-over-row"
     | "gym-incline-dumbbell-press"
-    | "gym-leg-press";
+    | "gym-leg-press"
+    | "gym-barbell-deadlift"
+    | "gym-overhead-press"
+    | "gym-bulgarian-split-squat"
+    | "gym-parallel-dips"
+    | "gym-hip-thrust";
 }
 
 const EXERCISES_DATA: Record<
@@ -346,7 +351,7 @@ const EXERCISES_DATA: Record<
   },
 };
 
-export type GymWorkoutLevel = "basic" | "intermediate";
+export type GymWorkoutLevel = "basic" | "intermediate" | "advanced";
 
 export const GYM_EXERCISES_DATA: Record<
   GymWorkoutLevel,
@@ -544,6 +549,100 @@ export const GYM_EXERCISES_DATA: Record<
         formDescription:
           "2-step guide: পদক্ষেপ ১: প্ল্যাটফর্মে ৯০° হাঁটু ভাঁজ to পদক্ষেপ ২: হিল পুশ এক্সটেনশন",
         customGraphic: "gym-leg-press",
+      },
+    ],
+  },
+  advanced: {
+    titleBn: "জিম হার্ড (হেভি কম্পাউন্ড ও পাওয়ার)",
+    titleEn: "Gym Advanced Heavy Compound & Power",
+    badge: "🏋️ লেভেল ৩ (জিম)",
+    color: "#ef4444",
+    duration: "৪০-৪৫ মিনিট • সর্বোচ্চ শক্তি ও স্ট্রেংথ",
+    exercises: [
+      {
+        id: "gh1",
+        nameBn: "কনভেনশনাল বারবেল ডেডলিফট",
+        nameEn: "Conventional Barbell Deadlift",
+        tag: "ফুল বডি পোস্টেরিয়র চেইন",
+        tagColor: "bg-red-500/10 text-red-400 border-red-500/20",
+        target: "🎯 গ্লুটস, হ্যামস্ট্রিংস, ইরেক্টর স্পাইনি, ল্যাটস ও ট্র্যাপস",
+        instructions:
+          "📋 মেঝেতে রাখা বারবেলের সামনে শিন ১ ইঞ্চি দূরে পা রাখুন। নিতম্ব পেছনে ঠেলে সোজা পিঠে বারবেল কাঁধের প্রস্থে শক্ত করে ধরুন। ল্যাটস লক ও বুক টান রেখে পা দিয়ে মেঝে পুশ করে নিতম্ব লকআউটে সোজা হয়ে দাঁড়ান।",
+        tip: "💡 পিঠ কখনই রাউন্ড (গোল) করবেন না; বার সর্বদা পায়ের পাতার কাছে রেখে মেঝে ড্রাইভ করে তুলবেন।",
+        durationOrReps: "৪-৬ রেপস x ৩-৪ সেট",
+        imageUrl: "",
+        formCue: "📐 ডেডলিফট: ফ্লোর সেটআপ ও টাইট ল্যাটস ➔ হিপ লকআউট",
+        formDescription:
+          "2-step guide: পদক্ষেপ ১: ফ্লোর থেকে ফ্ল্যাট স্পাইন সেটআপ to পদক্ষেপ ২: এক্সপ্লোসিভ হিপ লকআউট",
+        customGraphic: "gym-barbell-deadlift",
+      },
+      {
+        id: "gh2",
+        nameBn: "স্ট্যান্ডিং বারবেল মিলিটারী প্রেস",
+        nameEn: "Standing Barbell Overhead Military Press",
+        tag: "শোল্ডার ও কোর স্ট্যাবিলিটি",
+        tagColor: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+        target: "🎯 অ্যান্টিরিয়র ডেল্টয়েড, ট্রাইসেপস, ট্র্যাপস ও সম্পূর্ণ কোর",
+        instructions:
+          "📋 সোজা দাঁড়িয়ে কলারবোনের ওপর বারবেল রেস্ট করুন, কনুই সামান্য সামনের দিকে। গ্লুটস ও পেট শক্ত করে ব্রেস রেখে বারবেল উল্লম্বভাবে মাথার উপরে সোজা প্রেস করে লকআউট করুন ও কলারবোনে নিয়ন্ত্রণ সহ নামান।",
+        tip: "💡 কোমর অতিরিক্ত পেছন দিকে আর্চ করবেন না; কোর ও গ্লুটস পাথরের মতো শক্ত করে সোজা লাইন ধরে প্রেস করুন।",
+        durationOrReps: "৬-৮ রেপস x ৩-৪ সেট",
+        imageUrl: "",
+        formCue: "📐 মিলিটারী প্রেস: কলারবোন রেস্ট ➔ ওভারহেড উল্লম্ব লকআউট",
+        formDescription:
+          "2-step guide: পদক্ষেপ ১: কলারবোনে বারবেল ও টাইট কোর to পদক্ষেপ ২: মাথার ওপর উল্লম্ব লকআউট",
+        customGraphic: "gym-overhead-press",
+      },
+      {
+        id: "gh3",
+        nameBn: "বুলগেরিয়ান স্প্লিট স্কোয়াট",
+        nameEn: "Bulgarian Split Squat (Dumbbell)",
+        tag: "ইউনিলেটারাল লেগস",
+        tagColor: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+        target: "🎯 কোয়াড্রিসেপস, গ্লুট মিডিয়াস, হ্যামস্ট্রিংস ও ব্যালেন্স",
+        instructions:
+          "📋 ফ্ল্যাট বেঞ্চের সামনে দাঁড়িয়ে পেছনের পায়ের পাতা বেঞ্চের ওপর রাখুন। দুই হাতে ডাম্বেল নিয়ে সামনের হাঁটু ৯০° কোণে নামিয়ে ডিপ সিঙ্গেল-লেগ স্কোয়াট করুন। সামনের হিলে চাপ দিয়ে ওপরে উঠুন।",
+        tip: "💡 সামনের হাঁটু যেন পায়ের বুড়ো আঙুল ছাড়িয়ে খুব বেশি এগিয়ে না যায়; পেছনের হাঁটু মেঝের কাছাকাছি নামান।",
+        durationOrReps: "৮-১০ রেপস প্রতি পায়ে x ৩ সেট",
+        imageUrl: "",
+        formCue: "📐 স্প্লিট স্কোয়াট: রিয়ার ফুট অন বেঞ্চ ➔ ৯০° ডিপ সিঙ্গেল লেগ",
+        formDescription:
+          "2-step guide: পদক্ষেপ ১: বেঞ্চে পেছনের পা স্থাপন to পদক্ষেপ ২: ৯০° ডিপ সিঙ্গেল লেগ স্কোয়াট",
+        customGraphic: "gym-bulgarian-split-squat",
+      },
+      {
+        id: "gh4",
+        nameBn: "প্যারালাল বার ডিপস",
+        nameEn: "Parallel Bar Dips (Bodyweight / Weighted)",
+        tag: "লোয়ার চেস্ট ও ট্রাইসেপস",
+        tagColor: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+        target: "🎯 পেক্টোরালিস মেজর (নিচের বুক), ট্রাইসেপস ও সামনের কাঁধ",
+        instructions:
+          "📋 প্যারালাল বারে হাত রেখে শরীর শূন্যে ঝুলিয়ে তুলুন। ধড় সামান্য সামনে ঝুঁকিয়ে কনুই ৯০° কোণে ভাঁজ করে শরীর নিচে নামান। বুকের নিচের অংশে টান অনুভব হলে বুক ও ট্রাইসেপসের শক্তিতে পুশ করে ওপরে উঠুন।",
+        tip: "💡 কাঁধের ইনজুরি এড়াতে ৯০ ডিগ্রির বেশি অতিরিক্ত নিচে নামবেন না এবং শরীর সামনে সামান্য হেলিয়ে রাখবেন।",
+        durationOrReps: "৮-১২ রেপস x ৩ সেট",
+        imageUrl: "",
+        formCue: "📐 বার ডিপস: ফুল আর্ম লক ➔ ৯০° কনুই ফ্লেক্স ও চেস্ট ডিপ",
+        formDescription:
+          "2-step guide: পদক্ষেপ ১: শূন্যে আর্ম লক সাপোর্ট to পদক্ষেপ ২: ৯০° কনুইতে ডিপ ডিসেন্ট",
+        customGraphic: "gym-parallel-dips",
+      },
+      {
+        id: "gh5",
+        nameBn: "বারবেল হিপ থ্রাস্ট",
+        nameEn: "Barbell Hip Thrust (Bench Supported)",
+        tag: "ম্যাক্সিমাল গ্লুটস ও হিপ্স",
+        tagColor: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+        target: "🎯 গ্লুটিয়াস ম্যাক্সিমাস, হ্যামস্ট্রিংস ও পেলভিক স্ট্যাবিলিটি",
+        instructions:
+          "📋 ফ্ল্যাট বেঞ্চের কিনারায় আপার ব্যাক সাপোর্ট দিয়ে মেঝেতে বসুন। হিপ ক্রিজের ওপর প্যাডেড বারবেল রাখুন। হিল দিয়ে মেঝেকে পুশ করে নিতম্ব শক্তিতে ওপরে তুলে হাঁটু ৯০° কোণে টেবিলটপ অবস্থানে আনুন ও গ্লুটস চরম সংকুচিত করুন।",
+        tip: "💡 শীর্ষে ঘাড় পেছনে ফেলবেন না, চিবুক বুকের কাছে রাখুন এবং কোমর অতিরিক্ত আর্চ না করে কেবল গ্লুটস স্কুইজ করুন।",
+        durationOrReps: "৮-১০ রেপস x ৩-৪ সেট",
+        imageUrl: "",
+        formCue: "📐 হিপ থ্রাস্ট: ফ্লোর স্টার্ট ➔ ৯০° হাঁটু ও গ্লুট পিক স্কুইজ",
+        formDescription:
+          "2-step guide: পদক্ষেপ ১: বেঞ্চ ব্যাক সাপোর্ট ও বারবেল ইন হিপ to পদক্ষেপ ২: হিপ ফুল এক্সটেনশন ও স্কুইজ",
+        customGraphic: "gym-hip-thrust",
       },
     ],
   },
@@ -3075,6 +3174,634 @@ function LegPressMachineTwoStepGraphic() {
   );
 }
 
+function ConventionalDeadliftTwoStepGraphic() {
+  return (
+    <svg
+      viewBox="0 0 600 320"
+      className="w-full h-full select-none"
+      aria-label="Conventional Barbell Deadlift 2-step equipment guide"
+    >
+      <defs>
+        <linearGradient id="dlBg" x1="0" y1="0" x2="0" y2="1">
+          <stop stopColor="#080e1a" />
+          <stop offset="1" stopColor="#0f172a" />
+        </linearGradient>
+        <linearGradient id="dlTorso1" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#f87171" />
+          <stop offset="1" stopColor="#dc2626" />
+        </linearGradient>
+        <linearGradient id="dlTorso2" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#ef4444" />
+          <stop offset="1" stopColor="#b91c1c" />
+        </linearGradient>
+      </defs>
+      <rect width="600" height="320" fill="url(#dlBg)" />
+
+      {/* Floor & Guideline */}
+      <line x1="0" y1="262" x2="600" y2="262" stroke="#1e293b" strokeWidth="1.5" />
+      <line x1="0" y1="285" x2="600" y2="285" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="4 4" />
+
+      {/* Center Separation Divider */}
+      <line x1="300" y1="35" x2="300" y2="265" stroke="#334155" strokeWidth="1.5" strokeDasharray="4 4" />
+      <g transform="translate(286, 136)">
+        <circle cx="14" cy="14" r="14" fill="#1e293b" stroke="#475569" strokeWidth="1.5" />
+        <path d="M10 14h8m-3-3l3 3-3 3" stroke="#f87171" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+
+      {/* ================= LEFT PANEL: STEP 1 (FLOOR SETUP & NEUTRAL SPINE) ================= */}
+      <rect x="25" y="16" width="145" height="26" rx="13" fill="#991b1b" fillOpacity="0.25" stroke="#f87171" strokeWidth="1" />
+      <circle cx="38" cy="29" r="4" fill="#f87171" />
+      <text x="48" y="33" fill="#fca5a5" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ১: শুরু
+      </text>
+
+      {/* Cue badge */}
+      <rect x="55" y="55" width="140" height="20" rx="4" fill="#000" fillOpacity="0.85" stroke="#f87171" strokeWidth="0.8" />
+      <text x="125" y="69" textAnchor="middle" fill="#f87171" fontSize="10" fontWeight="700" fontFamily="monospace">
+        ফ্লোর সেটআপ • সোজা পিঠ
+      </text>
+
+      {/* Step 1 Deadlift Setup from Floor */}
+      <g transform="translate(150, 75)">
+        {/* Head in line with torso */}
+        <circle cx="38" cy="72" r="13" fill="#cbd5e1" />
+        {/* Flat Torso angled from hips down to shoulders */}
+        <path d="M-20 115 L28 85 L22 74 L-26 104 Z" fill="url(#dlTorso1)" />
+
+        {/* Legs: hips back and above knees, knees flexed, shins close to bar */}
+        <path d="M-20 115 L-8 152 L-6 182" stroke="#cbd5e1" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <ellipse cx="-2" cy="184" rx="9" ry="4" fill="#dc2626" />
+
+        {/* Straight arms gripping barbell on floor */}
+        <line x1="22" y1="84" x2="16" y2="162" stroke="#cbd5e1" strokeWidth="6" strokeLinecap="round" />
+
+        {/* Olympic Barbell on Floor with Large Plates */}
+        <line x1="-35" y1="164" x2="65" y2="164" stroke="#e2e8f0" strokeWidth="4" strokeLinecap="round" />
+        {/* Big Bumper Plates resting on floor */}
+        <circle cx="-32" cy="164" r="18" fill="#475569" stroke="#cbd5e1" strokeWidth="1.5" />
+        <circle cx="62" cy="164" r="18" fill="#475569" stroke="#cbd5e1" strokeWidth="1.5" />
+        <circle cx="16" cy="164" r="3.5" fill="#dc2626" />
+      </g>
+
+      <text x="150" y="292" textAnchor="middle" fill="#94a3b8" fontSize="11" fontFamily="sans-serif">
+        মেঝেতে রাখা বারবেলে গ্রিপ নিয়ে পিঠ সোজা ও ল্যাটস শক্ত করুন
+      </text>
+
+      {/* ================= RIGHT PANEL: STEP 2 (EXPLOSIVE HIP LOCKOUT) ================= */}
+      <rect x="325" y="16" width="165" height="26" rx="13" fill="#dc2626" fillOpacity="0.25" stroke="#f87171" strokeWidth="1.2" />
+      <circle cx="338" cy="29" r="4" fill="#f87171" />
+      <text x="348" y="33" fill="#fca5a5" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ২: হিপ লকআউট
+      </text>
+
+      {/* Upward Drive Arrow */}
+      <path d="M470 170 L470 135" stroke="#f87171" strokeWidth="2" strokeDasharray="3 3" fill="none" />
+      <polygon points="466,138 474,138 470,130" fill="#f87171" />
+
+      {/* Cue badge */}
+      <rect x="410" y="55" width="145" height="20" rx="4" fill="#000" fillOpacity="0.85" stroke="#f87171" strokeWidth="0.8" />
+      <text x="482" y="69" textAnchor="middle" fill="#f87171" fontSize="10" fontWeight="700" fontFamily="monospace">
+        হিপ ড্রাইভ • স্ট্যান্ডিং লকআউট
+      </text>
+
+      {/* Step 2 Figure (Fully Standing Upright with Barbell) */}
+      <g transform="translate(450, 75)">
+        {/* Head */}
+        <circle cx="0" cy="15" r="13" fill="#f8fafc" />
+        {/* Torso fully upright */}
+        <rect x="-13" y="36" width="26" height="52" rx="6" fill="url(#dlTorso2)" />
+
+        {/* Legs fully extended, glutes locked */}
+        <line x1="-8" y1="88" x2="-8" y2="182" stroke="#f8fafc" strokeWidth="8" strokeLinecap="round" />
+        <line x1="8" y1="88" x2="8" y2="182" stroke="#f8fafc" strokeWidth="8" strokeLinecap="round" />
+        <ellipse cx="-12" cy="184" rx="9" ry="4" fill="#b91c1c" />
+        <ellipse cx="12" cy="184" rx="9" ry="4" fill="#b91c1c" />
+
+        {/* Arms hanging holding barbell at mid-thigh */}
+        <line x1="-12" y1="44" x2="-8" y2="115" stroke="#f8fafc" strokeWidth="6" strokeLinecap="round" />
+        <line x1="12" y1="44" x2="8" y2="115" stroke="#f8fafc" strokeWidth="6" strokeLinecap="round" />
+
+        {/* Barbell held at hip/thigh height */}
+        <line x1="-55" y1="116" x2="55" y2="116" stroke="#e2e8f0" strokeWidth="4" strokeLinecap="round" />
+        <circle cx="-52" cy="116" r="18" fill="#475569" stroke="#cbd5e1" strokeWidth="1.5" />
+        <circle cx="52" cy="116" r="18" fill="#475569" stroke="#cbd5e1" strokeWidth="1.5" />
+        <circle cx="-8" cy="116" r="3.5" fill="#b91c1c" />
+        <circle cx="8" cy="116" r="3.5" fill="#b91c1c" />
+      </g>
+
+      <text x="450" y="292" textAnchor="middle" fill="#f87171" fontSize="11" fontWeight="600" fontFamily="sans-serif">
+        মেঝেতে পা ড্রাইভ করে সোজা দাঁড়িয়ে নিতম্ব লকআউট করুন
+      </text>
+    </svg>
+  );
+}
+
+function OverheadMilitaryPressTwoStepGraphic() {
+  return (
+    <svg
+      viewBox="0 0 600 320"
+      className="w-full h-full select-none"
+      aria-label="Standing Barbell Overhead Military Press 2-step equipment guide"
+    >
+      <defs>
+        <linearGradient id="ompBg" x1="0" y1="0" x2="0" y2="1">
+          <stop stopColor="#080e1a" />
+          <stop offset="1" stopColor="#0f172a" />
+        </linearGradient>
+        <linearGradient id="ompTorso1" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#fbbf24" />
+          <stop offset="1" stopColor="#d97706" />
+        </linearGradient>
+        <linearGradient id="ompTorso2" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#f59e0b" />
+          <stop offset="1" stopColor="#b45309" />
+        </linearGradient>
+      </defs>
+      <rect width="600" height="320" fill="url(#ompBg)" />
+
+      {/* Floor & Guideline */}
+      <line x1="0" y1="262" x2="600" y2="262" stroke="#1e293b" strokeWidth="1.5" />
+      <line x1="0" y1="285" x2="600" y2="285" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="4 4" />
+
+      {/* Center Separation Divider */}
+      <line x1="300" y1="35" x2="300" y2="265" stroke="#334155" strokeWidth="1.5" strokeDasharray="4 4" />
+      <g transform="translate(286, 136)">
+        <circle cx="14" cy="14" r="14" fill="#1e293b" stroke="#475569" strokeWidth="1.5" />
+        <path d="M10 14h8m-3-3l3 3-3 3" stroke="#fbbf24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+
+      {/* ================= LEFT PANEL: STEP 1 (BARBELL RESTING ON CLAVICLE) ================= */}
+      <rect x="25" y="16" width="145" height="26" rx="13" fill="#b45309" fillOpacity="0.25" stroke="#fbbf24" strokeWidth="1" />
+      <circle cx="38" cy="29" r="4" fill="#fbbf24" />
+      <text x="48" y="33" fill="#fde68a" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ১: শুরু
+      </text>
+
+      {/* Cue badge */}
+      <rect x="50" y="55" width="140" height="20" rx="4" fill="#000" fillOpacity="0.85" stroke="#fbbf24" strokeWidth="0.8" />
+      <text x="120" y="69" textAnchor="middle" fill="#fbbf24" fontSize="10" fontWeight="700" fontFamily="monospace">
+        কলারবোনে বারবেল • টাইট কোর
+      </text>
+
+      {/* Step 1 Figure (Standing Tall with Barbell at Clavicle) */}
+      <g transform="translate(150, 75)">
+        {/* Head */}
+        <circle cx="0" cy="15" r="13" fill="#cbd5e1" />
+        {/* Torso upright */}
+        <rect x="-13" y="36" width="26" height="52" rx="6" fill="url(#ompTorso1)" />
+
+        {/* Legs standing tall */}
+        <line x1="-8" y1="88" x2="-8" y2="182" stroke="#cbd5e1" strokeWidth="8" strokeLinecap="round" />
+        <line x1="8" y1="88" x2="8" y2="182" stroke="#cbd5e1" strokeWidth="8" strokeLinecap="round" />
+        <ellipse cx="-12" cy="184" rx="9" ry="4" fill="#d97706" />
+        <ellipse cx="12" cy="184" rx="9" ry="4" fill="#d97706" />
+
+        {/* Olympic Barbell at Clavicle/Chest */}
+        <line x1="-60" y1="42" x2="60" y2="42" stroke="#e2e8f0" strokeWidth="4" strokeLinecap="round" />
+        <rect x="-58" y="26" width="6" height="32" rx="2" fill="#94a3b8" stroke="#cbd5e1" strokeWidth="1" />
+        <rect x="52" y="26" width="6" height="32" rx="2" fill="#94a3b8" stroke="#cbd5e1" strokeWidth="1" />
+
+        {/* Arms holding barbell in front of shoulders */}
+        <path d="M-13 42 L-22 62 L-16 44" stroke="#cbd5e1" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <path d="M13 42 L22 62 L16 44" stroke="#cbd5e1" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <circle cx="-16" cy="42" r="3.5" fill="#d97706" />
+        <circle cx="16" cy="42" r="3.5" fill="#d97706" />
+      </g>
+
+      <text x="150" y="292" textAnchor="middle" fill="#94a3b8" fontSize="11" fontFamily="sans-serif">
+        কলারবোনের কাছে বারবেল রেখে কোর ও গ্লুটস শক্ত করে দাঁড়ান
+      </text>
+
+      {/* ================= RIGHT PANEL: STEP 2 (OVERHEAD LOCKOUT) ================= */}
+      <rect x="325" y="16" width="165" height="26" rx="13" fill="#d97706" fillOpacity="0.25" stroke="#f59e0b" strokeWidth="1.2" />
+      <circle cx="338" cy="29" r="4" fill="#f59e0b" />
+      <text x="348" y="33" fill="#fef3c7" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ২: ওভারহেড প্রেস
+      </text>
+
+      {/* Overhead Press Arrow */}
+      <path d="M450 65 L450 35" stroke="#f59e0b" strokeWidth="2" strokeDasharray="3 3" fill="none" />
+      <polygon points="446,38 454,38 450,30" fill="#f59e0b" />
+
+      {/* Cue badge */}
+      <rect x="400" y="55" width="150" height="20" rx="4" fill="#000" fillOpacity="0.85" stroke="#f59e0b" strokeWidth="0.8" />
+      <text x="475" y="69" textAnchor="middle" fill="#f59e0b" fontSize="10" fontWeight="700" fontFamily="monospace">
+        উল্লম্ব লকআউট • হেড থ্রু
+      </text>
+
+      {/* Step 2 Figure (Overhead Lockout) */}
+      <g transform="translate(450, 75)">
+        {/* Head slightly forward through window */}
+        <circle cx="0" cy="18" r="13" fill="#f8fafc" />
+        {/* Torso straight */}
+        <rect x="-13" y="36" width="26" height="52" rx="6" fill="url(#ompTorso2)" />
+
+        {/* Legs straight */}
+        <line x1="-8" y1="88" x2="-8" y2="182" stroke="#f8fafc" strokeWidth="8" strokeLinecap="round" />
+        <line x1="8" y1="88" x2="8" y2="182" stroke="#f8fafc" strokeWidth="8" strokeLinecap="round" />
+        <ellipse cx="-12" cy="184" rx="9" ry="4" fill="#b45309" />
+        <ellipse cx="12" cy="184" rx="9" ry="4" fill="#b45309" />
+
+        {/* Arms fully extended straight up */}
+        <line x1="-12" y1="42" x2="-14" y2="-12" stroke="#f8fafc" strokeWidth="6" strokeLinecap="round" />
+        <line x1="12" y1="42" x2="14" y2="-12" stroke="#f8fafc" strokeWidth="6" strokeLinecap="round" />
+
+        {/* Barbell held directly overhead */}
+        <line x1="-60" y1="-14" x2="60" y2="-14" stroke="#e2e8f0" strokeWidth="4" strokeLinecap="round" />
+        <rect x="-58" y="-30" width="6" height="32" rx="2" fill="#94a3b8" stroke="#cbd5e1" strokeWidth="1" />
+        <rect x="52" y="-30" width="6" height="32" rx="2" fill="#94a3b8" stroke="#cbd5e1" strokeWidth="1" />
+        <circle cx="-14" cy="-14" r="3.5" fill="#b45309" />
+        <circle cx="14" cy="-14" r="3.5" fill="#b45309" />
+      </g>
+
+      <text x="450" y="292" textAnchor="middle" fill="#f59e0b" fontSize="11" fontWeight="600" fontFamily="sans-serif">
+        বারবেল সোজা মাথার ওপর উল্লম্বভাবে প্রেস করে কনুই লক করুন
+      </text>
+    </svg>
+  );
+}
+
+function BulgarianSplitSquatTwoStepGraphic() {
+  return (
+    <svg
+      viewBox="0 0 600 320"
+      className="w-full h-full select-none"
+      aria-label="Bulgarian Split Squat 2-step equipment guide"
+    >
+      <defs>
+        <linearGradient id="bssBg" x1="0" y1="0" x2="0" y2="1">
+          <stop stopColor="#080e1a" />
+          <stop offset="1" stopColor="#0f172a" />
+        </linearGradient>
+        <linearGradient id="bssTorso1" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#38bdf8" />
+          <stop offset="1" stopColor="#0284c7" />
+        </linearGradient>
+        <linearGradient id="bssTorso2" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#22d3ee" />
+          <stop offset="1" stopColor="#0891b2" />
+        </linearGradient>
+        <linearGradient id="benchBss" x1="0" y1="0" x2="0" y2="1">
+          <stop stopColor="#475569" />
+          <stop offset="1" stopColor="#1e293b" />
+        </linearGradient>
+      </defs>
+      <rect width="600" height="320" fill="url(#bssBg)" />
+
+      {/* Floor & Guideline */}
+      <line x1="0" y1="262" x2="600" y2="262" stroke="#1e293b" strokeWidth="1.5" />
+      <line x1="0" y1="285" x2="600" y2="285" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="4 4" />
+
+      {/* Center Separation Divider */}
+      <line x1="300" y1="35" x2="300" y2="265" stroke="#334155" strokeWidth="1.5" strokeDasharray="4 4" />
+      <g transform="translate(286, 136)">
+        <circle cx="14" cy="14" r="14" fill="#1e293b" stroke="#475569" strokeWidth="1.5" />
+        <path d="M10 14h8m-3-3l3 3-3 3" stroke="#22d3ee" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+
+      {/* ================= LEFT PANEL: STEP 1 (REAR FOOT ELEVATED ON BENCH) ================= */}
+      <rect x="25" y="16" width="145" height="26" rx="13" fill="#0891b2" fillOpacity="0.25" stroke="#22d3ee" strokeWidth="1" />
+      <circle cx="38" cy="29" r="4" fill="#22d3ee" />
+      <text x="48" y="33" fill="#67e8f9" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ১: শুরু
+      </text>
+
+      {/* Cue badge */}
+      <rect x="65" y="55" width="145" height="20" rx="4" fill="#000" fillOpacity="0.85" stroke="#22d3ee" strokeWidth="0.8" />
+      <text x="137" y="69" textAnchor="middle" fill="#22d3ee" fontSize="10" fontWeight="700" fontFamily="monospace">
+        বেঞ্চে পেছনের পা • সোজা ধড়
+      </text>
+
+      {/* Step 1 Bench & Lifter */}
+      <g transform="translate(20, 20)">
+        {/* Flat Bench at rear */}
+        <rect x="35" y="196" width="60" height="12" rx="3" fill="url(#benchBss)" stroke="#64748b" strokeWidth="1" />
+        <line x1="45" y1="208" x2="45" y2="242" stroke="#475569" strokeWidth="5" />
+        <line x1="85" y1="208" x2="85" y2="242" stroke="#475569" strokeWidth="5" />
+
+        {/* Head */}
+        <circle cx="150" cy="85" r="12" fill="#cbd5e1" />
+        {/* Torso upright */}
+        <rect x="138" y="98" width="24" height="52" rx="6" fill="url(#bssTorso1)" />
+
+        {/* Front Leg standing straight */}
+        <line x1="150" y1="150" x2="160" y2="240" stroke="#cbd5e1" strokeWidth="8" strokeLinecap="round" />
+        <ellipse cx="166" cy="242" rx="9" ry="4" fill="#0891b2" />
+
+        {/* Rear Leg elevated back on bench */}
+        <path d="M142 150 L105 180 L75 196" stroke="#cbd5e1" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <ellipse cx="72" cy="195" rx="6" ry="3.5" fill="#0891b2" />
+
+        {/* Dumbbells held in hands at sides */}
+        <line x1="140" y1="110" x2="135" y2="165" stroke="#cbd5e1" strokeWidth="5" strokeLinecap="round" />
+        <g transform="translate(135, 168)">
+          <rect x="-10" y="-4" width="4" height="8" rx="1" fill="#94a3b8" />
+          <rect x="-6" y="-1" width="12" height="3" rx="0.5" fill="#cbd5e1" />
+          <rect x="6" y="-4" width="4" height="8" rx="1" fill="#94a3b8" />
+          <circle cx="0" cy="0" r="2.5" fill="#0891b2" />
+        </g>
+      </g>
+
+      <text x="150" y="292" textAnchor="middle" fill="#94a3b8" fontSize="11" fontFamily="sans-serif">
+        পেছনের পা বেঞ্চে রেখে দুই হাতে ডাম্বেল নিয়ে সোজা দাঁড়ান
+      </text>
+
+      {/* ================= RIGHT PANEL: STEP 2 (DEEP SINGLE LEG 90°) ================= */}
+      <rect x="325" y="16" width="165" height="26" rx="13" fill="#06b6d4" fillOpacity="0.25" stroke="#22d3ee" strokeWidth="1.2" />
+      <circle cx="338" cy="29" r="4" fill="#22d3ee" />
+      <text x="348" y="33" fill="#67e8f9" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ২: ডিপ স্কোয়াট
+      </text>
+
+      {/* Squat Downward Arrow */}
+      <path d="M435 130 L435 165" stroke="#22d3ee" strokeWidth="2" strokeDasharray="3 3" fill="none" />
+      <polygon points="431,162 439,162 435,170" fill="#22d3ee" />
+
+      {/* Cue badge */}
+      <rect x="390" y="55" width="150" height="20" rx="4" fill="#000" fillOpacity="0.85" stroke="#22d3ee" strokeWidth="0.8" />
+      <text x="465" y="69" textAnchor="middle" fill="#22d3ee" fontSize="10" fontWeight="700" fontFamily="monospace">
+        ৯০° হাঁটু ভাঁজ • সামনের হিল পুশ
+      </text>
+
+      {/* Step 2 Bench & Lifter in Deep Lunge */}
+      <g transform="translate(320, 20)">
+        {/* Flat Bench */}
+        <rect x="35" y="196" width="60" height="12" rx="3" fill="url(#benchBss)" stroke="#64748b" strokeWidth="1" />
+        <line x1="45" y1="208" x2="45" y2="242" stroke="#475569" strokeWidth="5" />
+        <line x1="85" y1="208" x2="85" y2="242" stroke="#475569" strokeWidth="5" />
+
+        {/* Head */}
+        <circle cx="150" cy="120" r="12" fill="#f8fafc" />
+        {/* Torso */}
+        <rect x="138" y="132" width="24" height="52" rx="6" fill="url(#bssTorso2)" />
+
+        {/* Front Leg bent at 90° */}
+        <path d="M150 184 L185 186 L180 240" stroke="#f8fafc" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <ellipse cx="186" cy="242" rx="9" ry="4" fill="#0891b2" />
+
+        {/* Rear Leg deeply bent hovering near floor */}
+        <path d="M142 184 L110 225 L75 196" stroke="#f8fafc" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <ellipse cx="72" cy="195" rx="6" ry="3.5" fill="#0891b2" />
+
+        {/* Dumbbells hanging at sides */}
+        <line x1="140" y1="144" x2="135" y2="198" stroke="#f8fafc" strokeWidth="5" strokeLinecap="round" />
+        <g transform="translate(135, 202)">
+          <rect x="-10" y="-4" width="4" height="8" rx="1" fill="#94a3b8" />
+          <rect x="-6" y="-1" width="12" height="3" rx="0.5" fill="#f8fafc" />
+          <rect x="6" y="-4" width="4" height="8" rx="1" fill="#94a3b8" />
+          <circle cx="0" cy="0" r="2.5" fill="#0891b2" />
+        </g>
+      </g>
+
+      <text x="450" y="292" textAnchor="middle" fill="#22d3ee" fontSize="11" fontWeight="600" fontFamily="sans-serif">
+        সামনের হাঁটু ৯০° নামিয়ে সামনের হিলের শক্তিতে সোজা উঠুন
+      </text>
+    </svg>
+  );
+}
+
+function ParallelBarDipsTwoStepGraphic() {
+  return (
+    <svg
+      viewBox="0 0 600 320"
+      className="w-full h-full select-none"
+      aria-label="Parallel Bar Dips 2-step equipment guide"
+    >
+      <defs>
+        <linearGradient id="pbdBg" x1="0" y1="0" x2="0" y2="1">
+          <stop stopColor="#080e1a" />
+          <stop offset="1" stopColor="#0f172a" />
+        </linearGradient>
+        <linearGradient id="pbdTorso1" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#34d399" />
+          <stop offset="1" stopColor="#059669" />
+        </linearGradient>
+        <linearGradient id="pbdTorso2" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#10b981" />
+          <stop offset="1" stopColor="#047857" />
+        </linearGradient>
+      </defs>
+      <rect width="600" height="320" fill="url(#pbdBg)" />
+
+      {/* Floor & Guideline */}
+      <line x1="0" y1="262" x2="600" y2="262" stroke="#1e293b" strokeWidth="1.5" />
+      <line x1="0" y1="285" x2="600" y2="285" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="4 4" />
+
+      {/* Center Separation Divider */}
+      <line x1="300" y1="35" x2="300" y2="265" stroke="#334155" strokeWidth="1.5" strokeDasharray="4 4" />
+      <g transform="translate(286, 136)">
+        <circle cx="14" cy="14" r="14" fill="#1e293b" stroke="#475569" strokeWidth="1.5" />
+        <path d="M10 14h8m-3-3l3 3-3 3" stroke="#34d399" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+
+      {/* ================= LEFT PANEL: STEP 1 (SUSPENDED ARM LOCKOUT) ================= */}
+      <rect x="25" y="16" width="145" height="26" rx="13" fill="#047857" fillOpacity="0.25" stroke="#34d399" strokeWidth="1" />
+      <circle cx="38" cy="29" r="4" fill="#34d399" />
+      <text x="48" y="33" fill="#a7f3d0" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ১: শুরু
+      </text>
+
+      {/* Cue badge */}
+      <rect x="55" y="55" width="140" height="20" rx="4" fill="#000" fillOpacity="0.85" stroke="#34d399" strokeWidth="0.8" />
+      <text x="125" y="69" textAnchor="middle" fill="#34d399" fontSize="10" fontWeight="700" fontFamily="monospace">
+        শূন্যে বডি লক • আর্ম সাপোর্ট
+      </text>
+
+      {/* Step 1 Parallel Dip Bars & Suspended Athlete */}
+      <g transform="translate(20, 20)">
+        {/* Parallel Dip Bars Station */}
+        <line x1="75" y1="150" x2="75" y2="242" stroke="#475569" strokeWidth="7" strokeLinecap="round" />
+        <line x1="185" y1="150" x2="185" y2="242" stroke="#475569" strokeWidth="7" strokeLinecap="round" />
+        <line x1="60" y1="150" x2="200" y2="150" stroke="#cbd5e1" strokeWidth="8" strokeLinecap="round" />
+
+        {/* Head */}
+        <circle cx="130" cy="75" r="12" fill="#cbd5e1" />
+        {/* Torso upright with slight forward lean */}
+        <path d="M122 88 L138 88 L134 145 L118 145 Z" fill="url(#pbdTorso1)" />
+
+        {/* Arms fully locked out holding parallel bar */}
+        <line x1="124" y1="92" x2="115" y2="148" stroke="#cbd5e1" strokeWidth="7" strokeLinecap="round" />
+        <circle cx="115" cy="148" r="4" fill="#059669" />
+
+        {/* Legs bent at knees suspended in air */}
+        <path d="M125 145 L138 185 L125 210" stroke="#cbd5e1" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <ellipse cx="125" cy="212" rx="6" ry="3.5" fill="#059669" />
+      </g>
+
+      <text x="150" y="292" textAnchor="middle" fill="#94a3b8" fontSize="11" fontFamily="sans-serif">
+        প্যারালাল বারে হাত রেখে হাত সোজা করে শরীর শূন্যে ঝুলিয়ে তুলুন
+      </text>
+
+      {/* ================= RIGHT PANEL: STEP 2 (90° ELBOW DESCENT) ================= */}
+      <rect x="325" y="16" width="160" height="26" rx="13" fill="#059669" fillOpacity="0.25" stroke="#10b981" strokeWidth="1.2" />
+      <circle cx="338" cy="29" r="4" fill="#10b981" />
+      <text x="348" y="33" fill="#6ee7b7" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ২: চেস্ট ডিপ
+      </text>
+
+      {/* Downward Dip Motion Arrow */}
+      <path d="M410 115 L410 148" stroke="#10b981" strokeWidth="2" strokeDasharray="3 3" fill="none" />
+      <polygon points="406,145 414,145 410,152" fill="#10b981" />
+
+      {/* Cue badge */}
+      <rect x="400" y="55" width="150" height="20" rx="4" fill="#000" fillOpacity="0.85" stroke="#10b981" strokeWidth="0.8" />
+      <text x="475" y="69" textAnchor="middle" fill="#10b981" fontSize="10" fontWeight="700" fontFamily="monospace">
+        ৯০° কনুই • চেস্ট ও ট্রাইসেপস
+      </text>
+
+      {/* Step 2 Parallel Dip Bars & Dipped Athlete */}
+      <g transform="translate(320, 20)">
+        {/* Parallel Dip Bars Station */}
+        <line x1="75" y1="150" x2="75" y2="242" stroke="#475569" strokeWidth="7" strokeLinecap="round" />
+        <line x1="185" y1="150" x2="185" y2="242" stroke="#475569" strokeWidth="7" strokeLinecap="round" />
+        <line x1="60" y1="150" x2="200" y2="150" stroke="#cbd5e1" strokeWidth="8" strokeLinecap="round" />
+
+        {/* Head lowered */}
+        <circle cx="130" cy="115" r="12" fill="#f8fafc" />
+        {/* Torso lowered & angled forward */}
+        <path d="M120 128 L136 128 L130 185 L114 185 Z" fill="url(#pbdTorso2)" />
+
+        {/* Arms bent at 90° angle */}
+        <path d="M122 132 L102 148 L115 148" stroke="#f8fafc" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <circle cx="115" cy="148" r="4" fill="#047857" />
+
+        {/* Legs bent in air */}
+        <path d="M120 185 L135 220 L122 240" stroke="#f8fafc" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <ellipse cx="122" cy="242" rx="6" ry="3.5" fill="#047857" />
+      </g>
+
+      <text x="450" y="292" textAnchor="middle" fill="#10b981" fontSize="11" fontWeight="600" fontFamily="sans-serif">
+        কনুই ৯০° কোণে নামিয়ে বুক ও ট্রাইসেপসের শক্তিতে ওপরে উঠুন
+      </text>
+    </svg>
+  );
+}
+
+function BarbellHipThrustTwoStepGraphic() {
+  return (
+    <svg
+      viewBox="0 0 600 320"
+      className="w-full h-full select-none"
+      aria-label="Barbell Hip Thrust 2-step equipment guide"
+    >
+      <defs>
+        <linearGradient id="bhtBg" x1="0" y1="0" x2="0" y2="1">
+          <stop stopColor="#080e1a" />
+          <stop offset="1" stopColor="#0f172a" />
+        </linearGradient>
+        <linearGradient id="bhtTorso1" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#c084fc" />
+          <stop offset="1" stopColor="#9333ea" />
+        </linearGradient>
+        <linearGradient id="bhtTorso2" x1="0" y1="0" x2="1" y2="1">
+          <stop stopColor="#a855f7" />
+          <stop offset="1" stopColor="#7e22ce" />
+        </linearGradient>
+        <linearGradient id="benchBht" x1="0" y1="0" x2="0" y2="1">
+          <stop stopColor="#475569" />
+          <stop offset="1" stopColor="#1e293b" />
+        </linearGradient>
+      </defs>
+      <rect width="600" height="320" fill="url(#bhtBg)" />
+
+      {/* Floor & Guideline */}
+      <line x1="0" y1="262" x2="600" y2="262" stroke="#1e293b" strokeWidth="1.5" />
+      <line x1="0" y1="285" x2="600" y2="285" stroke="#1e293b" strokeWidth="0.8" strokeDasharray="4 4" />
+
+      {/* Center Separation Divider */}
+      <line x1="300" y1="35" x2="300" y2="265" stroke="#334155" strokeWidth="1.5" strokeDasharray="4 4" />
+      <g transform="translate(286, 136)">
+        <circle cx="14" cy="14" r="14" fill="#1e293b" stroke="#475569" strokeWidth="1.5" />
+        <path d="M10 14h8m-3-3l3 3-3 3" stroke="#c084fc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+
+      {/* ================= LEFT PANEL: STEP 1 (FLOOR START WITH BACK ON BENCH) ================= */}
+      <rect x="25" y="16" width="145" height="26" rx="13" fill="#7e22ce" fillOpacity="0.25" stroke="#c084fc" strokeWidth="1" />
+      <circle cx="38" cy="29" r="4" fill="#c084fc" />
+      <text x="48" y="33" fill="#e9d5ff" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ১: শুরু
+      </text>
+
+      {/* Cue badge */}
+      <rect x="65" y="55" width="140" height="20" rx="4" fill="#000" fillOpacity="0.85" stroke="#c084fc" strokeWidth="0.8" />
+      <text x="135" y="69" textAnchor="middle" fill="#c084fc" fontSize="10" fontWeight="700" fontFamily="monospace">
+        বেঞ্চে ব্যাক • হিপ ডিপ
+      </text>
+
+      {/* Step 1 Bench & Athlete on Floor with Barbell */}
+      <g transform="translate(20, 20)">
+        {/* Flat Bench */}
+        <rect x="35" y="180" width="55" height="22" rx="3" fill="url(#benchBht)" stroke="#64748b" strokeWidth="1" />
+        <line x1="45" y1="202" x2="45" y2="242" stroke="#475569" strokeWidth="5" />
+        <line x1="80" y1="202" x2="80" y2="242" stroke="#475569" strokeWidth="5" />
+
+        {/* Head & Upper Back on Bench Edge */}
+        <circle cx="85" cy="170" r="11" fill="#cbd5e1" />
+        {/* Torso angled downward from bench edge to floor hips */}
+        <path d="M88 178 L135 220 L126 226 L80 184 Z" fill="url(#bhtTorso1)" />
+
+        {/* Legs: hips on floor, knees bent up, feet flat on floor */}
+        <path d="M130 220 L170 185 L180 240" stroke="#cbd5e1" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <ellipse cx="184" cy="242" rx="8" ry="3.5" fill="#9333ea" />
+
+        {/* Padded Barbell resting on hip crease */}
+        <line x1="105" y1="210" x2="155" y2="210" stroke="#e2e8f0" strokeWidth="6" strokeLinecap="round" />
+        <circle cx="105" cy="210" r="15" fill="#475569" stroke="#cbd5e1" strokeWidth="1" />
+        <circle cx="155" cy="210" r="15" fill="#475569" stroke="#cbd5e1" strokeWidth="1" />
+        <rect x="120" y="206" width="20" height="8" rx="2" fill="#a855f7" />
+      </g>
+
+      <text x="150" y="292" textAnchor="middle" fill="#94a3b8" fontSize="11" fontFamily="sans-serif">
+        বেঞ্চের কিনারে পিঠ রেখে হিপের ওপর প্যাডেড বারবেল বসান
+      </text>
+
+      {/* ================= RIGHT PANEL: STEP 2 (FULL HIP EXTENSION & PEAK GLUTE SQUEEZE) ================= */}
+      <rect x="325" y="16" width="165" height="26" rx="13" fill="#9333ea" fillOpacity="0.25" stroke="#c084fc" strokeWidth="1.2" />
+      <circle cx="338" cy="29" r="4" fill="#c084fc" />
+      <text x="348" y="33" fill="#f3e8ff" fontSize="12" fontWeight="700" fontFamily="sans-serif">
+        পদক্ষেপ ২: হিপ থ্রাস্ট
+      </text>
+
+      {/* Upward Hip Thrust Arrow */}
+      <path d="M465 210 L465 175" stroke="#c084fc" strokeWidth="2" strokeDasharray="3 3" fill="none" />
+      <polygon points="461,178 469,178 465,170" fill="#c084fc" />
+
+      {/* Cue badge */}
+      <rect x="390" y="55" width="155" height="20" rx="4" fill="#000" fillOpacity="0.85" stroke="#c084fc" strokeWidth="0.8" />
+      <text x="467" y="69" textAnchor="middle" fill="#c084fc" fontSize="10" fontWeight="700" fontFamily="monospace">
+        টেবিলটপ হিপ্স • গ্লুট পিক স্কুইজ
+      </text>
+
+      {/* Step 2 Bench & Athlete at Peak Tabletop Extension */}
+      <g transform="translate(320, 20)">
+        {/* Flat Bench */}
+        <rect x="35" y="180" width="55" height="22" rx="3" fill="url(#benchBht)" stroke="#64748b" strokeWidth="1" />
+        <line x1="45" y1="202" x2="45" y2="242" stroke="#475569" strokeWidth="5" />
+        <line x1="80" y1="202" x2="80" y2="242" stroke="#475569" strokeWidth="5" />
+
+        {/* Head & Upper Back on Bench */}
+        <circle cx="85" cy="170" r="11" fill="#f8fafc" />
+        {/* Torso horizontal table-top at peak */}
+        <rect x="90" y="174" width="60" height="15" rx="5" fill="url(#bhtTorso2)" />
+
+        {/* Knees at 90°, vertical shins down to floor */}
+        <path d="M150 180 L185 180 L185 240" stroke="#f8fafc" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <ellipse cx="188" cy="242" rx="8" ry="3.5" fill="#7e22ce" />
+
+        {/* Padded Barbell raised at hip height */}
+        <line x1="125" y1="170" x2="175" y2="170" stroke="#e2e8f0" strokeWidth="6" strokeLinecap="round" />
+        <circle cx="125" cy="170" r="15" fill="#475569" stroke="#cbd5e1" strokeWidth="1" />
+        <circle cx="175" cy="170" r="15" fill="#475569" stroke="#cbd5e1" strokeWidth="1" />
+        <rect x="140" y="166" width="20" height="8" rx="2" fill="#c084fc" />
+      </g>
+
+      <text x="450" y="292" textAnchor="middle" fill="#c084fc" fontSize="11" fontWeight="600" fontFamily="sans-serif">
+        হিল দিয়ে মেঝে পুশ করে নিতম্ব তুলুন এবং গ্লুটস চরম সংকুচিত করুন
+      </text>
+    </svg>
+  );
+}
+
 export default function WorkoutFlow() {
   const [step, setStep] = useState<"location" | "level" | "exercises" | "gym">("location");
   const [location, setLocation] = useState<WorkoutLocation>("home");
@@ -3391,6 +4118,16 @@ export default function WorkoutFlow() {
                       <InclineDumbbellPressTwoStepGraphic />
                     ) : ex.customGraphic === "gym-leg-press" ? (
                       <LegPressMachineTwoStepGraphic />
+                    ) : ex.customGraphic === "gym-barbell-deadlift" ? (
+                      <ConventionalDeadliftTwoStepGraphic />
+                    ) : ex.customGraphic === "gym-overhead-press" ? (
+                      <OverheadMilitaryPressTwoStepGraphic />
+                    ) : ex.customGraphic === "gym-bulgarian-split-squat" ? (
+                      <BulgarianSplitSquatTwoStepGraphic />
+                    ) : ex.customGraphic === "gym-parallel-dips" ? (
+                      <ParallelBarDipsTwoStepGraphic />
+                    ) : ex.customGraphic === "gym-hip-thrust" ? (
+                      <BarbellHipThrustTwoStepGraphic />
                     ) : (
                       /* eslint-disable-next-line @next/next/no-img-element */
                       <img
@@ -3530,6 +4267,35 @@ export default function WorkoutFlow() {
                 </div>
               </div>
               <span className="text-amber-400 font-bold group-hover:translate-x-1 transition-transform ml-2">
+                শুরু করুন &rarr;
+              </span>
+            </button>
+
+            {/* Level 3: Gym Hard */}
+            <button
+              type="button"
+              onClick={() => handleSelectGymLevel("advanced")}
+              className="p-4 rounded-2xl border border-red-500/40 bg-red-950/20 hover:border-red-400 hover:bg-red-900/30 transition-all text-left flex items-center justify-between group active:scale-[0.98] cursor-pointer shadow-lg"
+            >
+              <div className="flex items-center gap-3.5">
+                <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-xl shrink-0">
+                  🔥
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-white group-hover:text-red-400 transition-colors">
+                      ৩. জিম হার্ড (Advanced Compound)
+                    </span>
+                    <span className="text-[10px] font-mono text-red-400 bg-red-500/15 px-2 py-0.5 rounded">
+                      ৪০-৪৫ মিনিট
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-1">
+                    কনভেনশনাল ডেডলিফট, মিলিটারী প্রেস, বুলগেরিয়ান স্প্লিট স্কোয়াট, বার ডিপস, হিপ থ্রাস্ট
+                  </p>
+                </div>
+              </div>
+              <span className="text-red-400 font-bold group-hover:translate-x-1 transition-transform ml-2">
                 শুরু করুন &rarr;
               </span>
             </button>
