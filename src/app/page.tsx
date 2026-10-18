@@ -95,7 +95,6 @@ export default function Home() {
           : "Sets, reps, rest timer, and progressive overload with real-time exercise logging.",
       image:
         "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=600&q=80",
-      metric: "5x5 @ 315 LBS",
       href: "/dashboard/workouts",
     },
     {
@@ -107,7 +106,6 @@ export default function Home() {
           : "Macro breakdown, calories, and real meal persistence for peak muscle recovery.",
       image:
         "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80",
-      metric: "2,750 KCAL / 190G P",
       href: "/dashboard/nutrition",
     },
     {
@@ -119,7 +117,6 @@ export default function Home() {
           : "Daily 250ml intervals, 7-day cyclical streaks, and holistic consistency telemetry.",
       image:
         "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=800&q=80",
-      metric: "3.8 LITERS TODAY",
       href: "/dashboard",
     },
     {
@@ -131,12 +128,9 @@ export default function Home() {
           : "Mass-to-height index, circumference logs, and real historical progress metrics.",
       image:
         "https://images.unsplash.com/photo-1576243345690-4e4b79b63288?auto=format&fit=crop&w=800&q=80",
-      metric: "+16.4% VOL GROWTH",
       href: "/dashboard/bmi",
     },
   ];
-
-  const brandPartners = ["NIKE", "ROGUE", "MYPROTEIN", "UNDER ARMOUR", "GYMSHARK"];
 
   return (
     <div className="relative min-h-screen bg-[#07090e] text-[#f9fafb] flex flex-col justify-between overflow-x-hidden selection:bg-[#ccff00] selection:text-black">
@@ -410,91 +404,6 @@ export default function Home() {
               {/* Cinematic Vignette Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#07090e] via-transparent to-black/30 opacity-80" />
               <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/20" />
-
-              {/* Floating Heart Rate Card (Bottom Left) */}
-              <div className="absolute left-4 bottom-5 p-3.5 rounded-2xl bg-[rgba(18,24,38,0.75)] backdrop-blur-xl border border-[rgba(163,230,53,0.35)] shadow-[0_10px_30px_rgba(0,0,0,0.7)] flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#07090e] border border-[#ccff00]/40 flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-[#ccff00] animate-pulse"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-[10px] font-black uppercase tracking-wider text-[#94a3b8]">
-                    {dict.peakHeartRate}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl font-black text-white font-mono">
-                      128
-                    </span>
-                    <span className="text-xs font-bold text-[#ccff00]">BPM</span>
-                    <svg
-                      className="w-12 h-4 text-[#ccff00]"
-                      viewBox="0 0 50 16"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        d="M0 8h12l3-6 5 12 4-9 3 5 4-2h9"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Floating Metric Widgets on Right Side */}
-            <div className="hidden sm:flex flex-col gap-3 absolute -right-4 lg:-right-8 top-10 z-20">
-              {/* Widget 1: Calories */}
-              <div className="p-3.5 rounded-2xl bg-[rgba(18,24,38,0.75)] backdrop-blur-xl border border-[rgba(163,230,53,0.3)] shadow-[0_12px_30px_rgba(0,0,0,0.6)] flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#ccff00]/10 border border-[#ccff00]/30 flex items-center justify-center">
-                  <span className="text-sm">🔥</span>
-                </div>
-                <div>
-                  <div className="text-sm font-black text-white font-mono leading-none">
-                    2,450
-                  </div>
-                  <div className="text-[10px] font-black uppercase tracking-wider text-[#94a3b8] mt-1">
-                    {dict.caloriesBurned}
-                  </div>
-                </div>
-              </div>
-
-              {/* Widget 2: Workouts */}
-              <div className="p-3.5 rounded-2xl bg-[rgba(18,24,38,0.75)] backdrop-blur-xl border border-[rgba(163,230,53,0.3)] shadow-[0_12px_30px_rgba(0,0,0,0.6)] flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#ccff00]/10 border border-[#ccff00]/30 flex items-center justify-center">
-                  <span className="text-sm">⚡</span>
-                </div>
-                <div>
-                  <div className="text-sm font-black text-white font-mono leading-none">
-                    28
-                  </div>
-                  <div className="text-[10px] font-black uppercase tracking-wider text-[#94a3b8] mt-1">
-                    {dict.workoutsCompleted}
-                  </div>
-                </div>
-              </div>
-
-              {/* Widget 3: Streak */}
-              <div className="p-3.5 rounded-2xl bg-[rgba(18,24,38,0.75)] backdrop-blur-xl border border-[rgba(163,230,53,0.3)] shadow-[0_12px_30px_rgba(0,0,0,0.6)] flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#ccff00]/10 border border-[#ccff00]/30 flex items-center justify-center">
-                  <span className="text-sm">🏆</span>
-                </div>
-                <div>
-                  <div className="text-sm font-black text-[#ccff00] font-mono leading-none">
-                    14 DAYS
-                  </div>
-                  <div className="text-[10px] font-black uppercase tracking-wider text-[#94a3b8] mt-1">
-                    {dict.activeStreak}
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -707,10 +616,6 @@ export default function Home() {
                   {card.badge}
                 </div>
 
-                {/* Metric pill */}
-                <div className="absolute bottom-3 right-3 px-2 py-0.5 rounded bg-[rgba(18,24,38,0.85)] border border-[rgba(163,230,53,0.2)] text-[10px] font-mono font-bold text-white">
-                  {card.metric}
-                </div>
               </Link>
 
               {/* Card Body */}
@@ -747,36 +652,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. Footer Trust Badges (Brand Ticker) & Minimal Footer */}
-      <footer className="relative z-10 border-t border-[rgba(163,230,53,0.15)] bg-[#07090e]/95 pt-12 pb-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-          {/* Brand Partner Ticker */}
-          <div className="w-full text-center mb-10">
-            <p className="text-[11px] font-black uppercase tracking-[0.25em] text-[#94a3b8]/60 mb-6">
-              COMPATIBLE ECOSYSTEM & ATHLETIC STANDARDS
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-14 md:gap-20">
-              {brandPartners.map((brand, i) => (
-                <span
-                  key={i}
-                  className="text-base sm:text-lg font-black tracking-widest text-[#94a3b8]/40 hover:text-[#ccff00] transition-colors duration-200 cursor-default"
-                >
-                  {brand}
-                </span>
-              ))}
-            </div>
+      {/* 4. Minimal Footer */}
+      <footer className="relative z-10 border-t border-[rgba(163,230,53,0.15)] bg-[#07090e]/95 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#94a3b8]/70">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#ccff00]" />
+            <span className="font-bold text-white">IRON & HABIT</span>
+            <span>&mdash; STRONGER EVERY DAY.</span>
           </div>
-
-          {/* Bottom Bar */}
-          <div className="w-full pt-8 border-t border-[rgba(163,230,53,0.08)] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#94a3b8]/70">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#ccff00]" />
-              <span className="font-bold text-white">IRON & HABIT</span>
-              <span>&mdash; STRONGER EVERY DAY.</span>
-            </div>
-            <div>
-              &copy; 2026 IRON & HABIT Inc. All rights reserved.
-            </div>
+          <div>
+            &copy; 2026 IRON & HABIT. All rights reserved.
           </div>
         </div>
       </footer>
