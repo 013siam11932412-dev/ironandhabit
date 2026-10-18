@@ -19,11 +19,10 @@ export default function ServiceWorkerRegister() {
           });
       };
 
-      if (document.readyState === "complete") {
+      if (document.readyState === "complete" || document.readyState === "interactive") {
         registerSW();
       } else {
-        window.addEventListener("load", registerSW);
-        return () => window.removeEventListener("load", registerSW);
+        window.addEventListener("load", registerSW, { once: true });
       }
     }
   }, []);
