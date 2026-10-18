@@ -59,8 +59,20 @@ export default function SignupPage() {
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-6 text-xs text-[#94a3b8]/60">
-          &copy; 2026 IRON & HABIT Inc. All rights reserved.
+        <div className="mt-8 text-center text-xs text-[#94a3b8]/70 space-y-2">
+          <p className="text-[11px] text-[#ccff00]/90">
+            General guidance only, not medical advice.
+          </p>
+          <div className="flex items-center justify-center gap-4 text-xs font-semibold text-[#94a3b8]">
+            <Link href="/about" className="hover:text-[#ccff00] transition-colors">About</Link>
+            <span>•</span>
+            <Link href="/contact" className="hover:text-[#ccff00] transition-colors">Contact</Link>
+            <span>•</span>
+            <Link href="/privacy" className="hover:text-[#ccff00] transition-colors">Privacy</Link>
+          </div>
+          <div className="text-[11px] text-[#94a3b8]/50 pt-1">
+            &copy; 2026 IRON & HABIT. All rights reserved.
+          </div>
         </div>
       </div>
     </div>

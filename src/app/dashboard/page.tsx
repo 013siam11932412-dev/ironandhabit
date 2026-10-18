@@ -7,6 +7,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
 import ProgressChartBoard from "@/components/dashboard/ProgressChartBoard";
+import Footer from "@/components/Footer";
 import {
   DailyRecord,
   getStoredHistory,
@@ -973,18 +974,7 @@ export default function DashboardPage() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-[rgba(163,230,53,0.12)] bg-[#07090e]/95 py-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#94a3b8]">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#ccff00]" />
-            <span className="font-bold text-white">IRON & HABIT</span>
-            <span>&mdash; ATHLETIC PERFORMANCE SYSTEM</span>
-          </div>
-          <div>
-            &copy; 2026 IRON & HABIT Inc. All rights reserved.
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

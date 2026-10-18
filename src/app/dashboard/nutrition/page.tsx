@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
+import Footer from "@/components/Footer";
 import {
   NutritionLog,
   fetchTodayNutritionLogs,
@@ -521,11 +522,7 @@ export default function NutritionPage() {
       )}
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-[rgba(163,230,53,0.12)] bg-[#07090e]/95 py-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-[#94a3b8]">
-          &copy; 2026 IRON & HABIT Inc. All rights reserved.
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

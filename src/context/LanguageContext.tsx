@@ -25,6 +25,10 @@ export const translations = {
     signOut: "Sign Out",
     tryNow: "Try Now",
     explore: "Explore",
+    about: "About",
+    contact: "Contact",
+    privacyPolicy: "Privacy Policy",
+    medicalDisclaimer: "General guidance only, not medical advice.",
 
     // How It Works / 3-Step Onboarding Guide
     howItWorks: "HOW TO GET STARTED",
@@ -339,6 +343,10 @@ export const translations = {
     signOut: "লগআউট",
     tryNow: "এখনই দেখুন",
     explore: "এক্সপ্লোর",
+    about: "আমাদের সম্পর্কে",
+    contact: "যোগাযোগ",
+    privacyPolicy: "গোপনীয়তা নীতি",
+    medicalDisclaimer: "সাধারণ নির্দেশিকা মাত্র, চিকিৎসা পরামর্শ নয়।",
 
     // How It Works / 3-Step Onboarding Guide
     howItWorks: "যেভাবে শুরু করবেন",

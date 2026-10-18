@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const { dict, language } = useLanguage();
@@ -652,19 +653,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. Minimal Footer */}
-      <footer className="relative z-10 border-t border-[rgba(163,230,53,0.15)] bg-[#07090e]/95 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#94a3b8]/70">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#ccff00]" />
-            <span className="font-bold text-white">IRON & HABIT</span>
-            <span>&mdash; STRONGER EVERY DAY.</span>
-          </div>
-          <div>
-            &copy; 2026 IRON & HABIT. All rights reserved.
-          </div>
-        </div>
-      </footer>
+      {/* 4. Footer */}
+      <Footer />
     </div>
   );
 }

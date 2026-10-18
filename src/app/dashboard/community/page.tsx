@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
+import Footer from "@/components/Footer";
 import {
   CommunityMessage,
   fetchCommunityMessages,
@@ -552,9 +553,7 @@ export default function CommunityPage() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-[rgba(163,230,53,0.08)] py-4 text-center text-xs text-[#64748b]">
-        IRON & HABIT • Open Community Squad Messenger
-      </footer>
+      <Footer />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
+import Footer from "@/components/Footer";
 import {
   BmiRecord,
   DailyMetric,
@@ -764,9 +765,7 @@ export default function AssistantPage() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-[rgba(163,230,53,0.08)] py-4 text-center text-xs text-[#64748b]">
-        IRON & HABIT • Socratic Athletic & Habit Conditioning • Powered by Gemini
-      </footer>
+      <Footer />
     </div>
   );
 }
