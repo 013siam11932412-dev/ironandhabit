@@ -7,6 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
 import Footer from "@/components/Footer";
 import HeroCarousel from "@/components/home/HeroCarousel";
+import InstallAppButton from "@/components/pwa/InstallAppButton";
 
 export default function Home() {
   const { dict, language } = useLanguage();
@@ -211,6 +212,7 @@ export default function Home() {
 
           {/* Language Switcher & Glowing CTA / User Badge */}
           <div className="flex items-center gap-3 sm:gap-4">
+            <InstallAppButton />
             <LanguageToggle />
             {user ? (
               <div className="flex items-center gap-2 sm:gap-3">

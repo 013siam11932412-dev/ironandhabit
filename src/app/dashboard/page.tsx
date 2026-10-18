@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
 import ProgressChartBoard from "@/components/dashboard/ProgressChartBoard";
 import Footer from "@/components/Footer";
+import InstallAppButton from "@/components/pwa/InstallAppButton";
 import {
   DailyRecord,
   getStoredHistory,
@@ -390,6 +391,7 @@ export default function DashboardPage() {
 
             {/* Language Switcher, 7-Day Cyclical Streak & Status Badge */}
             <div className="flex items-center gap-2.5 sm:gap-3">
+              <InstallAppButton />
               <LanguageToggle />
 
               {/* 7-Day Cyclical Streak Tracker Badge */}
