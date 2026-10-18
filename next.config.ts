@@ -48,4 +48,10 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+import { withSentryConfig } from "@sentry/nextjs/config";
+
+export default withSentryConfig(nextConfig, {
+  // Sentry configuration options
+  widenClientFileUpload: true,
+  tunnelRoute: "/monitoring",
+});
