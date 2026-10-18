@@ -6,6 +6,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
 import Footer from "@/components/Footer";
+import HeroCarousel from "@/components/home/HeroCarousel";
 
 export default function Home() {
   const { dict, language } = useLanguage();
@@ -385,27 +386,9 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Center & Right Column: Hero Visuals & Athlete Imagery */}
+          {/* Center & Right Column: Interactive 3D Hero Athlete Carousel */}
           <div className="lg:col-span-5 relative flex items-center justify-center">
-            {/* Ambient Radial Neon Glow Behind Hero Image */}
-            <div className="absolute w-[340px] sm:w-[460px] h-[340px] sm:h-[460px] rounded-full bg-gradient-to-tr from-[#ccff00]/25 via-[#a3e635]/15 to-transparent blur-[90px] pointer-events-none" />
-
-            {/* Athlete Hero Image Container */}
-            <div className="relative w-full max-w-[420px] aspect-[4/5] rounded-3xl overflow-hidden border-2 border-[rgba(163,230,53,0.3)] shadow-[0_20px_60px_rgba(0,0,0,0.85)] group">
-              <Image
-                src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=800&q=80"
-                alt="Elite Athlete Hero Conditioning"
-                fill
-                priority
-                unoptimized={true}
-                sizes="(max-width: 768px) 100vw, 420px"
-                className="w-full h-full object-cover object-top filter contrast-110 brightness-95 group-hover:scale-105 transition-transform duration-700"
-              />
-
-              {/* Cinematic Vignette Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#07090e] via-transparent to-black/30 opacity-80" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/20" />
-            </div>
+            <HeroCarousel />
           </div>
         </div>
       </section>
