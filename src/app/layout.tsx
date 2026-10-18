@@ -5,6 +5,7 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import { AuthProvider } from "@/context/AuthContext";
 import AuthModal from "@/components/auth/AuthModal";
 import ServiceWorkerRegister from "@/components/pwa/ServiceWorkerRegister";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,6 +22,10 @@ export const metadata: Metadata = {
   description:
     "Elite athletic conditioning and habit operating system. Precision workout tracking, nutrition planning, and live telemetry.",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/icons/icon-192x192.png",
+    apple: "/apple-touch-icon.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
@@ -47,7 +52,7 @@ export default function RootLayout({
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#10b981" />
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -61,6 +66,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-[#07090e] text-[#f9fafb] selection:bg-[#ccff00] selection:text-black">
+        <GoogleAnalytics />
         <LanguageProvider>
           <AuthProvider>
             {children}

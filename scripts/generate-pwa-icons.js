@@ -167,20 +167,23 @@ function renderIconPixel(width, height, isMaskable) {
 }
 
 // Generate PNG files
+const publicDir = path.join(__dirname, '..', 'public');
 const targets = [
-  { name: 'icon-192x192.png', size: 192, maskable: false },
-  { name: 'icon-192x192-maskable.png', size: 192, maskable: true },
-  { name: 'icon-512x512.png', size: 512, maskable: false },
-  { name: 'icon-512x512-maskable.png', size: 512, maskable: true },
-  { name: 'icon-maskable.png', size: 512, maskable: true },
-  { name: 'icon.png', size: 512, maskable: false }
+  { name: 'icon-192x192.png', size: 192, maskable: false, dest: iconsDir },
+  { name: 'icon-192x192-maskable.png', size: 192, maskable: true, dest: iconsDir },
+  { name: 'icon-512x512.png', size: 512, maskable: false, dest: iconsDir },
+  { name: 'icon-512x512-maskable.png', size: 512, maskable: true, dest: iconsDir },
+  { name: 'icon-maskable.png', size: 512, maskable: true, dest: iconsDir },
+  { name: 'icon.png', size: 512, maskable: false, dest: iconsDir },
+  { name: 'apple-touch-icon.png', size: 180, maskable: true, dest: publicDir },
+  { name: 'apple-touch-icon.png', size: 180, maskable: true, dest: iconsDir }
 ];
 
 for (const t of targets) {
-  const filePath = path.join(iconsDir, t.name);
+  const filePath = path.join(t.dest, t.name);
   const png = makePNG(t.size, t.size, renderIconPixel(t.size, t.size, t.maskable));
   fs.writeFileSync(filePath, png);
-  console.log(`Generated: ${t.name} (${t.size}x${t.size}) - ${png.length} bytes`);
+  console.log(`Generated: ${filePath} (${t.size}x${t.size}) - ${png.length} bytes`);
 }
 
 // Also generate a crisp SVG version in public/icons/icon.svg
