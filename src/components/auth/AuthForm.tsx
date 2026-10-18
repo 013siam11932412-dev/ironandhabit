@@ -40,7 +40,7 @@ export default function AuthForm({
       const session = localStorage.getItem("iron_user_session");
       if (token || session) {
         onSuccess?.();
-        router.replace("/dashboard/workout");
+        router.replace("/dashboard");
       }
     }
   }, [router, onSuccess]);
@@ -180,13 +180,13 @@ export default function AuthForm({
 
     setSuccessMessage(
       language === "bn"
-        ? "সফলভাবে সাইন ইন হয়েছে! ওয়ার্কআউট ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে..."
-        : "Authentication verified! Redirecting to workout dashboard..."
+        ? "সফলভাবে সাইন ইন হয়েছে! ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে..."
+        : "Authentication verified! Redirecting to dashboard overview..."
     );
 
     setTimeout(() => {
       onSuccess?.();
-      router.replace("/dashboard/workout");
+      router.replace("/dashboard");
     }, 600);
   }
 
@@ -222,13 +222,13 @@ export default function AuthForm({
 
     setSuccessMessage(
       language === "bn"
-        ? "ডেমো অ্যাথলিট প্রোফাইল প্রস্তুত! ওয়ার্কআউটে নিয়ে যাওয়া হচ্ছে..."
-        : "Demo athlete profile ready! Loading workout protocol..."
+        ? "ডেমো অ্যাথলিট প্রোফাইল প্রস্তুত! ড্যাশবোর্ডে নিয়ে যাওয়া হচ্ছে..."
+        : "Demo athlete profile ready! Loading dashboard overview..."
     );
 
     setTimeout(() => {
       onSuccess?.();
-      router.replace("/dashboard/workout");
+      router.replace("/dashboard");
     }, 550);
   }
 

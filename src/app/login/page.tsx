@@ -14,7 +14,7 @@ export default function LoginPage() {
       const token = localStorage.getItem("iron_auth_token");
       const session = localStorage.getItem("iron_user_session");
       if (token || session) {
-        router.replace("/dashboard/workout");
+        router.replace("/dashboard");
       }
     }
   }, [router]);
