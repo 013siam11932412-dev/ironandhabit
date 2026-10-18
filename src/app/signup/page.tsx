@@ -1,10 +1,17 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import LanguageToggle from "@/components/LanguageToggle";
 import AuthForm from "@/components/auth/AuthForm";
 
 export default function SignupPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/login");
+  }, [router]);
   return (
     <div className="relative min-h-screen bg-[#07090e] text-[#f9fafb] flex flex-col items-center justify-center p-4 selection:bg-[#ccff00] selection:text-black">
       {/* Top Bar with Language Toggle and Return Home */}
@@ -55,7 +62,7 @@ export default function SignupPage() {
 
         {/* Card Surface */}
         <div className="bg-[rgba(18,24,38,0.7)] backdrop-blur-md border border-[rgba(163,230,53,0.2)] rounded-2xl p-6 sm:p-8 shadow-[0_20px_50px_rgba(0,0,0,0.85)]">
-          <AuthForm initialTab="signup" />
+          <AuthForm initialTab="signin" />
         </div>
 
         {/* Footer */}

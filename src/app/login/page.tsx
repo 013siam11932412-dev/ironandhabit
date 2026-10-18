@@ -1,10 +1,23 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import LanguageToggle from "@/components/LanguageToggle";
 import AuthForm from "@/components/auth/AuthForm";
 
 export default function LoginPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("iron_auth_token");
+      const session = localStorage.getItem("iron_user_session");
+      if (token || session) {
+        router.replace("/dashboard/workout");
+      }
+    }
+  }, [router]);
   return (
     <div className="relative min-h-screen bg-[#07090e] text-[#f9fafb] flex flex-col items-center justify-center p-4 selection:bg-[#ccff00] selection:text-black">
       {/* Top Bar with Language Toggle and Return Home */}
@@ -31,19 +44,21 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-3 group">
             <div className="w-12 h-12 rounded-xl bg-[#121826] border border-[#a3e635]/40 flex items-center justify-center shadow-[0_0_20px_rgba(204,255,0,0.2)] group-hover:border-[#ccff00] group-hover:shadow-[0_0_25px_rgba(204,255,0,0.4)] transition-all">
-              <svg
-                className="w-6 h-6 text-[#ccff00]"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13 10V3L4 14h7v7l9-11h-7z"
-                />
-              </svg>
+              <div className="w-6 h-6 flex items-center justify-center">
+                <svg
+                  className="w-6 h-6 text-[#ccff00]"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
+                </svg>
+              </div>
             </div>
             <span className="font-black text-2xl tracking-wider text-white">
               IRON <span className="text-[#ccff00]">&</span> HABIT

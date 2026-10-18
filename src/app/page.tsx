@@ -261,7 +261,7 @@ export default function Home() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => openAuthModal("signup")}
+                  onClick={() => openAuthModal("signin")}
                   className="relative px-5 py-2.5 rounded-lg text-xs font-black uppercase tracking-wider bg-[#ccff00] hover:bg-[#d8ff33] text-black transition-all duration-200 shadow-[0_0_25px_rgba(204,255,0,0.35)] hover:shadow-[0_0_35px_rgba(204,255,0,0.55)] active:scale-95 cursor-pointer"
                 >
                   {dict.joinFree}
@@ -340,7 +340,7 @@ export default function Home() {
               ) : (
                 <button
                   type="button"
-                  onClick={() => openAuthModal("signup")}
+                  onClick={() => openAuthModal("signin")}
                   className="px-8 py-4 rounded-xl text-sm font-black uppercase tracking-wider bg-[#ccff00] hover:bg-[#d8ff33] text-black flex items-center justify-center gap-3 transition-all duration-200 shadow-[0_0_30px_rgba(204,255,0,0.45)] hover:shadow-[0_0_45px_rgba(204,255,0,0.65)] hover:-translate-y-0.5 active:scale-95 cursor-pointer"
                 >
                   <span>{dict.getStarted}</span>
@@ -456,7 +456,7 @@ export default function Home() {
               ) : (
                 <button
                   type="button"
-                  onClick={() => openAuthModal("signup")}
+                  onClick={() => openAuthModal("signin")}
                   className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-wider text-[#ccff00] hover:text-white transition-colors cursor-pointer"
                 >
                   <span>{dict.joinFree} &rarr;</span>
