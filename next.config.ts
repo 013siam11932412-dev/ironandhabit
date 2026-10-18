@@ -20,6 +20,9 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  env: {
+    SENTRY_DSN: process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN || "",
+  },
   async headers() {
     return [
       {
@@ -52,6 +55,8 @@ import { withSentryConfig } from "@sentry/nextjs/config";
 
 export default withSentryConfig(nextConfig, {
   // Sentry configuration options
+  org: "ironandhabit",
+  project: "ironandhabit",
   widenClientFileUpload: true,
   tunnelRoute: "/monitoring",
 });
