@@ -20,6 +20,7 @@ export default function InstallModal({ isOpen, onClose }: InstallModalProps) {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [pwaInstallSuccess, setPwaInstallSuccess] = useState(false);
+  const [isDownloadingApk, setIsDownloadingApk] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -96,6 +97,13 @@ export default function InstallModal({ isOpen, onClose }: InstallModalProps) {
           : "Please use your browser's install icon in the URL address bar or menu to install Iron & Habit."
       );
     }
+  }
+
+  function handleApkDownload() {
+    setIsDownloadingApk(true);
+    setTimeout(() => {
+      setIsDownloadingApk(false);
+    }, 2500);
   }
 
   return (
@@ -286,31 +294,32 @@ export default function InstallModal({ isOpen, onClose }: InstallModalProps) {
               </p>
 
               <a
-                href="/downloads/iron-and-habit.apk"
-                download="iron-and-habit.apk"
-                onClick={(e) => {
-                  // If APK file isn't uploaded yet, provide clear friendly notification
-                  fetch("/downloads/iron-and-habit.apk", { method: "HEAD" })
-                    .then((res) => {
-                      if (!res.ok) {
-                        e.preventDefault();
-                        alert(
-                          language === "bn"
-                            ? "অ্যান্ড্রয়েড এপিকে বিল্ড প্রস্তুত হচ্ছে। অনুগ্রহ করে উপরের 'সরাসরি ইনস্টল করুন (PWA)' বাটনটি ব্যবহার করুন যা তাৎক্ষণিক ইনস্টল হয়।"
-                            : "Direct APK build package is syncing. Please use the 'Install Directly to Device (PWA)' button above for instant 1-click install."
-                        );
-                      }
-                    })
-                    .catch(() => {});
-                }}
-                className="w-full py-2.5 px-4 rounded-xl bg-[#121826] hover:bg-[#1a2337] border border-[#a3e635]/40 text-[#ccff00] hover:border-[#ccff00] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer"
+                href="/downloads/IronAndHabit.apk"
+                download="IronAndHabit.apk"
+                onClick={handleApkDownload}
+                className="w-full py-2.5 px-4 rounded-xl bg-[#121826] hover:bg-[#1a2337] border border-[#a3e635]/40 text-[#ccff00] hover:border-[#ccff00] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-[0_0_15px_rgba(204,255,0,0.12)]"
               >
                 <div className="w-4 h-4 flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" />
-                  </svg>
+                  {isDownloadingApk ? (
+                    <svg className="animate-spin w-4 h-4 text-[#ccff00]" viewBox="0 0 24 24" fill="none">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" />
+                    </svg>
+                  )}
                 </div>
-                <span>{language === "bn" ? "অ্যান্ড্রয়েড এপিকে ডাউনলোড (.APK)" : "Download Android App (.APK)"}</span>
+                <span>
+                  {isDownloadingApk
+                    ? language === "bn"
+                      ? "ডাউনলোড শুরু হয়েছে..."
+                      : "Downloading APK..."
+                    : language === "bn"
+                    ? "অ্যান্ড্রয়েড এপিকে ডাউনলোড (.APK)"
+                    : "Download Android App (.APK)"}
+                </span>
               </a>
             </div>
           </div>
