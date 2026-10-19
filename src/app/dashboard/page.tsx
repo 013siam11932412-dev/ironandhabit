@@ -8,6 +8,10 @@ import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
 import ProgressChartBoard from "@/components/dashboard/ProgressChartBoard";
 import ExportDataButton from "@/components/dashboard/ExportDataButton";
+import DailyQuests, {
+  QuestItem,
+  getInitialHabits,
+} from "@/components/dashboard/DailyQuests";
 import Footer from "@/components/Footer";
 import InstallAppButton from "@/components/pwa/InstallAppButton";
 import {
@@ -78,69 +82,8 @@ export default function DashboardPage() {
     return [false, false, false, false, false, false, false, false];
   });
 
-  // 5. Daily Quests Checklist - Clean Zero-State (All start uncompleted)
-  const [quests, setQuests] = useState(() => {
-    const defaultQuests = [
-      {
-        id: 1,
-        titleEn: "Log Morning Compound Workout (Chest & Triceps)",
-        titleBn: "সকালের কম্পাউন্ড ওয়ার্কআউট সম্পন্ন করুন (বুক ও ট্রাইসেপ)",
-        categoryEn: "TRAINING",
-        categoryBn: "ট্রেনিং",
-        completed: false,
-        points: "+150 XP",
-      },
-      {
-        id: 2,
-        titleEn: "Hit 190g Daily Protein Fuel Target",
-        titleBn: "দৈনিক ১৯০ গ্রাম প্রোটিন লক্ষ্যমাত্রা পূরণ করুন",
-        categoryEn: "NUTRITION",
-        categoryBn: "পুষ্টি",
-        completed: false,
-        points: "+100 XP",
-      },
-      {
-        id: 3,
-        titleEn: "Reach 8 Glasses of Pure Hydration",
-        titleBn: "৮ গ্লাস বিশুদ্ধ পানি পান করুন",
-        categoryEn: "HYDRATION",
-        categoryBn: "পানি",
-        completed: false,
-        points: "+80 XP",
-      },
-      {
-        id: 4,
-        titleEn: "10-Min Post-Workout Mobility & Stretch",
-        titleBn: "১০ মিনিট পোস্ট-ওয়ার্কআউট স্ট্রেচিং সম্পন্ন করুন",
-        categoryEn: "RECOVERY",
-        categoryBn: "রিকভারি",
-        completed: false,
-        points: "+60 XP",
-      },
-      {
-        id: 5,
-        titleEn: "Record Fasted Weight & Resting Heart Rate",
-        titleBn: "সকালের ওজন ও হার্ট রেট রেকর্ড করুন",
-        categoryEn: "METRICS",
-        categoryBn: "পরিমাপ",
-        completed: false,
-        points: "+50 XP",
-      },
-    ];
-
-    if (typeof window !== "undefined") {
-      try {
-        const saved = localStorage.getItem("iron_daily_quests");
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed) && parsed.length === 5) return parsed;
-        }
-      } catch {
-        // ignore
-      }
-    }
-    return defaultQuests;
-  });
+  // 5. Daily Quests Checklist - 6 Core Habits + Custom Habits
+  const [quests, setQuests] = useState<QuestItem[]>(() => getInitialHabits());
 
   // Load live data from Supabase & localStorage on mount & user change
   useEffect(() => {
@@ -196,8 +139,8 @@ export default function DashboardPage() {
           caloriesBurned: Math.round(row.calories_consumed * 0.9),
           waterMl: row.water_ml,
           habitsScore: isCompleted ? 100 : row.water_ml > 0 ? 60 : 0,
-          completedQuestsCount: isCompleted ? 5 : 2,
-          totalQuestsCount: 5,
+          completedQuestsCount: isCompleted ? 6 : 2,
+          totalQuestsCount: 6,
           status: isCompleted ? "completed" : row.water_ml > 0 ? "partial" : "rest",
         };
       });
@@ -208,8 +151,8 @@ export default function DashboardPage() {
     // Midnight rollover check
     const resetResult = checkAndRunMidnightReset({
       glassesCount: 8,
-      completedQuests: 5,
-      totalQuests: 5,
+      completedQuests: 6,
+      totalQuests: 6,
     });
     if (resetResult.didReset) {
       queueMicrotask(() => {
@@ -275,12 +218,6 @@ export default function DashboardPage() {
       }
     }
 
-    const allFilled = updated.filter(Boolean).length === 8;
-    const nextQuests = quests.map((q) =>
-      q.id === 3 ? { ...q, completed: allFilled } : q
-    );
-    setQuests(nextQuests);
-
     const filledCount = updated.filter(Boolean).length;
     const waterMl = filledCount * 250;
     const today = getTodayIsoDate();
@@ -293,10 +230,10 @@ export default function DashboardPage() {
       streak_count: streakDay,
     });
 
-    checkAndUpdateStreak(nextQuests, updated);
+    checkAndUpdateStreak(quests, updated);
   }
 
-  function toggleQuest(id: number) {
+  function toggleQuest(id: string | number) {
     const nextQuests = quests.map((q) =>
       q.id === id ? { ...q, completed: !q.completed } : q
     );
@@ -304,6 +241,70 @@ export default function DashboardPage() {
 
     if (typeof window !== "undefined") {
       try {
+        localStorage.setItem("iron_daily_quests", JSON.stringify(nextQuests));
+      } catch {
+        // ignore
+      }
+    }
+
+    checkAndUpdateStreak(nextQuests, glasses);
+  }
+
+  function handleAddCustomHabit(title: string) {
+    const trimmed = title.trim();
+    if (!trimmed) return;
+
+    const newHabit: QuestItem = {
+      id: `custom-${Date.now()}`,
+      titleEn: trimmed,
+      titleBn: trimmed,
+      categoryEn: "CUSTOM / DISCIPLINE",
+      categoryBn: "কাস্টম / ডিসিপ্লিন",
+      completed: false,
+      points: "+50 XP",
+      isCustom: true,
+    };
+
+    const nextQuests = [...quests, newHabit];
+    setQuests(nextQuests);
+
+    if (typeof window !== "undefined") {
+      try {
+        const storedCustom = JSON.parse(
+          localStorage.getItem("user_custom_habits") || "[]"
+        );
+        const updatedCustom = [
+          ...storedCustom,
+          {
+            id: newHabit.id,
+            title: trimmed,
+            categoryEn: newHabit.categoryEn,
+            categoryBn: newHabit.categoryBn,
+            points: newHabit.points,
+            createdAt: Date.now(),
+          },
+        ];
+        localStorage.setItem("user_custom_habits", JSON.stringify(updatedCustom));
+        localStorage.setItem("iron_daily_quests", JSON.stringify(nextQuests));
+      } catch {
+        // ignore
+      }
+    }
+
+    checkAndUpdateStreak(nextQuests, glasses);
+  }
+
+  function handleRemoveCustomHabit(id: string | number) {
+    const nextQuests = quests.filter((q) => q.id !== id);
+    setQuests(nextQuests);
+
+    if (typeof window !== "undefined") {
+      try {
+        const storedCustom = JSON.parse(
+          localStorage.getItem("user_custom_habits") || "[]"
+        );
+        const updatedCustom = storedCustom.filter((item: any) => item.id !== id);
+        localStorage.setItem("user_custom_habits", JSON.stringify(updatedCustom));
         localStorage.setItem("iron_daily_quests", JSON.stringify(nextQuests));
       } catch {
         // ignore
@@ -753,104 +754,14 @@ export default function DashboardPage() {
           </div>
 
           {/* Right Column (7 cols): Daily Quests Checklist */}
-          <div className="lg:col-span-7 bg-[rgba(18,24,38,0.7)] backdrop-blur-md border border-[rgba(163,230,53,0.2)] rounded-2xl p-6 shadow-xl">
-            <div className="flex items-center justify-between mb-6 pb-4 border-b border-[rgba(163,230,53,0.12)]">
-              <div>
-                <h3 className="text-lg font-black uppercase tracking-tight text-white">
-                  {dict.dailyQuests}
-                </h3>
-                <p className="text-xs text-[#94a3b8]">
-                  {dict.questsSubtitle}
-                </p>
-              </div>
-              <span className="text-xs font-mono font-bold text-[#ccff00] bg-[#07090e] px-3 py-1.5 rounded-lg border border-[rgba(163,230,53,0.2)]">
-                {completedQuestsCount} / {quests.length} {dict.completed}
-              </span>
-            </div>
-
-            <div className="space-y-3">
-              {quests.map((quest) => (
-                <div
-                  key={quest.id}
-                  onClick={() => toggleQuest(quest.id)}
-                  className={`p-3.5 rounded-xl border flex items-center justify-between gap-4 cursor-pointer transition-all duration-200 select-none ${
-                    quest.completed
-                      ? "bg-[rgba(18,24,38,0.95)] border-[rgba(163,230,53,0.35)] shadow-[0_0_15px_rgba(204,255,0,0.08)]"
-                      : "bg-[#07090e]/80 border-[rgba(163,230,53,0.12)] hover:border-[rgba(163,230,53,0.3)]"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`w-6 h-6 rounded-lg flex items-center justify-center border transition-all ${
-                        quest.completed
-                          ? "bg-[#ccff00] border-[#ccff00] text-black shadow-[0_0_10px_rgba(204,255,0,0.5)]"
-                          : "bg-[#07090e] border-[rgba(163,230,53,0.3)] text-transparent"
-                      }`}
-                    >
-                      <svg
-                        className="w-4 h-4 font-black"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="3"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M4.5 12.75l6 6 9-13.5"
-                        />
-                      </svg>
-                    </div>
-
-                    <div>
-                      <span
-                        className={`text-xs sm:text-sm font-bold block transition-colors ${
-                          quest.completed
-                            ? "text-white line-through opacity-70"
-                            : "text-[#f9fafb]"
-                        }`}
-                      >
-                        {language === "bn" ? quest.titleBn : quest.titleEn}
-                      </span>
-                      <span className="text-[10px] font-black uppercase tracking-wider text-[#94a3b8]">
-                        {language === "bn"
-                          ? quest.categoryBn
-                          : quest.categoryEn}
-                      </span>
-                    </div>
-                  </div>
-
-                  <span className="text-xs font-mono font-bold text-[#ccff00] whitespace-nowrap">
-                    {quest.points}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Quests Footer Motivation & Midnight Simulation button */}
-            <div className="mt-6 pt-4 border-t border-[rgba(163,230,53,0.1)] flex flex-wrap items-center justify-between gap-3 text-xs text-[#94a3b8]">
-              <div className="flex items-center gap-2">
-                <span>
-                  {language === "bn"
-                    ? "স্ট্রিক সুরক্ষা সক্রিয়"
-                    : "Streak Protection Active"}
-                </span>
-                <span className="text-[#ccff00] font-bold">
-                  {language === "bn"
-                    ? `দিন ${streakDay} / ৭`
-                    : `Day ${streakDay} / 7`}
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={handleManualMidnightReset}
-                className="text-[10px] font-mono text-[#94a3b8] hover:text-[#ccff00] border border-[rgba(163,230,53,0.2)] hover:border-[#ccff00] px-2.5 py-1 rounded-md transition-colors"
-                title="Simulate 12:00 AM Midnight tracker reset"
-              >
-                🌙 {language === "bn" ? "মধ্যরাত রিসেট টেস্ট" : "Test 00:00 Reset"}
-              </button>
-            </div>
-          </div>
+          <DailyQuests
+            quests={quests}
+            onToggleQuest={toggleQuest}
+            onAddCustomHabit={handleAddCustomHabit}
+            onRemoveCustomHabit={handleRemoveCustomHabit}
+            streakDay={streakDay}
+            onMidnightReset={handleManualMidnightReset}
+          />
         </div>
 
         {/* 3. 30-Day Progress Chart Board */}

@@ -180,7 +180,7 @@ export function checkAndRunMidnightReset(params?: {
     if (lastActive < today) {
       const glassesCount = params?.glassesCount ?? 0;
       const completedQuests = params?.completedQuests ?? 0;
-      const totalQuests = params?.totalQuests ?? 5;
+      const totalQuests = params?.totalQuests ?? 6;
       const score = Math.round(
         ((completedQuests + glassesCount / 8) / (totalQuests + 1)) * 100
       );
