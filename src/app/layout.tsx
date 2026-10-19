@@ -6,6 +6,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import AuthModal from "@/components/auth/AuthModal";
 import ServiceWorkerRegister from "@/components/pwa/ServiceWorkerRegister";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
+import InAppBrowserBanner from "@/components/InAppBrowserBanner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,9 +19,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "IRON & HABIT | Stronger Every Day",
+  metadataBase: new URL("https://ironandhabit.vercel.app"),
+  title: "Iron & Habit - আপনার ফিটনেস ও অভ্যাসের সঠিক সঙ্গী",
   description:
-    "Elite athletic conditioning and habit operating system. Precision workout tracking, nutrition planning, and live telemetry.",
+    "সালাত, পুষ্টিকর খাবার, ওয়ার্কআউট এবং শক্তিশালী অভ্যাস গড়ার আধুনিক প্ল্যাটফর্ম। কোনো ইনস্টলেশন ফি ছাড়া সরাসরি ব্যবহার করুন।",
   manifest: "/manifest.json",
   icons: {
     icon: "/icons/icon-192x192.png",
@@ -30,6 +32,30 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Iron & Habit",
+  },
+  openGraph: {
+    title: "Iron & Habit - আপনার ফিটনেস ও অভ্যাসের সঠিক সঙ্গী",
+    description:
+      "সালাত, পুষ্টিকর খাবার, ওয়ার্কআউট এবং শক্তিশালী অভ্যাস গড়ার আধুনিক প্ল্যাটফর্ম। কোনো ইনস্টলেশন ফি ছাড়া সরাসরি ব্যবহার করুন।",
+    url: "https://ironandhabit.vercel.app",
+    siteName: "Iron & Habit",
+    images: [
+      {
+        url: "/icons/icon-512x512.png",
+        width: 512,
+        height: 512,
+        alt: "Iron & Habit Logo",
+      },
+    ],
+    locale: "bn_BD",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Iron & Habit - আপনার ফিটনেস ও অভ্যাসের সঠিক সঙ্গী",
+    description:
+      "সালাত, পুষ্টিকর খাবার, ওয়ার্কআউট এবং শক্তিশালী অভ্যাস গড়ার আধুনিক প্ল্যাটফর্ম। কোনো ইনস্টলেশন ফি ছাড়া সরাসরি ব্যবহার করুন।",
+    images: ["/icons/icon-512x512.png"],
   },
 };
 
@@ -66,6 +92,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-[#07090e] text-[#f9fafb] selection:bg-[#ccff00] selection:text-black">
+        <InAppBrowserBanner />
         <GoogleAnalytics />
         <LanguageProvider>
           <AuthProvider>
