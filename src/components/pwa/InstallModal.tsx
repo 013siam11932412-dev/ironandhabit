@@ -12,23 +12,32 @@ interface InstallModalProps {
   isOpen: boolean;
   onClose: () => void;
   onDownloadSuccess?: () => void;
+  initialPrompt?: BeforeInstallPromptEvent | null;
 }
 
 export default function InstallModal({
   isOpen,
   onClose,
   onDownloadSuccess,
+  initialPrompt,
 }: InstallModalProps) {
   const { language } = useLanguage();
   const [detectedPlatform, setDetectedPlatform] = useState<"ios" | "android" | "desktop">("desktop");
   const [activeTab, setActiveTab] = useState<"ios" | "android">("android");
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(
+    () => initialPrompt || (typeof window !== "undefined" ? window.__ironDeferredPrompt || null : null)
+  );
   const [isInstalled, setIsInstalled] = useState(false);
   const [pwaInstallSuccess, setPwaInstallSuccess] = useState(false);
-  const [isDownloadingApk, setIsDownloadingApk] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    if (initialPrompt) {
+      setDeferredPrompt(initialPrompt);
+    } else if (window.__ironDeferredPrompt) {
+      setDeferredPrompt(window.__ironDeferredPrompt);
+    }
 
     // Detect standalone mode
     const isStandalone =
@@ -58,7 +67,9 @@ export default function InstallModal({
 
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      const promptEvent = e as BeforeInstallPromptEvent;
+      window.__ironDeferredPrompt = promptEvent;
+      setDeferredPrompt(promptEvent);
     };
 
     const handleAppInstalled = () => {
@@ -66,6 +77,7 @@ export default function InstallModal({
       setPwaInstallSuccess(true);
       setDeferredPrompt(null);
       if (typeof window !== "undefined") {
+        window.__ironDeferredPrompt = null;
         try {
           localStorage.setItem("iron_app_downloaded", "true");
         } catch {
@@ -95,11 +107,11 @@ export default function InstallModal({
       window.removeEventListener("beforeinstallprompt", handleBeforeInstall);
       window.removeEventListener("appinstalled", handleAppInstalled);
     };
-  }, [isOpen, onClose, onDownloadSuccess]);
+  }, [isOpen, onClose, onDownloadSuccess, initialPrompt]);
 
   if (!isOpen) return null;
 
-  async function handlePwaInstall() {
+  function handlePwaInstall() {
     if (typeof window !== "undefined") {
       try {
         localStorage.setItem("iron_app_downloaded", "true");
@@ -109,24 +121,42 @@ export default function InstallModal({
     }
     onDownloadSuccess?.();
 
-    if (deferredPrompt) {
+    const promptEvent =
+      deferredPrompt || (typeof window !== "undefined" ? window.__ironDeferredPrompt : null);
+
+    if (promptEvent) {
       try {
-        await deferredPrompt.prompt();
-        const choice = await deferredPrompt.userChoice;
-        if (choice.outcome === "accepted") {
-          setPwaInstallSuccess(true);
-        }
-        setDeferredPrompt(null);
+        // Synchronous invoke without delay
+        promptEvent.prompt();
+        promptEvent.userChoice
+          .then((choice) => {
+            if (choice.outcome === "accepted") {
+              setPwaInstallSuccess(true);
+            }
+            if (typeof window !== "undefined") {
+              window.__ironDeferredPrompt = null;
+            }
+            setDeferredPrompt(null);
+          })
+          .catch((err) => {
+            console.error("Install prompt error:", err);
+          });
       } catch (err) {
         console.error("Install prompt error:", err);
       }
     } else {
-      // Fallback hint for desktop or modern browsers
-      alert(
-        language === "bn"
-          ? "ব্রাউজার মেনু থেকে 'Install Iron & Habit' বা 'Add to Home Screen' ক্লিক করুন।"
-          : "Please use your browser's install icon in the URL address bar or menu to install Iron & Habit."
-      );
+      // If native prompt is unavailable, instantly invoke direct APK download without waiting
+      const apkLink = document.getElementById("iron-direct-apk-link") as HTMLAnchorElement | null;
+      if (apkLink) {
+        apkLink.click();
+      } else {
+        const link = document.createElement("a");
+        link.href = "/downloads/IronAndHabit.apk";
+        link.download = "IronAndHabit.apk";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     }
   }
 
@@ -139,10 +169,6 @@ export default function InstallModal({
       }
     }
     onDownloadSuccess?.();
-    setIsDownloadingApk(true);
-    setTimeout(() => {
-      setIsDownloadingApk(false);
-    }, 2500);
   }
 
   return (
@@ -333,29 +359,19 @@ export default function InstallModal({
               </p>
 
               <a
+                id="iron-direct-apk-link"
                 href="/downloads/IronAndHabit.apk"
                 download="IronAndHabit.apk"
                 onClick={handleApkDownload}
                 className="w-full py-2.5 px-4 rounded-xl bg-[#121826] hover:bg-[#1a2337] border border-[#a3e635]/40 text-[#ccff00] hover:border-[#ccff00] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-95 shadow-[0_0_15px_rgba(204,255,0,0.12)]"
               >
                 <div className="w-4 h-4 flex items-center justify-center">
-                  {isDownloadingApk ? (
-                    <svg className="animate-spin w-4 h-4 text-[#ccff00]" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                  ) : (
-                    <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" />
-                    </svg>
-                  )}
+                  <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" />
+                  </svg>
                 </div>
                 <span>
-                  {isDownloadingApk
-                    ? language === "bn"
-                      ? "ডাউনলোড শুরু হয়েছে..."
-                      : "Downloading APK..."
-                    : language === "bn"
+                  {language === "bn"
                     ? "অ্যান্ড্রয়েড এপিকে ডাউনলোড (.APK)"
                     : "Download Android App (.APK)"}
                 </span>
