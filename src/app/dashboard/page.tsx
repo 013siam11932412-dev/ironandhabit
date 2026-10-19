@@ -7,7 +7,6 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
 import ProgressChartBoard from "@/components/dashboard/ProgressChartBoard";
-import ExportDataButton from "@/components/dashboard/ExportDataButton";
 import DailyQuests, {
   QuestItem,
   getInitialHabits,
@@ -394,7 +393,6 @@ export default function DashboardPage() {
             {/* Language Switcher, 7-Day Cyclical Streak & Status Badge */}
             <div className="flex items-center gap-2.5 sm:gap-3">
               <InstallAppButton />
-              <ExportDataButton />
               <LanguageToggle />
 
               {/* 7-Day Cyclical Streak Tracker Badge */}
