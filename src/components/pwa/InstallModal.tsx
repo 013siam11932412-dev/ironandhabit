@@ -11,9 +11,14 @@ interface BeforeInstallPromptEvent extends Event {
 interface InstallModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onDownloadSuccess?: () => void;
 }
 
-export default function InstallModal({ isOpen, onClose }: InstallModalProps) {
+export default function InstallModal({
+  isOpen,
+  onClose,
+  onDownloadSuccess,
+}: InstallModalProps) {
   const { language } = useLanguage();
   const [detectedPlatform, setDetectedPlatform] = useState<"ios" | "android" | "desktop">("desktop");
   const [activeTab, setActiveTab] = useState<"ios" | "android">("android");
@@ -24,6 +29,15 @@ export default function InstallModal({ isOpen, onClose }: InstallModalProps) {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    // Detect standalone mode
+    const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      (navigator as any).standalone === true;
+
+    if (isStandalone) {
+      setIsInstalled(true);
+    }
 
     const ua = navigator.userAgent || "";
     const isIOS =
@@ -51,6 +65,14 @@ export default function InstallModal({ isOpen, onClose }: InstallModalProps) {
       setIsInstalled(true);
       setPwaInstallSuccess(true);
       setDeferredPrompt(null);
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("iron_app_downloaded", "true");
+        } catch {
+          // ignore
+        }
+      }
+      onDownloadSuccess?.();
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstall);
@@ -73,11 +95,20 @@ export default function InstallModal({ isOpen, onClose }: InstallModalProps) {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstall);
       window.removeEventListener("appinstalled", handleAppInstalled);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, onDownloadSuccess]);
 
   if (!isOpen) return null;
 
   async function handlePwaInstall() {
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("iron_app_downloaded", "true");
+      } catch {
+        // ignore
+      }
+    }
+    onDownloadSuccess?.();
+
     if (deferredPrompt) {
       try {
         await deferredPrompt.prompt();
@@ -100,6 +131,14 @@ export default function InstallModal({ isOpen, onClose }: InstallModalProps) {
   }
 
   function handleApkDownload() {
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("iron_app_downloaded", "true");
+      } catch {
+        // ignore
+      }
+    }
+    onDownloadSuccess?.();
     setIsDownloadingApk(true);
     setTimeout(() => {
       setIsDownloadingApk(false);

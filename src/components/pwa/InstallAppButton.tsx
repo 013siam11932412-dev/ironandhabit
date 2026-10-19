@@ -1,12 +1,61 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import InstallModal from "./InstallModal";
 
 export default function InstallAppButton() {
   const { language } = useLanguage();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isInstalledOrDownloaded, setIsInstalledOrDownloaded] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // 1. Check if running in standalone PWA mode
+    const isStandalone =
+      window.matchMedia("(display-mode: standalone)").matches ||
+      (navigator as any).standalone === true;
+
+    // 2. Check persistent downloaded/installed flag in localStorage
+    let isDownloaded = false;
+    try {
+      isDownloaded = localStorage.getItem("iron_app_downloaded") === "true";
+    } catch {
+      // ignore storage access restrictions
+    }
+
+    if (isStandalone || isDownloaded) {
+      setIsInstalledOrDownloaded(true);
+    }
+
+    // Listen for browser appinstalled event
+    const handleAppInstalled = () => {
+      try {
+        localStorage.setItem("iron_app_downloaded", "true");
+      } catch {
+        // ignore
+      }
+      setIsInstalledOrDownloaded(true);
+    };
+
+    window.addEventListener("appinstalled", handleAppInstalled);
+    return () => window.removeEventListener("appinstalled", handleAppInstalled);
+  }, []);
+
+  const handleDownloadSuccess = () => {
+    try {
+      localStorage.setItem("iron_app_downloaded", "true");
+    } catch {
+      // ignore
+    }
+    setIsInstalledOrDownloaded(true);
+  };
+
+  // If running in standalone or already downloaded/installed, hide completely
+  if (isInstalledOrDownloaded) {
+    return null;
+  }
 
   return (
     <>
@@ -34,6 +83,7 @@ export default function InstallAppButton() {
       <InstallModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        onDownloadSuccess={handleDownloadSuccess}
       />
     </>
   );
