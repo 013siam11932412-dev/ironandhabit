@@ -193,6 +193,11 @@ export default function AssistantPage() {
   const { user, signOut } = useAuth();
 
   // Streak & Telemetry Context
+  // Client hydration mount tracking
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   const [streakDay] = useState<number>(() => getStoredStreak());
   const [bmiRecord, setBmiRecord] = useState<BmiRecord | null>(null);
   const [dailyMetric, setDailyMetric] = useState<DailyMetric | null>(null);
@@ -454,10 +459,13 @@ export default function AssistantPage() {
                 className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[rgba(18,24,38,0.85)] border border-[rgba(163,230,53,0.35)] shadow-[0_0_15px_rgba(204,255,0,0.2)]"
               >
                 <span className="w-2 h-2 rounded-full bg-[#ccff00] animate-pulse" />
-                <span className="text-xs font-black uppercase text-[#ccff00] tracking-wider font-mono">
+                <span
+                  suppressHydrationWarning
+                  className="text-xs font-black uppercase text-[#ccff00] tracking-wider font-mono"
+                >
                   {language === "bn"
-                    ? `দিন ${toBnDigits(streakDay)} / ৭ 🔥`
-                    : `Day ${streakDay} / 7 🔥`}
+                    ? `দিন ${toBnDigits(isMounted ? streakDay : 0)} / ৭ 🔥`
+                    : `Day ${isMounted ? streakDay : 0} / 7 🔥`}
                 </span>
               </div>
 
