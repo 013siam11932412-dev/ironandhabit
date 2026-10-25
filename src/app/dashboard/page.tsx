@@ -38,6 +38,12 @@ export default function DashboardPage() {
   const { dict, language } = useLanguage();
   const { user, signOut } = useAuth();
 
+  // Client hydration mount tracking
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   // 1. Streak State: 7-Day Cyclical Tracker (0 to 7)
   const [streakDay, setStreakDay] = useState<number>(() => getStoredStreak());
   const [streakIncrementedToday, setStreakIncrementedToday] = useState(false);
@@ -402,10 +408,13 @@ export default function DashboardPage() {
                 className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[rgba(18,24,38,0.85)] border border-[rgba(163,230,53,0.35)] shadow-[0_0_15px_rgba(204,255,0,0.2)]"
               >
                 <span className="w-2 h-2 rounded-full bg-[#ccff00] animate-pulse" />
-                <span className="text-xs font-black uppercase text-[#ccff00] tracking-wider font-mono">
+                <span
+                  suppressHydrationWarning
+                  className="text-xs font-black uppercase text-[#ccff00] tracking-wider font-mono"
+                >
                   {language === "bn"
-                    ? `দিন ${streakDay} / ৭ 🔥`
-                    : `Day ${streakDay} / 7 🔥`}
+                    ? `দিন ${isMounted ? streakDay : 0} / ৭ 🔥`
+                    : `Day ${isMounted ? streakDay : 0} / 7 🔥`}
                 </span>
               </div>
 
