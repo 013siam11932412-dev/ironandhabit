@@ -7,6 +7,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import LanguageToggle from "@/components/LanguageToggle";
 import ProgressChartBoard from "@/components/dashboard/ProgressChartBoard";
+import GoogleDriveFiles from "@/components/dashboard/GoogleDriveFiles";
 import DailyQuests, {
   QuestItem,
   getInitialHabits,
@@ -776,7 +777,12 @@ export default function DashboardPage() {
           />
         </section>
 
-        {/* 4. Quick Navigation Cards to Connected Modules */}
+        {/* 4. Google Drive Cloud Vault */}
+        <section className="pt-2">
+          <GoogleDriveFiles />
+        </section>
+
+        {/* 5. Quick Navigation Cards to Connected Modules */}
         <section className="pt-2">
           <h3 className="text-sm font-black uppercase tracking-widest text-[#ccff00] mb-4">
             {dict.connectedModules}
