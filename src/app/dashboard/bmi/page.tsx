@@ -180,8 +180,8 @@ export default function BmiPage() {
       ? effectiveBmi < 18.5
         ? "gain"
         : effectiveBmi >= 25.0
-        ? "lose"
-        : "maintain"
+          ? "lose"
+          : "maintain"
       : "maintain";
 
   const activeWeight =
@@ -343,7 +343,7 @@ export default function BmiPage() {
               <LanguageToggle />
               <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[rgba(18,24,38,0.85)] border border-[rgba(163,230,53,0.3)] shadow-[0_0_15px_rgba(204,255,0,0.15)]">
                 <span className="w-2 h-2 rounded-full bg-[#ccff00] animate-pulse" />
-                <span className="text-xs font-black uppercase text-[#ccff00] tracking-wider font-mono">
+                <span suppressHydrationWarning={true} className="text-xs font-black uppercase text-[#ccff00] tracking-wider font-mono">
                   {language === "bn" ? `দিন ${streakDay} / ৭ 🔥` : `Day ${streakDay} / 7 🔥`}
                 </span>
               </div>
@@ -367,11 +367,10 @@ export default function BmiPage() {
                 <Link
                   key={tab.name}
                   href={tab.href}
-                  className={`px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap ${
-                    isActive
-                      ? "bg-[#ccff00] text-black shadow-[0_0_20px_rgba(204,255,0,0.3)]"
-                      : "text-[#94a3b8] hover:text-white hover:bg-[rgba(18,24,38,0.5)]"
-                  }`}
+                  className={`px-4 py-2 rounded-lg text-xs font-black uppercase tracking-wider transition-all whitespace-nowrap ${isActive
+                    ? "bg-[#ccff00] text-black shadow-[0_0_20px_rgba(204,255,0,0.3)]"
+                    : "text-[#94a3b8] hover:text-white hover:bg-[rgba(18,24,38,0.5)]"
+                    }`}
                 >
                   {tab.name}
                 </Link>
@@ -481,8 +480,8 @@ export default function BmiPage() {
                 {isSaving
                   ? dict.savedToStorage
                   : bmiResult !== null
-                  ? dict.recalculateBmi
-                  : dict.calculateBmi}
+                    ? dict.recalculateBmi
+                    : dict.calculateBmi}
               </button>
             </div>
 
@@ -662,20 +661,18 @@ export default function BmiPage() {
                     type="button"
                     onClick={() => setSelectedGoal(tab.key as "gain" | "maintain" | "lose")}
                     title={tab.fullLabel}
-                    className={`px-3 sm:px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 flex items-center gap-2 whitespace-nowrap cursor-pointer ${
-                      isActive
-                        ? "bg-[#ccff00] text-black shadow-[0_0_15px_rgba(204,255,0,0.35)] font-black"
-                        : "text-[#94a3b8] hover:text-white hover:bg-[rgba(18,24,38,0.6)]"
-                    }`}
+                    className={`px-3 sm:px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-200 flex items-center gap-2 whitespace-nowrap cursor-pointer ${isActive
+                      ? "bg-[#ccff00] text-black shadow-[0_0_15px_rgba(204,255,0,0.35)] font-black"
+                      : "text-[#94a3b8] hover:text-white hover:bg-[rgba(18,24,38,0.6)]"
+                      }`}
                   >
                     <span>{tab.label}</span>
                     {isAiRecommended && (
                       <span
-                        className={`text-[9px] font-black uppercase px-1.5 py-0.5 rounded border transition-colors ${
-                          isActive
-                            ? "bg-black/20 text-black border-black/30"
-                            : "bg-[#ccff00]/15 text-[#ccff00] border-[#ccff00]/30"
-                        }`}
+                        className={`text-[9px] font-black uppercase px-1.5 py-0.5 rounded border transition-colors ${isActive
+                          ? "bg-black/20 text-black border-black/30"
+                          : "bg-[#ccff00]/15 text-[#ccff00] border-[#ccff00]/30"
+                          }`}
                       >
                         {dict.aiRecommendedBadge}
                       </span>
@@ -932,17 +929,17 @@ export default function BmiPage() {
               {records.map((rec) => {
                 const dateLabel = rec.created_at
                   ? new Date(rec.created_at).toLocaleDateString([], {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })
                   : "Today";
 
                 const timeLabel = rec.created_at
                   ? new Date(rec.created_at).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })
                   : "";
 
                 return (

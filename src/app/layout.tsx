@@ -79,17 +79,7 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#10b981" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if (typeof window !== "undefined" && "serviceWorker" in navigator) {
-                window.addEventListener("load", function() {
-                  navigator.serviceWorker.register("/sw.js", { scope: "/" });
-                });
-              }
-            `,
-          }}
-        />
+
       </head>
       <body className="min-h-full flex flex-col bg-[#07090e] text-[#f9fafb] selection:bg-[#ccff00] selection:text-black">
         <InAppBrowserBanner />
